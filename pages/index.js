@@ -13,6 +13,12 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <Image
+          src="/images/profile.jpg"
+          alt="Your Name"
+          width={144}
+          height={144}
+        />
         <h1 className={styles.title}>
           Read <Link href="/posts/first-post">this page!</Link>
         </h1>
