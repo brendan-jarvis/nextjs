@@ -8,6 +8,7 @@ import { useState } from 'react'
 
 export default function Add({ session }) {
   const user = useUser()
+  const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [preview, setPreview] = useState(false)
 
@@ -33,7 +34,13 @@ export default function Add({ session }) {
         <h1 className={utilStyles.headingXl}>Add a Post</h1>
         <form action="/api/add-post" method="post" autoComplete="off">
           <label htmlFor="title">Title</label>
-          <input type="text" id="title" name="title" />
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <label htmlFor="content">Content</label>
           <textarea
             id="content"
@@ -58,12 +65,14 @@ export default function Add({ session }) {
               {preview ? 'Hide Preview' : 'Show Preview'}
             </button>
             {preview && (
-              <p
-                className="markdown"
-                dangerouslySetInnerHTML={{
-                  __html: remark().use(html).processSync(content).toString(),
-                }}
-              />
+              <>
+                <h1>{title}</h1>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: remark().use(html).processSync(content).toString(),
+                  }}
+                />
+              </>
             )}
           </div>
 
