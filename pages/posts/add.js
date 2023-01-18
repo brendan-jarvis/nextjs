@@ -30,15 +30,18 @@ export default function Add({ session }) {
           <label htmlFor="title">Title</label>
           <input type="text" id="title" name="title" />
           <label htmlFor="content">Content</label>
-          <input type="text" id="content" name="content" />
+          <textarea id="content" name="content" rows="5" />
           <input
             type="text"
             id="author"
             name="author"
             defaultValue={user.id}
+            rows="4"
             hidden
           />
-          <button type="submit">Submit</button>
+          <button type="submit" className="button primary block">
+            Submit
+          </button>
         </form>
       </article>
     </Layout>

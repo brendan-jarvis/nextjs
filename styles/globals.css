@@ -185,6 +185,17 @@ input {
   color: var(--custom-color);
 }
 
+textarea {
+  width: 100%;
+  border-radius: 5px;
+  border: var(--custom-border);
+  padding: 8px;
+  font-size: 0.9rem;
+  background-color: var(--custom-bg-color);
+  color: var(--custom-color);
+  resize: vertical;
+}
+
 input[disabled] {
   color: var(--custom-color-secondary);
 }
@@ -255,6 +266,7 @@ button.primary,
 .button.primary {
   background-color: var(--custom-color-brand);
   border: 1px solid var(--custom-color-brand);
+  margin-top: 1rem;
 }
 
 /* Widgets */
