@@ -2,9 +2,14 @@ import Layout from '../../components/layout'
 import Head from 'next/head'
 import utilStyles from '../../styles/utils.module.css'
 import { useUser } from '@supabase/auth-helpers-react'
+import { remark } from 'remark'
+import html from 'remark-html'
+import { useState } from 'react'
 
 export default function Add({ session }) {
   const user = useUser()
+  const [content, setContent] = useState('')
+  const [preview, setPreview] = useState(false)
 
   if (!user)
     return (
@@ -30,7 +35,12 @@ export default function Add({ session }) {
           <label htmlFor="title">Title</label>
           <input type="text" id="title" name="title" />
           <label htmlFor="content">Content</label>
-          <textarea id="content" name="content" rows="5" />
+          <textarea
+            id="content"
+            name="content"
+            rows="5"
+            onChange={(e) => setContent(e.target.value)}
+          />
           <input
             type="text"
             id="author"
@@ -39,6 +49,24 @@ export default function Add({ session }) {
             rows="4"
             hidden
           />
+          <div id="preview">
+            <button
+              type="button"
+              className="button block"
+              onClick={() => setPreview(!preview)}
+            >
+              {preview ? 'Hide Preview' : 'Show Preview'}
+            </button>
+            {preview && (
+              <p
+                className="markdown"
+                dangerouslySetInnerHTML={{
+                  __html: remark().use(html).processSync(content).toString(),
+                }}
+              />
+            )}
+          </div>
+
           <button type="submit" className="button primary block">
             Submit
           </button>
