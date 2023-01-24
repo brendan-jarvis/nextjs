@@ -17,9 +17,10 @@ const Scene = () => {
       <pointLight position={[0, 10, 10]} intensity={1.5} />
       <ambientLight intensity={0.1} />
       <mesh ref={myMesh}>
-        <boxGeometry attach="geometry" args={[1, 1, 1]} />
+        <dodecahedronGeometry attach="geometry" args={[1, 0]} />
         <meshStandardMaterial attach="material" color={'cornflowerblue'} />
       </mesh>
+
       <Stars
         radius={100}
         depth={50}
