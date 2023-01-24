@@ -61,6 +61,20 @@ export default function Home({ allPostsData }) {
         <h2 className={utilStyles.headingLg}>Projects</h2>
         <ul className={utilStyles.list}>
           <li className={utilStyles.listItem}>
+            <Link href="https://seasoned-production.up.railway.app/">
+              Seasoned
+            </Link>
+            <br />
+            <small className={utilStyles.lightText}>21 September 2022</small>
+            <br />
+            <small className={utilStyles.lightText}>
+              The final group project as part of the Dev Academy course. Hosted
+              on Railway and built with React and Redux. Frequently offline due
+              to Railway&apos;s free tier limits.
+            </small>
+          </li>
+
+          <li className={utilStyles.listItem}>
             <Link href="https://brew.onrender.com/">Brew!</Link>
             <br />
             <small className={utilStyles.lightText}>17 September 2022</small>
