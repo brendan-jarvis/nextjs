@@ -25,7 +25,7 @@ function Scene() {
   )
 }
 
-export default function Three({ session }) {
+export default function Three() {
   return (
     <Layout>
       <Head>
