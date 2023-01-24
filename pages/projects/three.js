@@ -27,7 +27,7 @@ function Scene() {
 
 export default function Three() {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Three.js</title>
       </Head>
@@ -35,6 +35,6 @@ export default function Three() {
         <color attach="background" args={['black']} />
         <Scene />
       </Canvas>
-    </Layout>
+    </>
   )
 }
