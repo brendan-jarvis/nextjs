@@ -69,8 +69,8 @@ export default function Home({ allPostsData }) {
             <br />
             <small className={utilStyles.lightText}>
               The final group project as part of the Dev Academy course. Hosted
-              on Railway and built with React and Redux. Frequently offline due
-              to Railway&apos;s free tier limits.
+              on Railway (originally on Heroku) and built with React and Redux.
+              Frequently offline due to Railway&apos;s free tier limits.
             </small>
           </li>
 
