@@ -56,6 +56,23 @@ export default function Home({ allPostsData }) {
           ))}
         </ul>
       </section>
+
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Projects</h2>
+        <ul className={utilStyles.list}>
+          <li className={utilStyles.listItem}>
+            <Link href="https://brendan-jarvis.github.io">
+              Dev Academy Blog
+            </Link>
+            <br />
+            <small className={utilStyles.lightText}>21 June 2022</small>
+            <br />
+            <small className={utilStyles.lightText}>
+              A blog built to learn HTML and CSS during Dev Academy.
+            </small>
+          </li>
+        </ul>
+      </section>
     </Layout>
   )
 }
