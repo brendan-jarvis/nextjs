@@ -61,6 +61,17 @@ export default function Home({ allPostsData }) {
         <h2 className={utilStyles.headingLg}>Projects</h2>
         <ul className={utilStyles.list}>
           <li className={utilStyles.listItem}>
+            <Link href="https://brew.onrender.com/">Brew!</Link>
+            <br />
+            <small className={utilStyles.lightText}>17 September 2022</small>
+            <br />
+            <small className={utilStyles.lightText}>
+              A personal project started to learn front-end development with
+              React and Redux, and Supabase as a backend.
+            </small>
+          </li>
+
+          <li className={utilStyles.listItem}>
             <Link href="https://brendan-jarvis.github.io">
               Dev Academy Blog
             </Link>
