@@ -21,6 +21,13 @@ const Scene = () => {
         <meshStandardMaterial attach="material" color={'cornflowerblue'} />
       </mesh>
 
+      <directionalLight
+        position={[1, 1, 0]}
+        intensity={2}
+        castShadow
+        color={'#F4E99B'}
+      />
+
       <Stars
         radius={100}
         depth={50}
