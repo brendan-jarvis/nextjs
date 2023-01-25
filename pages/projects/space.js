@@ -41,7 +41,7 @@ const Scene = () => {
   )
 }
 
-const Box = () => {
+const Space = () => {
   const cameraControlRef = useRef()
 
   return (
@@ -109,4 +109,4 @@ const Box = () => {
   )
 }
 
-export default Box
+export default Space
