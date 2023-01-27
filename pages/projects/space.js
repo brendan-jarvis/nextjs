@@ -47,7 +47,7 @@ const Space = () => {
   return (
     <>
       <Head>
-        <title>Three.js</title>
+        <title>Space</title>
       </Head>
       <Canvas>
         <CameraControls ref={cameraControlRef} />
