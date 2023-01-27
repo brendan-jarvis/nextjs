@@ -13,7 +13,7 @@ const Spaceship = () => {
 
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
-      <icosahedronGeometry />
+      <tetrahedronGeometry />
       <meshStandardMaterial color={'white'} />
     </mesh>
   )
