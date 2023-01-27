@@ -1,21 +1,11 @@
 import React, { useRef, useEffect } from 'react'
 import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
-import {
-  CameraControls,
-  KeyboardControls,
-  KeyboardControlsEntry,
-  Stars,
-} from '@react-three/drei'
+import { CameraControls, Stars } from '@react-three/drei'
 
 const Spaceship = () => {
   const meshRef = useRef()
   const speed = 0.1
-
-  // useFrame(() => {
-  //   meshRef.current.rotation.x += 0.01
-  //   meshRef.current.rotation.y += 0.01
-  // })
 
   useEffect(() => {
     const onKeyDown = (e) => {
