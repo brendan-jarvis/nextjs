@@ -17,10 +17,10 @@ const Spaceship = () => {
           meshRef.current.position.y -= speed
           break
         case 'ArrowLeft':
-          meshRef.current.rotation.z += speed
+          meshRef.current.rotation.x += speed
           break
         case 'ArrowRight':
-          meshRef.current.rotation.z -= speed
+          meshRef.current.rotation.x -= speed
           break
         default:
           break
@@ -45,7 +45,7 @@ const Scene = () => {
       <ambientLight intensity={0.1} />
 
       <directionalLight
-        position={[1, 1, 0]}
+        position={[1, 1, 1]}
         intensity={2}
         castShadow
         color={'#F4E99B'}
