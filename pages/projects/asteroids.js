@@ -4,23 +4,23 @@ import { Canvas } from '@react-three/fiber'
 import { CameraControls, Stars } from '@react-three/drei'
 
 const Spaceship = () => {
-  const meshRef = useRef()
+  const spaceshipRef = useRef()
   const speed = 0.1
 
   useEffect(() => {
     const onKeyDown = (e) => {
       switch (e.key) {
         case 'ArrowUp':
-          meshRef.current.position.y += speed
+          spaceshipRef.current.position.y += speed
           break
         case 'ArrowDown':
-          meshRef.current.position.y -= speed
+          spaceshipRef.current.position.y -= speed
           break
         case 'ArrowLeft':
-          meshRef.current.rotation.x += speed
+          spaceshipRef.current.position.x -= speed
           break
         case 'ArrowRight':
-          meshRef.current.rotation.x -= speed
+          spaceshipRef.current.position.x += speed
           break
         default:
           break
@@ -32,8 +32,14 @@ const Spaceship = () => {
   }, [speed])
 
   return (
-    <mesh castShadow ref={meshRef} position={[0, 0, 0]}>
-      <tetrahedronGeometry />
+    // <mesh ref={spaceshipRef} castShadow receiveShadow>
+    //   {/* <tetrahedronGeometry /> */}
+    //   <coneGeometry args={[1, 2, 20]} radialSegments="3" />
+    //   <meshStandardMaterial color={'white'} />
+    // </mesh>
+
+    <mesh ref={spaceshipRef} castShadow receiveShadow>
+      <coneGeometry radius={5} height={20} radialSegments={3} />
       <meshStandardMaterial color={'white'} />
     </mesh>
   )
