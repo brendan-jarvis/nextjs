@@ -72,7 +72,10 @@ const Asteroids = () => {
       <Head>
         <title>Asteroids</title>
       </Head>
-      <Canvas camera={{ fov: 90, near: 0.1, far: 1000, position: [0, 0, 10] }}>
+      <Canvas
+        camera={{ fov: 90, near: 0.1, far: 1000, position: [0, 0, 10] }}
+        shadows
+      >
         <CameraControls ref={cameraControlRef} />
         <color attach="background" args={['black']} />
         <Spaceship />
