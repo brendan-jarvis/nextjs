@@ -16,7 +16,7 @@ const Scene = () => {
   return (
     <>
       <ambientLight intensity={0.1} />
-      <mesh ref={myMesh}>
+      <mesh ref={myMesh} castShadow receiveShadow>
         <dodecahedronGeometry attach="geometry" args={[1, 0]} />
         <meshStandardMaterial attach="material" color={'cornflowerblue'} />
       </mesh>
@@ -49,7 +49,7 @@ const Space = () => {
       <Head>
         <title>Space</title>
       </Head>
-      <Canvas>
+      <Canvas camera={{ fov: 90, position: [0, 0, 10] }} shadows>
         <CameraControls ref={cameraControlRef} />
         <color attach="background" args={['black']} />
         <Scene />
