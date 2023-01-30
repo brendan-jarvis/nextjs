@@ -22,7 +22,7 @@ const Scene = () => {
       </mesh>
 
       <directionalLight
-        position={[1, 1, 0]}
+        position={[10, 10, 10]}
         intensity={2}
         castShadow
         color={'#F4E99B'}

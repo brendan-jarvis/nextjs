@@ -62,7 +62,7 @@ const Asteroids = () => {
         <directionalLight
           angle={0.25}
           penumbra={0.5}
-          position={[10, 10, 5]}
+          position={[10, 10, 10]}
           intensity={2}
           color={'#F4E99B'}
           castShadow
