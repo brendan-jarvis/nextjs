@@ -59,7 +59,7 @@ const Asteroids = () => {
         <Spaceship />
         <ambientLight intensity={0.1} />
 
-        <spotLight
+        <directionalLight
           angle={0.25}
           penumbra={0.5}
           position={[10, 10, 5]}
