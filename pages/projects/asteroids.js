@@ -93,8 +93,8 @@ const Asteroids = () => {
         <color attach="background" args={['black']} />
         <Spaceship />
         <AsteroidSpawner count={100} />
-        <ambientLight intensity={0.5} />
 
+        <hemisphereLight intensity={0.5} position={[10, 10, 10]} />
         <directionalLight
           position={[10, 10, 10]}
           intensity={2}
