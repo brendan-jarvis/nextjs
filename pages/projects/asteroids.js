@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { CameraControls, Stars } from '@react-three/drei'
+import { Physics } from '@react-three/cannon'
 
 const AsteroidSpawner = ({ count = 10 }) => {
   const asteroidRef = useRef()
@@ -90,8 +91,10 @@ const Asteroids = () => {
       <Canvas camera={{ fov: 90, position: [0, 0, 50] }} shadows color="black">
         <CameraControls ref={cameraControlRef} />
 
-        <Spaceship />
-        <AsteroidSpawner count={100} />
+        <Physics>
+          <Spaceship />
+          <AsteroidSpawner count={100} />
+        </Physics>
 
         <hemisphereLight intensity={0.5} position={[10, 10, 10]} />
         <directionalLight
