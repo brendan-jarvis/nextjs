@@ -8,16 +8,21 @@ const Scene = () => {
 
   // Rotate x, y, and z axis
   useFrame(() => {
-    myMesh.current.rotation.z += 0.02
+    myMesh.current.rotation.x += 0.02
 
-    myMesh.current.position.z += 0.01
+    myMesh.current.position.x += 0.05
+    myMesh.current.position.z += 0.1
   })
 
   return (
     <>
       <ambientLight intensity={0.1} />
       <mesh ref={myMesh} castShadow receiveShadow>
-        <dodecahedronGeometry attach="geometry" args={[1, 0]} />
+        <dodecahedronGeometry
+          attach="geometry"
+          args={[1, 0]}
+          position={[10, 10, 10]}
+        />
         <meshStandardMaterial attach="material" color={'cornflowerblue'} />
       </mesh>
 
@@ -49,7 +54,7 @@ const Space = () => {
       <Head>
         <title>Space</title>
       </Head>
-      <Canvas camera={{ fov: 90, position: [0, 0, 10] }} shadows>
+      <Canvas camera={{ fov: 90, position: [0, 0, 100] }} shadows>
         <CameraControls ref={cameraControlRef} />
         <color attach="background" args={['black']} />
         <Scene />
