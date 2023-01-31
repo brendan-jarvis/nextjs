@@ -8,7 +8,8 @@ const Scene = () => {
 
   // Rotate x, y, and z axis
   useFrame((state, delta) => {
-    myMesh.current.rotation.x += 0.02
+    myMesh.current.rotation.x =
+      2.5 * (1 + Math.sin(state.clock.getElapsedTime() * 2))
 
     myMesh.current.position.x += 0.05
     myMesh.current.position.z += 0.01
