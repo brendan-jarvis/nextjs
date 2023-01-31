@@ -1,20 +1,25 @@
 import React, { useRef, useEffect } from 'react'
 import Head from 'next/head'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { CameraControls, Stars } from '@react-three/drei'
 
 const Spaceship = () => {
   const spaceshipRef = useRef()
   const speed = 0.1
+  let acceleration = 0.01
+
+  useFrame((state, delta) => {
+    spaceshipRef.current.position.y += acceleration
+  })
 
   useEffect(() => {
     const onKeyDown = (e) => {
       switch (e.key) {
         case 'ArrowUp':
-          spaceshipRef.current.position.y += speed
+          acceleration += speed
           break
         case 'ArrowDown':
-          spaceshipRef.current.position.y -= speed
+          acceleration -= speed
           break
         case 'ArrowLeft':
           spaceshipRef.current.rotation.z += speed
@@ -60,8 +65,6 @@ const Asteroids = () => {
         <ambientLight intensity={0.1} />
 
         <directionalLight
-          angle={0.25}
-          penumbra={0.5}
           position={[10, 10, 10]}
           intensity={2}
           color={'#F4E99B'}
