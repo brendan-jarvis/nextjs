@@ -5,21 +5,21 @@ import { CameraControls, Stars } from '@react-three/drei'
 
 const Spaceship = () => {
   const spaceshipRef = useRef()
+  const accelerationRef = useRef(0.0)
   const speed = 0.1
-  let acceleration = 0.01
 
   useFrame((state, delta) => {
-    spaceshipRef.current.position.y += acceleration
+    spaceshipRef.current.position.y += accelerationRef.current
   })
 
   useEffect(() => {
     const onKeyDown = (e) => {
       switch (e.key) {
         case 'ArrowUp':
-          acceleration += speed
+          accelerationRef.current += speed
           break
         case 'ArrowDown':
-          acceleration -= speed
+          accelerationRef.current -= speed
           break
         case 'ArrowLeft':
           spaceshipRef.current.rotation.z += speed
@@ -58,7 +58,7 @@ const Asteroids = () => {
       <Head>
         <title>Asteroids</title>
       </Head>
-      <Canvas camera={{ fov: 90, position: [0, 0, 10] }} shadows>
+      <Canvas camera={{ fov: 90, position: [0, 0, 50] }} shadows>
         <CameraControls ref={cameraControlRef} />
         <color attach="background" args={['black']} />
         <Spaceship />
