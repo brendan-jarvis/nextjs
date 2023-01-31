@@ -1,41 +1,62 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useMemo } from 'react'
 import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { CameraControls, Stars } from '@react-three/drei'
+import { CameraControls } from '@react-three/drei'
 import { Physics } from '@react-three/cannon'
 
-const AsteroidSpawner = ({ count = 10 }) => {
-  const asteroidRef = useRef()
+const AsteroidSpawner = ({ count = 1 }) => {
   const [asteroids, setAsteroids] = useState([])
-  const asteroidSpeed = 0.5
 
-  const directionX = Math.random() * asteroidSpeed + 1
-  const directionY = Math.random() * asteroidSpeed + 1
+  useMemo(() => {
+    for (let i = 0; i < count; i++) {
+      const asteroidSpeed = Math.random() * 5 + 1
+      const directionX = Math.random() * 2 - 1
+      const directionY = Math.random() * 2 - 1
+      const asteroid = (
+        <mesh key={i}>
+          <octahedronGeometry
+            radius={Math.random() * 5 + 1}
+            detail={Math.floor(Math.random() * 3) + 1}
+            position={[Math.random() * 10, Math.random() * 10, 0]}
+          />
+          <meshStandardMaterial
+            color={`hsl(${Math.random() * 360}, 100%, 50%)`}
+          />
+        </mesh>
+      )
+      setAsteroids((prev) => [
+        ...prev,
+        { asteroid, asteroidSpeed, directionX, directionY },
+      ])
+    }
+  }, [count])
+
+  return (
+    <>
+      {asteroids.map(
+        ({ asteroid, asteroidSpeed, directionX, directionY }, i) => (
+          <Asteroid
+            key={i}
+            asteroid={asteroid}
+            asteroidSpeed={asteroidSpeed}
+            directionX={directionX}
+            directionY={directionY}
+          />
+        )
+      )}
+    </>
+  )
+}
+
+const Asteroid = ({ asteroid, asteroidSpeed, directionX, directionY }) => {
+  const meshRef = useRef()
 
   useFrame((state, delta) => {
-    asteroidRef.current.position.x += directionX * asteroidSpeed * delta
-    asteroidRef.current.position.y += directionY * asteroidSpeed * delta
+    meshRef.current.position.x += directionX * asteroidSpeed * delta
+    meshRef.current.position.y += directionY * asteroidSpeed * delta
   })
 
-  for (let i = 0; i < count; i++) {
-    asteroids.push(
-      <mesh ref={asteroidRef} key={i} castShadow receiveShadow>
-        <octahedronGeometry
-          attach="geometry"
-          args={[1, 0]}
-          radius={Math.floor(Math.random() * 4) + 1}
-          detail={Math.floor(Math.random() * 3) + 1}
-        />
-        <meshStandardMaterial
-          attach="material"
-          color={`hsl(${Math.random() * 360}, 100%, 50%)`}
-          roughness={0.5}
-        />
-      </mesh>
-    )
-  }
-
-  return <>{asteroids}</>
+  return <>{React.cloneElement(asteroid, { ref: meshRef })}</>
 }
 
 const Spaceship = () => {
@@ -88,7 +109,7 @@ const Asteroids = () => {
       <Head>
         <title>Asteroids</title>
       </Head>
-      <Canvas camera={{ fov: 90, position: [0, 0, 50] }} shadows color="black">
+      <Canvas camera={{ zoom: 10 }} orthographic shadows color="black">
         <CameraControls ref={cameraControlRef} />
 
         <Physics>
@@ -102,16 +123,6 @@ const Asteroids = () => {
           intensity={2}
           color={'#FFF'}
           castShadow
-        />
-
-        <Stars
-          radius={100}
-          depth={50}
-          count={5000}
-          factor={4}
-          saturation={0}
-          fade
-          speed={1}
         />
       </Canvas>
     </>
