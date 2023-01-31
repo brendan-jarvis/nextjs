@@ -17,10 +17,10 @@ const Spaceship = () => {
           spaceshipRef.current.position.y -= speed
           break
         case 'ArrowLeft':
-          spaceshipRef.current.position.x -= speed
+          spaceshipRef.current.rotation.z += speed
           break
         case 'ArrowRight':
-          spaceshipRef.current.position.x += speed
+          spaceshipRef.current.rotation.z -= speed
           break
         default:
           break
