@@ -3,17 +3,17 @@ import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { CameraControls, Stars } from '@react-three/drei'
 
-const AsteroidSpawner = ({ count }) => {
+const AsteroidSpawner = ({ count = 10 }) => {
   const asteroidRef = useRef()
   const [asteroids, setAsteroids] = useState([])
-  const speed = 0.1
+  const asteroidSpeed = 0.5
 
-  const bearingX = Math.random() * 2 - 1
-  const bearingY = Math.random() * 2 - 1
+  const directionX = Math.random() * asteroidSpeed + 1
+  const directionY = Math.random() * asteroidSpeed + 1
 
   useFrame((state, delta) => {
-    asteroidRef.current.position.x += bearingX * speed
-    asteroidRef.current.position.y += bearingY * speed
+    asteroidRef.current.position.x += directionX * asteroidSpeed * delta
+    asteroidRef.current.position.y += directionY * asteroidSpeed * delta
   })
 
   for (let i = 0; i < count; i++) {
@@ -22,9 +22,8 @@ const AsteroidSpawner = ({ count }) => {
         <octahedronGeometry
           attach="geometry"
           args={[1, 0]}
-          radius={Math.random()}
+          radius={Math.floor(Math.random() * 4) + 1}
           detail={Math.floor(Math.random() * 3) + 1}
-          position={[Math.random() * 100, Math.random() * 100, 0]}
         />
         <meshStandardMaterial
           attach="material"
@@ -88,9 +87,9 @@ const Asteroids = () => {
       <Head>
         <title>Asteroids</title>
       </Head>
-      <Canvas camera={{ fov: 90, position: [0, 0, 50] }} shadows>
+      <Canvas camera={{ fov: 90, position: [0, 0, 50] }} shadows color="black">
         <CameraControls ref={cameraControlRef} />
-        <color attach="background" args={['black']} />
+
         <Spaceship />
         <AsteroidSpawner count={100} />
 
