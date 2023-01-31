@@ -7,22 +7,23 @@ const Scene = () => {
   const myMesh = useRef()
 
   // Rotate x, y, and z axis
-  useFrame(() => {
+  useFrame((state, delta) => {
     myMesh.current.rotation.x += 0.02
 
     myMesh.current.position.x += 0.05
-    myMesh.current.position.z += 0.1
+    myMesh.current.position.z += 0.01
+
+    myMesh.current.scale.x =
+      myMesh.current.scale.y =
+      myMesh.current.scale.z =
+        2.5 * (1 + Math.sin(state.clock.getElapsedTime() * 2)) + 2.5
   })
 
   return (
     <>
       <ambientLight intensity={0.1} />
       <mesh ref={myMesh} castShadow receiveShadow>
-        <dodecahedronGeometry
-          attach="geometry"
-          args={[1, 0]}
-          position={[10, 10, 10]}
-        />
+        <dodecahedronGeometry attach="geometry" args={[1, 0]} />
         <meshStandardMaterial attach="material" color={'cornflowerblue'} />
       </mesh>
 
