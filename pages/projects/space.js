@@ -25,7 +25,11 @@ const Scene = () => {
       <ambientLight intensity={0.1} />
       <mesh ref={myMesh} castShadow receiveShadow>
         <dodecahedronGeometry attach="geometry" args={[1, 0]} />
-        <meshStandardMaterial attach="material" color={'cornflowerblue'} />
+        <meshStandardMaterial
+          attach="material"
+          color={'cornflowerblue'}
+          roughness={0.5}
+        />
       </mesh>
 
       <directionalLight

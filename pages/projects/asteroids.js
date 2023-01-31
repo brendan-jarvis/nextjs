@@ -45,7 +45,7 @@ const Spaceship = () => {
 
     <mesh ref={spaceshipRef} castShadow receiveShadow>
       <coneGeometry radius={5} height={20} radialSegments={3} />
-      <meshStandardMaterial color={'white'} />
+      <meshStandardMaterial color={'white'} roughness={0.5} />
     </mesh>
   )
 }
