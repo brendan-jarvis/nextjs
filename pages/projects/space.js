@@ -8,9 +8,9 @@ const Scene = () => {
 
   // Rotate x, y, and z axis
   useFrame(() => {
-    myMesh.current.rotation.x += 0.01
-    myMesh.current.rotation.y += 0.02
-    myMesh.current.rotation.z += 0.03
+    myMesh.current.rotation.z += 0.02
+
+    myMesh.current.position.z += 0.01
   })
 
   return (
