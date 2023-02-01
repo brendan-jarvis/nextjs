@@ -62,6 +62,7 @@ const Asteroid = ({ asteroid, asteroidSpeed, directionX, directionY }) => {
 const Spaceship = () => {
   const spaceshipRef = useRef()
   const accelerationRef = useRef(0.0)
+  const enginesFiringRef = useRef(false)
   const speed = 0.1
   const turnSpeed = 0.3
 
@@ -74,6 +75,7 @@ const Spaceship = () => {
       switch (e.key) {
         case 'ArrowUp':
           accelerationRef.current += speed
+          enginesFiringRef.current = true
           break
         case 'ArrowDown':
           accelerationRef.current -= speed
