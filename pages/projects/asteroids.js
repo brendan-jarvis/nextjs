@@ -67,7 +67,13 @@ const Spaceship = () => {
   const turnSpeed = 0.3
 
   useFrame((state, delta) => {
-    spaceshipRef.current.position.y += accelerationRef.current
+    // spaceshipRef.current.position.y += accelerationRef.current
+    spaceshipRef.current.position.x +=
+      Math.cos(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
+      accelerationRef.current
+    spaceshipRef.current.position.y +=
+      Math.sin(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
+      accelerationRef.current
   })
 
   useEffect(() => {
