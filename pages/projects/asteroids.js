@@ -117,7 +117,7 @@ const Asteroids = () => {
           <AsteroidSpawner count={100} />
         </Physics>
 
-        <hemisphereLight intensity={0.5} position={[10, 10, 10]} />
+        <hemisphereLight intensity={0.125} color="#8040df" groundColor="red" />
         <directionalLight
           position={[10, 10, 10]}
           intensity={2}
