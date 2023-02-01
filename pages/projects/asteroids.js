@@ -9,7 +9,7 @@ const AsteroidSpawner = ({ count = 1 }) => {
 
   useMemo(() => {
     for (let i = 0; i < count; i++) {
-      const asteroidSpeed = Math.random() * 5 + 1
+      const asteroidSpeed = Math.random() * 2 + 5
       const directionX = Math.random() * 2 - 1
       const directionY = Math.random() * 2 - 1
       const asteroid = (
