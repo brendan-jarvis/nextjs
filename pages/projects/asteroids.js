@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react'
 import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { CameraControls } from '@react-three/drei'
+import { CameraControls, Stars } from '@react-three/drei'
 import { Physics } from '@react-three/cannon'
 
 const AsteroidSpawner = ({ count = 1 }) => {
@@ -119,6 +119,15 @@ const Asteroids = () => {
           <AsteroidSpawner count={100} />
         </Physics>
 
+        <Stars
+          radius={40}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={50}
+          fade
+          speed={1}
+        />
         <hemisphereLight intensity={0.6} color="#8040df" groundColor="yellow" />
         <directionalLight
           position={[10, 10, 10]}
