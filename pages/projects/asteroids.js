@@ -54,6 +54,25 @@ const Asteroid = ({ asteroid, asteroidSpeed, directionX, directionY }) => {
   useFrame((state, delta) => {
     meshRef.current.position.x += directionX * asteroidSpeed * delta
     meshRef.current.position.y += directionY * asteroidSpeed * delta
+
+    const { x, y } = meshRef.current.position
+    const bounds = {
+      min: { x: -50, y: -50 },
+      max: { x: 50, y: 50 },
+    }
+
+    if (x < bounds.min.x) {
+      meshRef.current.position.x = bounds.max.x
+    }
+    if (x > bounds.max.x) {
+      meshRef.current.position.x = bounds.min.x
+    }
+    if (y < bounds.min.y) {
+      meshRef.current.position.y = bounds.max.y
+    }
+    if (y > bounds.max.y) {
+      meshRef.current.position.y = bounds.min.y
+    }
   })
 
   return <>{React.cloneElement(asteroid, { ref: meshRef })}</>
