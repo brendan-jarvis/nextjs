@@ -12,18 +12,17 @@ const AsteroidSpawner = ({ count = 1 }) => {
       const asteroidSpeed = Math.random() * 2 + 5
       const directionX = Math.random() * 2 - 1
       const directionY = Math.random() * 2 - 1
+      const position = [Math.random() * 10, Math.random() * 10, 0]
+
       const asteroid = (
         <mesh key={i}>
-          <octahedronGeometry
-            radius={Math.random() * 5 + 1}
-            detail={Math.floor(Math.random() * 3) + 1}
-            position={[Math.random() * 10, Math.random() * 10, 0]}
-          />
+          <octahedronGeometry position={position} />
           <meshStandardMaterial
             color={`hsl(${Math.random() * 360}, 100%, 50%)`}
           />
         </mesh>
       )
+
       setAsteroids((prev) => [
         ...prev,
         { asteroid, asteroidSpeed, directionX, directionY },
@@ -87,7 +86,6 @@ const Spaceship = () => {
   const friction = 0.997
 
   useFrame((state, delta) => {
-    // spaceshipRef.current.position.y += accelerationRef.current
     spaceshipRef.current.position.x +=
       Math.cos(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
       accelerationRef.current
@@ -97,7 +95,6 @@ const Spaceship = () => {
 
     accelerationRef.current *= friction
 
-    // Prevent spaceship from going backwards
     if (accelerationRef.current < 0) {
       accelerationRef.current = 0
     }
