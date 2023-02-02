@@ -7,12 +7,13 @@ import { Physics } from '@react-three/cannon'
 const AsteroidSpawner = ({ count = 1 }) => {
   const [asteroids, setAsteroids] = useState([])
 
-  const getRandomBetweenRanges = () => {
-    const range1 = Math.floor(Math.random() * (50 - 10 + 1) + 10)
-    const range2 = Math.floor(Math.random() * (50 + 50 + 1) - 50)
+  function getRandomBetweenRanges() {
+    const randomNumber = Math.random() * 100 - 50
 
-    // 50% chance of returning either range1 or range2
-    return Math.random() < 0.5 ? range1 : range2
+    if (randomNumber >= -10 && randomNumber <= 10) {
+      return getRandomBetweenRanges()
+    }
+    return randomNumber
   }
 
   useMemo(() => {
@@ -21,8 +22,6 @@ const AsteroidSpawner = ({ count = 1 }) => {
       const directionX = Math.random() * 2 - 1
       const directionY = Math.random() * 2 - 1
       const position = [getRandomBetweenRanges(), getRandomBetweenRanges(), 0]
-
-      console.log(position)
 
       const asteroid = (
         <mesh key={i} position={position}>
@@ -93,7 +92,7 @@ const Spaceship = () => {
   const enginesFiringRef = useRef(false)
   const speed = 0.1
   const turnSpeed = 0.3
-  const friction = 0.997
+  const friction = 0.996
 
   useFrame((state, delta) => {
     spaceshipRef.current.position.x +=
