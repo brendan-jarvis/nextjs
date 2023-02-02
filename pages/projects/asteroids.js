@@ -84,6 +84,7 @@ const Spaceship = () => {
   const enginesFiringRef = useRef(false)
   const speed = 0.1
   const turnSpeed = 0.3
+  const friction = 0.997
 
   useFrame((state, delta) => {
     // spaceshipRef.current.position.y += accelerationRef.current
@@ -93,6 +94,8 @@ const Spaceship = () => {
     spaceshipRef.current.position.y +=
       Math.sin(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
       accelerationRef.current
+
+    accelerationRef.current *= friction
 
     const { x, y } = spaceshipRef.current.position
     const bounds = {
