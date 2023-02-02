@@ -7,16 +7,16 @@ import { Physics } from '@react-three/cannon'
 const AsteroidSpawner = ({ count = 1 }) => {
   const [asteroids, setAsteroids] = useState([])
 
-  function getRandomBetweenRanges() {
-    const randomNumber = Math.random() * 100 - 50
-
-    if (randomNumber >= -10 && randomNumber <= 10) {
-      return getRandomBetweenRanges()
-    }
-    return randomNumber
-  }
-
   useMemo(() => {
+    function getRandomBetweenRanges() {
+      const randomNumber = Math.random() * 100 - 50
+
+      if (randomNumber >= -10 && randomNumber <= 10) {
+        return getRandomBetweenRanges()
+      }
+      return randomNumber
+    }
+
     for (let i = 0; i < count; i++) {
       const asteroidSpeed = Math.random() * 2 + 5
       const directionX = Math.random() * 2 - 1
