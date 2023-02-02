@@ -1,8 +1,16 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react'
 import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { CameraControls, Stars, Line } from '@react-three/drei'
+import { CameraControls, Stars, Line, Text, Text3D } from '@react-three/drei'
 import { Physics } from '@react-three/cannon'
+
+import { Press_Start_2P } from '@next/font/google'
+const pressStart2P = Press_Start_2P({
+  weight: '400',
+  subsets: ['latin'],
+})
+
+console.log(pressStart2P)
 
 const AsteroidSpawner = ({ count = 1 }) => {
   const [asteroids, setAsteroids] = useState([])
@@ -176,6 +184,53 @@ const PlayArea = () => {
   )
 }
 
+const Hud = () => {
+  const hudRef = useRef()
+  const [score, setScore] = useState(0)
+  const [lives, setLives] = useState(3)
+
+  useFrame((state, delta) => {
+    hudRef.current.position.x = state.camera.position.x
+    hudRef.current.position.y = state.camera.position.y
+  })
+
+  return (
+    <group ref={hudRef}>
+      <Text
+        className={pressStart2P.className}
+        color="white"
+        fontSize={8}
+        position={[0, 55, 0]}
+        rotation={[0, 0, 0]}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Asteroids
+      </Text>
+      <Text
+        color="white"
+        fontSize={6}
+        position={[-25, -55, 0]}
+        rotation={[0, 0, 0]}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Score: {score}
+      </Text>
+      <Text
+        color="white"
+        fontSize={6}
+        position={[25, -55, 0]}
+        rotation={[0, 0, 0]}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Lives: {lives}
+      </Text>
+    </group>
+  )
+}
+
 const Asteroids = () => {
   const cameraControlRef = useRef()
 
@@ -189,8 +244,10 @@ const Asteroids = () => {
 
         <Physics>
           <Spaceship />
-          <AsteroidSpawner count={200} />
+          <AsteroidSpawner count={100} />
         </Physics>
+
+        <Hud />
 
         <PlayArea />
         <Stars
