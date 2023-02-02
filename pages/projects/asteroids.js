@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react'
 import Head from 'next/head'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { CameraControls, Stars } from '@react-three/drei'
+import { CameraControls, Stars, Line } from '@react-three/drei'
 import { Physics } from '@react-three/cannon'
 
 const AsteroidSpawner = ({ count = 1 }) => {
@@ -74,6 +74,25 @@ const Spaceship = () => {
     spaceshipRef.current.position.y +=
       Math.sin(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
       accelerationRef.current
+
+    const { x, y } = spaceshipRef.current.position
+    const bounds = {
+      min: { x: -50, y: -50 },
+      max: { x: 50, y: 50 },
+    }
+
+    if (x < bounds.min.x) {
+      spaceshipRef.current.position.x = bounds.max.x
+    }
+    if (x > bounds.max.x) {
+      spaceshipRef.current.position.x = bounds.min.x
+    }
+    if (y < bounds.min.y) {
+      spaceshipRef.current.position.y = bounds.max.y
+    }
+    if (y > bounds.max.y) {
+      spaceshipRef.current.position.y = bounds.min.y
+    }
   })
 
   useEffect(() => {
@@ -109,6 +128,20 @@ const Spaceship = () => {
   )
 }
 
+const PlayArea = () => {
+  const playAreaRef = useRef()
+  return (
+    <Line
+      ref={playAreaRef}
+      points={[
+        -50, -50, 0, 50, -50, 0, 50, 50, 0, 50, 50, 0, -50, 50, 0, -50, -50, 0,
+      ]}
+      color="white"
+      lineWidth={1}
+    />
+  )
+}
+
 const Asteroids = () => {
   const cameraControlRef = useRef()
 
@@ -117,16 +150,17 @@ const Asteroids = () => {
       <Head>
         <title>Asteroids</title>
       </Head>
-      <Canvas camera={{ zoom: 10 }} orthographic shadows color="black">
+      <Canvas camera={{ zoom: 7 }} orthographic shadows color="black">
         <CameraControls ref={cameraControlRef} />
 
         <Physics>
           <Spaceship />
-          <AsteroidSpawner count={100} />
+          <AsteroidSpawner count={200} />
         </Physics>
 
+        <PlayArea />
         <Stars
-          radius={40}
+          radius={50}
           depth={50}
           count={5000}
           factor={4}
