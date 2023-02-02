@@ -7,16 +7,26 @@ import { Physics } from '@react-three/cannon'
 const AsteroidSpawner = ({ count = 1 }) => {
   const [asteroids, setAsteroids] = useState([])
 
+  const getRandomBetweenRanges = () => {
+    const range1 = Math.floor(Math.random() * (50 - 10 + 1) + 10)
+    const range2 = Math.floor(Math.random() * (50 + 50 + 1) - 50)
+
+    // 50% chance of returning either range1 or range2
+    return Math.random() < 0.5 ? range1 : range2
+  }
+
   useMemo(() => {
     for (let i = 0; i < count; i++) {
       const asteroidSpeed = Math.random() * 2 + 5
       const directionX = Math.random() * 2 - 1
       const directionY = Math.random() * 2 - 1
-      const position = [Math.random() * 10, Math.random() * 10, 0]
+      const position = [getRandomBetweenRanges(), getRandomBetweenRanges(), 0]
+
+      console.log(position)
 
       const asteroid = (
-        <mesh key={i}>
-          <octahedronGeometry position={position} />
+        <mesh key={i} position={position}>
+          <octahedronGeometry />
           <meshStandardMaterial
             color={`hsl(${Math.random() * 360}, 100%, 50%)`}
           />
