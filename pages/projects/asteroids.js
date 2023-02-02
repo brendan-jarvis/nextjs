@@ -97,6 +97,11 @@ const Spaceship = () => {
 
     accelerationRef.current *= friction
 
+    // Prevent spaceship from going backwards
+    if (accelerationRef.current < 0) {
+      accelerationRef.current = 0
+    }
+
     const { x, y } = spaceshipRef.current.position
     const bounds = {
       min: { x: -50, y: -50 },
@@ -125,7 +130,7 @@ const Spaceship = () => {
           enginesFiringRef.current = true
           break
         case 'ArrowDown':
-          accelerationRef.current -= speed
+          if (accelerationRef.current > 0) accelerationRef.current -= speed
           break
         case 'ArrowLeft':
           spaceshipRef.current.rotation.z += turnSpeed
