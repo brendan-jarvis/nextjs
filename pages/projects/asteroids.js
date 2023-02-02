@@ -121,10 +121,11 @@ const Spaceship = () => {
   }, [speed])
 
   return (
-    <mesh ref={spaceshipRef} castShadow receiveShadow>
-      <coneGeometry radius={5} height={20} radialSegments={3} />
-      <meshStandardMaterial color={'silver'} roughness={0.5} metalness={0.8} />
-    </mesh>
+    <Line
+      ref={spaceshipRef}
+      points={[-1, -1, 0, 1, -1, 0, 0, 1, 0, -1, -1, 0]}
+      color="white"
+    />
   )
 }
 
