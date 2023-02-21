@@ -61,6 +61,44 @@ export default function Home({ allPostsData }) {
         <h2 className={utilStyles.headingLg}>Projects</h2>
         <ul className={utilStyles.list}>
           <li className={utilStyles.listItem}>
+            <Link href="https://svelte-brendan-jarvis.vercel.app/">
+              Svelte Framework
+            </Link>
+            <br />
+            <small className={utilStyles.lightText}>7 February 2023</small>
+            <br />
+            <small className={utilStyles.lightText}>
+              I had a recommendation to learn Svelte and Azure fundamentals
+              (AZ-900) at a coffee meetup. I started this website using
+              Sveltekit, hosted on Vercel, and built a HackerNews news reader
+              using the HackerNews API. Consuming this external API is hampered
+              by a N+1 query problem. I&apos;ve since returned to studying the
+              AZ-900 content.
+            </small>
+          </li>
+          <li className={utilStyles.listItem}>
+            <Link href="https://nextjs-brendan-jarvis.vercel.app/projects/asteroids">
+              Asteroids Game (unfinished)
+            </Link>
+            <br />
+            <small className={utilStyles.lightText}>24 January 2023</small>
+            <br />
+            <small className={utilStyles.lightText}>
+              I was curious about using Three.js to build 3D computer graphics
+              in a web browser using WebGL. I started this project to learn 3D
+              graphics prompted to do so as part of an (unsuccessful) job
+              application. I&apos;ve since a lot about 3D graphics and how to
+              work with Three.js. I&apos;ll hopefully come back to this project
+              at some point. The application currently uses React, Next.js,{' '}
+              <a href="https://docs.pmnd.rs/react-three-fiber/getting-started/introduction">
+                React-Three-Fiber
+              </a>{' '}
+              and <a href="https://drei.pmnd.rs/">Drei</a>. It is hosted on
+              Vercel with no backend.
+            </small>
+          </li>
+
+          <li className={utilStyles.listItem}>
             <Link href="https://seasoned-production.up.railway.app/">
               Seasoned
             </Link>
