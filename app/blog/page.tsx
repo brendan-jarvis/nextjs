@@ -12,7 +12,7 @@ export default async function Page() {
     <ul className="my-auto text-foreground">
       {posts?.map((post) => (
         <Link key={post.id} href={`blog/${post.id}`}>
-          <li>
+          <li className="underline">
             {post.title} - {dayjs(post.created_at).format('DD MMM YYYY')}
           </li>
         </Link>
