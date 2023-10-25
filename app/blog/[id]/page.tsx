@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import dayjs from 'dayjs'
+import { remark } from 'remark'
 import remarkHtml from 'remark-html'
 
 export const dynamic = 'force-dynamic'
@@ -13,21 +14,27 @@ export default async function Page({ params }: { params: { id: number } }) {
     .single()
 
   if (!post) {
-    return <div>Post not found</div>
+    return (
+      <div className="mx-auto">
+        <h1 className="text-4xl font-bold py-4 text-center">Post not found</h1>
+      </div>
+    )
   }
 
+  const htmlContent = await remark().use(remarkHtml).process(post.content)
+
   return (
-    <div className="text-foreground">
-      <h1 className="text-4xl font-bold">{post.title}</h1>
-      <p className="text-sm">
-        Written {dayjs(post.created_at).format('DD MMM YYYY')}
+    <div className="mx-auto">
+      <h1 className="text-4xl font-bold py-4 text-center">{post.title}</h1>
+      <p className="text-sm text-center py-2">
+        {dayjs(post.created_at).format('DD MMM YYYY')}
+        {post.updated_at !== post.created_at &&
+          ` (updated ${dayjs(post.updated_at).format('DD MMM YYYY')})`}
       </p>
-      <p className="prose">{post.content}</p>
-      <p>-----------------------------</p>
-      <h2 className="text-2xl font-bold">Debug</h2>
-      <pre className="p-4 overflow-auto whitespace-pre-wrap">
-        {JSON.stringify(post, null, 2)}
-      </pre>
+      <div
+        className="prose prose-stone mx-auto"
+        dangerouslySetInnerHTML={{ __html: String(htmlContent) }}
+      />
     </div>
   )
 }
