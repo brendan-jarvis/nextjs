@@ -1,34 +1,15 @@
-import HomeButton from '../components/HomeButton'
-import AuthButton from '../components/AuthButton'
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
 export const dynamic = 'force-dynamic'
 
-const canInitSupabaseClient = () => {
-  try {
-    createClient()
-    return true
-  } catch (e) {
-    return false
-  }
-}
-
 export default async function Index() {
-  const isSupabaseConnected = canInitSupabaseClient()
   const supabase = createClient()
   const { data: posts } = await supabase.from('posts').select()
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-        <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-          <HomeButton />
-          {isSupabaseConnected && <AuthButton />}
-        </div>
-      </nav>
-
       <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
         <main className="flex-1 flex flex-col gap-6">
           <section>

@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Metadata } from 'next'
+import Nav from '@/components/Nav'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className + 'bg-background text-foreground'}>
         <main className="min-h-screen flex flex-col items-center">
+          <Nav />
           {children}
         </main>
       </body>
