@@ -1,6 +1,8 @@
+import Link from 'next/link'
+
 export default function HomeButton() {
   return (
-    <a
+    <Link
       className="py-2 px-3 flex rounded-md no-underline hover:bg-btn-background-hover border"
       href="/"
     >
@@ -16,6 +18,6 @@ export default function HomeButton() {
         ></path>
       </svg>
       Brendan Jarvis
-    </a>
+    </Link>
   )
 }
