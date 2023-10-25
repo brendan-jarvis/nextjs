@@ -12,6 +12,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.10",
+    "lucide-react": "^0.288.0",
     "next": "latest",
     "postcss": "^8.4.31",
     "react": "18.2.0",
