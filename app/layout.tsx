@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Metadata } from 'next'
 
+const inter = Inter({ subsets: ['latin'] })
+
 export const metadata: Metadata = {
   title: 'Brendan Jarvis - Blog',
   description:
@@ -16,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-background text-foreground">
+      <body className={inter.className + 'bg-background text-foreground'}>
         <main className="min-h-screen flex flex-col items-center">
           {children}
         </main>
