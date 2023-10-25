@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { remark } from 'remark'
 import remarkHtml from 'remark-html'
 
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 export default async function Page({ params }: { params: { id: number } }) {
   const supabase = createClient()
