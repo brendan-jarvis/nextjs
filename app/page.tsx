@@ -1,12 +1,12 @@
-import { createClient } from '@/utils/supabase/server'
-import Link from 'next/link'
-import dayjs from 'dayjs'
+import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
+import dayjs from "dayjs";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default async function Index() {
-  const supabase = createClient()
-  const { data: posts } = await supabase.from('posts').select()
+  const supabase = createClient();
+  const { data: posts } = await supabase.from("posts").select();
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
@@ -22,7 +22,7 @@ export default async function Index() {
             Supabase.
           </p>
           <p>
-            You can contact me on{' '}
+            You can contact me on{" "}
             <Link
               className="underline"
               href="https://twitter.com/brendanjjarvis"
@@ -38,7 +38,7 @@ export default async function Index() {
             {posts?.map((post) => (
               <Link key={post.id} href={`blog/${post.id}`}>
                 <li className="font-light underline">
-                  {post.title} - {dayjs(post.created_at).format('DD MMM YYYY')}
+                  {post.title} - {dayjs(post.created_at).format("DD MMM YYYY")}
                 </li>
               </Link>
             ))}
@@ -57,11 +57,10 @@ export default async function Index() {
               <p className="font-light text-sm">7 February 2023</p>
               <p className="font-light">
                 I had a recommendation to learn Svelte and Azure fundamentals
-                (AZ-900) at a coffee meetup. I started this website using
-                Sveltekit, hosted on Vercel, and built a HackerNews news reader
-                using the HackerNews API. Consuming this external API is
-                hampered by a N+1 query problem. I&apos;ve since returned to
-                studying the AZ-900 content.
+                (AZ-900) at a meetup. I started this website using Sveltekit,
+                hosted on Vercel, and built a HackerNews news reader using the
+                HackerNews API. Consuming this external API is hampered by a N+1
+                query problem.
               </p>
             </li>
             <li className="py-2">
@@ -69,22 +68,20 @@ export default async function Index() {
                 className="font-semibold"
                 href="https://nextjs-brendan-jarvis.vercel.app/projects/asteroids"
               >
-                Asteroids Game (unfinished)
+                Three.js Asteroids Game
               </Link>
               <p className="font-light text-sm">24 January 2023</p>
               <p className="font-light">
                 I was curious about using Three.js to build 3D computer graphics
                 in a web browser using WebGL. I started this project to learn 3D
-                graphics prompted to do so as part of an (unsuccessful) job
-                application. I&apos;ve since a lot about 3D graphics and how to
-                work with Three.js. I&apos;ll hopefully come back to this
-                project at some point. The application currently uses React,
-                Next.js,{' '}
-                <a href="https://docs.pmnd.rs/react-three-fiber/getting-started/introduction">
+                graphics prompted to do so as part of a job application.
+                I&apos;ve since a lot about 3D graphics and how to work with
+                Three.js. I&apos;ll hopefully come back to this project at some
+                point. The application currently uses React, Next.js,{" "}
+                <Link href="https://docs.pmnd.rs/react-three-fiber/getting-started/introduction">
                   React-Three-Fiber
-                </a>{' '}
-                and <a href="https://drei.pmnd.rs/">Drei</a>. It is hosted on
-                Vercel with no backend.
+                </Link>{" "}
+                and <Link href="https://drei.pmnd.rs/">Drei</Link>.
               </p>
             </li>
 
@@ -133,17 +130,17 @@ export default async function Index() {
 
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
         <p>
-          Powered by{' '}
-          <a
+          Powered by{" "}
+          <Link
             href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
             target="_blank"
             className="font-bold hover:underline"
             rel="noreferrer"
           >
             Supabase
-          </a>
+          </Link>
         </p>
       </footer>
     </div>
-  )
+  );
 }
