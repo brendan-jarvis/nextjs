@@ -11,33 +11,31 @@ export default async function Index() {
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
-        <section>
-          <h2 className="font-bold text-4xl mb-4">Welcome</h2>
-          <p>
-            Kia ora, my name is Brendan Jarvis. I am using this website to learn
-            Next.js!
+        <section className="text-center">
+          <h2 className="font-bold text-6xl my-4 text-center">Welcome</h2>
+          <p className="mb-2">
+            <span className="bg-citrus-blaze text-slate-100">
+              Kia ora, my name is Brendan Jarvis.
+            </span>
           </p>
-          <p>
-            The front-end is hosted on Vercel and the backend is provided by
-            Supabase.
+          <p className="mb-2">
+            I am using this website to learn Next.js! The front-end is hosted on
+            Vercel and the backend is provided by Supabase.
           </p>
           <p>
             You can contact me on{" "}
-            <Link
-              className="underline"
-              href="https://twitter.com/brendanjjarvis"
-            >
-              Twitter
+            <Link className="underline" href="https://x.com/brendanjjarvis">
+              X
             </Link>
             .
           </p>
         </section>
         <section>
-          <h2 className="font-bold text-4xl mb-4">Blog</h2>
+          <h2 className="font-bold text-orchid-pink text-4xl mb-4">Blog</h2>
           <ul className="my-auto text-foreground">
             {posts?.map((post) => (
               <Link key={post.id} href={`blog/${post.id}`}>
-                <li className="font-light underline">
+                <li className="font-light underline decoration-soft-lilac">
                   {post.title} - {dayjs(post.created_at).format("DD MMM YYYY")}
                 </li>
               </Link>
@@ -45,16 +43,18 @@ export default async function Index() {
           </ul>
         </section>
         <section>
-          <h2 className="font-bold text-4xl mb-4">Projects</h2>
+          <h2 className="font-bold text-orchid-pink text-4xl mb-4">Projects</h2>
           <ul className="my-auto text-foreground">
             <li className="py-2">
               <Link
-                className="font-semibold"
+                className="font-semibold text-gray-700 bg-seafoam-green"
                 href="https://svelte-brendan-jarvis.vercel.app/"
               >
                 Svelte Framework
               </Link>
-              <p className="font-light text-sm">7 February 2023</p>
+              <p className="font-light text-sm bg-sunny-yellow">
+                7 February 2023
+              </p>
               <p className="font-light">
                 I had a recommendation to learn Svelte and Azure fundamentals
                 (AZ-900) at a meetup. I started this website using Sveltekit,
@@ -65,12 +65,14 @@ export default async function Index() {
             </li>
             <li className="py-2">
               <Link
-                className="font-semibold"
+                className="font-semibold text-gray-700 bg-seafoam-green"
                 href="https://nextjs-brendan-jarvis.vercel.app/projects/asteroids"
               >
                 Three.js Asteroids Game
               </Link>
-              <p className="font-light text-sm">24 January 2023</p>
+              <p className="font-light text-sm bg-sunny-yellow">
+                24 January 2023
+              </p>
               <p className="font-light">
                 I was curious about using Three.js to build 3D computer graphics
                 in a web browser using WebGL. I started this project to learn 3D
@@ -87,12 +89,14 @@ export default async function Index() {
 
             <li className="py-2">
               <Link
-                className="font-semibold"
+                className="font-semibold text-gray-700 bg-seafoam-green"
                 href="https://seasoned-production.up.railway.app/"
               >
                 Seasoned
               </Link>
-              <p className="font-light text-sm">21 September 2022</p>
+              <p className="font-light text-sm bg-sunny-yellow">
+                21 September 2022
+              </p>
               <p className="font-light">
                 The final group project as part of the Dev Academy course.
                 Hosted on Railway (originally on Heroku) and built with React
@@ -102,10 +106,15 @@ export default async function Index() {
             </li>
 
             <li className="py-2">
-              <Link className="font-semibold" href="https://brew.onrender.com/">
+              <Link
+                className="font-semibold text-gray-700 bg-seafoam-green"
+                href="https://brew.onrender.com/"
+              >
                 Brew!
               </Link>
-              <p className="font-light text-sm">17 September 2022</p>
+              <p className="font-light text-sm bg-sunny-yellow">
+                17 September 2022
+              </p>
               <p className="font-light">
                 A personal project started to learn front-end development with
                 React and Redux, and Supabase as a backend.
@@ -114,12 +123,12 @@ export default async function Index() {
 
             <li className="py-2">
               <Link
-                className="font-semibold"
+                className="font-semibold text-gray-700 bg-seafoam-green"
                 href="https://brendan-jarvis.github.io"
               >
                 Dev Academy Blog
               </Link>
-              <p className="font-light text-sm">21 June 2022</p>
+              <p className="font-light text-sm bg-sunny-yellow">21 June 2022</p>
               <p className="font-light">
                 A blog built to learn HTML and CSS during Dev Academy.
               </p>
