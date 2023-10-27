@@ -6,7 +6,11 @@ export const dynamic = "force-dynamic";
 
 export default async function Index() {
   const supabase = createClient();
-  const { data: posts } = await supabase.from("posts").select();
+  const { data: posts } = await supabase
+    .from("posts")
+    .select()
+    .limit(10)
+    .order("created_at", { ascending: false });
 
   return (
     <div className="flex w-full flex-1 flex-col items-center gap-20">
@@ -31,7 +35,7 @@ export default async function Index() {
           </p>
         </section>
         <section>
-          <h2 className="mb-4 text-4xl font-bold text-orchid-pink">Blog</h2>
+          <h2 className="mb-4 text-4xl font-bold">Blog</h2>
           <ul className="my-auto text-foreground">
             {posts?.map((post) => (
               <Link key={post.id} href={`blog/${post.id}`}>
@@ -43,7 +47,7 @@ export default async function Index() {
           </ul>
         </section>
         <section>
-          <h2 className="mb-4 text-4xl font-bold text-orchid-pink">Projects</h2>
+          <h2 className="mb-4 text-4xl font-bold">Projects</h2>
           <ul className="my-auto text-foreground">
             <li className="py-2">
               <Link
