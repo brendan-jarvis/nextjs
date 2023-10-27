@@ -14,7 +14,7 @@ export default async function Index() {
         <section className="text-center">
           <h2 className="my-4 text-center text-6xl font-bold">Welcome</h2>
           <p className="mb-2">
-            <span className="bg-citrus-blaze text-slate-100">
+            <span className="bg-citrus-blaze p-1 text-slate-100">
               Kia ora, my name is Brendan Jarvis.
             </span>
           </p>
