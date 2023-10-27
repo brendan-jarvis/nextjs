@@ -9,10 +9,10 @@ export default async function Index() {
   const { data: posts } = await supabase.from("posts").select();
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
+    <div className="flex w-full flex-1 flex-col items-center gap-20">
+      <div className="flex max-w-4xl flex-1 flex-col gap-20 px-3">
         <section className="text-center">
-          <h2 className="font-bold text-6xl my-4 text-center">Welcome</h2>
+          <h2 className="my-4 text-center text-6xl font-bold">Welcome</h2>
           <p className="mb-2">
             <span className="bg-citrus-blaze text-slate-100">
               Kia ora, my name is Brendan Jarvis.
@@ -31,7 +31,7 @@ export default async function Index() {
           </p>
         </section>
         <section>
-          <h2 className="font-bold text-orchid-pink text-4xl mb-4">Blog</h2>
+          <h2 className="mb-4 text-4xl font-bold text-orchid-pink">Blog</h2>
           <ul className="my-auto text-foreground">
             {posts?.map((post) => (
               <Link key={post.id} href={`blog/${post.id}`}>
@@ -43,16 +43,16 @@ export default async function Index() {
           </ul>
         </section>
         <section>
-          <h2 className="font-bold text-orchid-pink text-4xl mb-4">Projects</h2>
+          <h2 className="mb-4 text-4xl font-bold text-orchid-pink">Projects</h2>
           <ul className="my-auto text-foreground">
             <li className="py-2">
               <Link
-                className="font-semibold text-gray-700 bg-seafoam-green"
+                className="bg-seafoam-green font-semibold text-gray-700"
                 href="https://svelte-brendan-jarvis.vercel.app/"
               >
                 Svelte Framework
               </Link>
-              <p className="font-light text-sm bg-sunny-yellow">
+              <p className="bg-sunny-yellow text-sm font-light">
                 7 February 2023
               </p>
               <p className="font-light">
@@ -65,12 +65,12 @@ export default async function Index() {
             </li>
             <li className="py-2">
               <Link
-                className="font-semibold text-gray-700 bg-seafoam-green"
+                className="bg-seafoam-green font-semibold text-gray-700"
                 href="https://nextjs-brendan-jarvis.vercel.app/projects/asteroids"
               >
                 Three.js Asteroids Game
               </Link>
-              <p className="font-light text-sm bg-sunny-yellow">
+              <p className="bg-sunny-yellow text-sm font-light">
                 24 January 2023
               </p>
               <p className="font-light">
@@ -89,12 +89,12 @@ export default async function Index() {
 
             <li className="py-2">
               <Link
-                className="font-semibold text-gray-700 bg-seafoam-green"
+                className="bg-seafoam-green font-semibold text-gray-700"
                 href="https://seasoned-production.up.railway.app/"
               >
                 Seasoned
               </Link>
-              <p className="font-light text-sm bg-sunny-yellow">
+              <p className="bg-sunny-yellow text-sm font-light">
                 21 September 2022
               </p>
               <p className="font-light">
@@ -107,12 +107,12 @@ export default async function Index() {
 
             <li className="py-2">
               <Link
-                className="font-semibold text-gray-700 bg-seafoam-green"
+                className="bg-seafoam-green font-semibold text-gray-700"
                 href="https://brew.onrender.com/"
               >
                 Brew!
               </Link>
-              <p className="font-light text-sm bg-sunny-yellow">
+              <p className="bg-sunny-yellow text-sm font-light">
                 17 September 2022
               </p>
               <p className="font-light">
@@ -123,12 +123,12 @@ export default async function Index() {
 
             <li className="py-2">
               <Link
-                className="font-semibold text-gray-700 bg-seafoam-green"
+                className="bg-seafoam-green font-semibold text-gray-700"
                 href="https://brendan-jarvis.github.io"
               >
                 Dev Academy Blog
               </Link>
-              <p className="font-light text-sm bg-sunny-yellow">21 June 2022</p>
+              <p className="bg-sunny-yellow text-sm font-light">21 June 2022</p>
               <p className="font-light">
                 A blog built to learn HTML and CSS during Dev Academy.
               </p>
@@ -137,7 +137,7 @@ export default async function Index() {
         </section>
       </div>
 
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
+      <footer className="flex w-full justify-center border-t border-t-foreground/10 p-8 text-center text-xs">
         <p>
           Powered by{" "}
           <Link
