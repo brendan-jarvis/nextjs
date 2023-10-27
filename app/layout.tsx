@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Metadata } from "next";
 import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <main className="flex min-h-screen flex-col items-center">
           <Nav />
           {children}
+          <Footer />
         </main>
       </body>
     </html>
