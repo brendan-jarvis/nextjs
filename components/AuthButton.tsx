@@ -13,14 +13,14 @@ export default async function AuthButton() {
     <div className="flex items-center gap-4">
       Hey, {user.email}!
       <form action="/auth/sign-out" method="post">
-        <Button className="py-2 px-4 rounded-md no-underline" variant="outline">
+        <Button className="rounded-md px-4 py-2 no-underline" variant="outline">
           Logout
         </Button>
       </form>
     </div>
   ) : (
     <Button variant="outline" asChild>
-      <Link href="/login" className="py-2 px-3 rounded-md no-underline">
+      <Link href="/login" className="rounded-md px-3 py-2 no-underline">
         Login
       </Link>
     </Button>

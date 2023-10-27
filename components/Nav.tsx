@@ -18,8 +18,8 @@ export default function Nav() {
   const isSupabaseConnected = canInitSupabaseClient()
 
   return (
-    <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-      <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+    <nav className="flex h-16 w-full justify-center border-b border-b-foreground/10">
+      <div className="flex w-full max-w-4xl items-center justify-between p-3 text-sm">
         <HomeButton />
         <BlogButton />
         {isSupabaseConnected && <AuthButton />}
