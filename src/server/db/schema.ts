@@ -22,13 +22,27 @@ export const posts = mysqlTable(
   "post",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
+    author_id: bigint("author_id", { mode: "number" }).notNull(),
+    title: varchar("name", { length: 256 }),
+    content: varchar("content", { length: 4000 }),
+    created_at: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt").onUpdateNow(),
+    updated_at: timestamp("updated_at").onUpdateNow(),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+    titleIndex: index("title_idx").on(example.title),
+  }),
+);
+
+export const profiles = mysqlTable(
+  "profile",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    username: varchar("username", { length: 256 }).unique(),
+    avatar_url: varchar("avatar_url", { length: 256 }),
+  },
+  (example) => ({
+    usernameIndex: index("username_idx").on(example.username),
+  }),
 );
