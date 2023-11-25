@@ -54,7 +54,11 @@ async function CrudShowcase() {
   return (
     <div className="w-full max-w-xs">
       {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
+        <div className="flex flex-col p-4">
+          <h2 className="text-center text-2xl font-bold">Latest Post</h2>
+          <h3 className="text-xl font-semibold">{latestPost.title}</h3>
+          <p>{latestPost.content}</p>
+        </div>
       ) : (
         <p>You have no posts yet.</p>
       )}
