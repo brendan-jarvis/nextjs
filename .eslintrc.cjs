@@ -25,6 +25,13 @@ const config = {
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/require-await": "off",
+    // This rule is disabled because it causes issues with shad-cn/ui.
+    "@typescript-eslint/no-empty-interface": [
+      "error",
+      {
+        allowSingleExtends: true,
+      },
+    ],
     "@typescript-eslint/no-misused-promises": [
       "error",
       {
