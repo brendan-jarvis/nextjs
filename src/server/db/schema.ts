@@ -28,10 +28,28 @@ export const posts = mysqlTable(
     created_at: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updated_at: timestamp("updated_at").onUpdateNow(),
+    updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`).onUpdateNow().notNull(),
+    tags: varchar("tags", { length: 256 }),
   },
   (example) => ({
     titleIndex: index("title_idx").on(example.title),
+  }),
+);
+
+export const comments = mysqlTable(
+  "comment",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    post_id: bigint("post_id", { mode: "number" }).notNull(),
+    author_id: bigint("author_id", { mode: "number" }).notNull(),
+    content: varchar("content", { length: 500 }),
+    created_at: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updated_at: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`).onUpdateNow().notNull(),
+  },
+  (example) => ({
+    contentIndex: index("content_idx").on(example.content),
   }),
 );
 
