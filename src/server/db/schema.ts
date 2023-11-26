@@ -3,7 +3,7 @@
 
 import { sql } from "drizzle-orm";
 import {
-  bigint,
+  int,
   index,
   mysqlTableCreator,
   timestamp,
@@ -21,10 +21,10 @@ export const mysqlTable = mysqlTableCreator((name) => `blog_${name}`);
 export const posts = mysqlTable(
   "post",
   {
-    id: bigint("id", { mode: "number" })
+    id: int("id")
       .primaryKey()
       .autoincrement(),
-    author_id: bigint("author_id", { mode: "number" }).notNull(),
+    author_id: int("author_id").notNull(),
     title: varchar("name", { length: 256 }),
     content: varchar("content", { length: 4000 }),
     created_at: timestamp("created_at")
@@ -44,12 +44,12 @@ export const posts = mysqlTable(
 export const comments = mysqlTable(
   "comment",
   {
-    id: bigint("id", { mode: "number" })
+    id: int("id")
       .primaryKey()
       .autoincrement(),
-    post_id: bigint("post_id", { mode: "number" })
+    post_id: int("post_id")
       .notNull(),
-    author_id: bigint("author_id", { mode: "number" }).notNull(),
+    author_id: int("author_id").notNull(),
     content: varchar("content", { length: 500 }),
     created_at: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
@@ -67,7 +67,7 @@ export const comments = mysqlTable(
 export const profiles = mysqlTable(
   "profile",
   {
-    id: bigint("id", { mode: "number" })
+    id: int("id")
       .primaryKey()
       .autoincrement(),
     username: varchar("username", { length: 256 })
