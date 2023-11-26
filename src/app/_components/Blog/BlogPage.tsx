@@ -13,10 +13,10 @@ import { api } from "~/trpc/server";
 export const revalidate = 3600;
 
 export async function generateMetadata({
-  id
-}:
-  { id: number }
-): Promise<Metadata> {
+  id,
+}: {
+  id: number;
+}): Promise<Metadata> {
   const post = await api.post.getById.query({ id: id });
 
   return {
@@ -54,7 +54,6 @@ export default async function Blog({ id }: { id: number }) {
     // For example, assign a default value or skip the processing
     htmlContent = await remark().use(remarkHtml).process("No content");
   }
-
 
   return (
     <div className="mx-auto min-h-screen min-w-full bg-background p-4">

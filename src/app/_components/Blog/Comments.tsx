@@ -14,25 +14,22 @@ export default async function Comments({ postId }: { postId: number }) {
     text: string;
   };
 
-  const comments:
-    Comment[]
-    = [
-      {
-        id: 1,
-        author_username: "Brendan Jarvis",
-        created_at: "2021-06-01T00:00:00.000Z",
-        updated_at: "2021-06-01T00:00:00.000Z",
-        text: "This is a comment.",
-      },
-      {
-        id: 2,
-        author_username: "Brendan Jarvis",
-        created_at: "2021-06-01T00:00:00.000Z",
-        updated_at: "2021-06-01T00:00:00.000Z",
-        text: "This is another comment.",
-      },
-    ];
-
+  const comments: Comment[] = [
+    {
+      id: 1,
+      author_username: "Brendan Jarvis",
+      created_at: "2021-06-01T00:00:00.000Z",
+      updated_at: "2021-06-01T00:00:00.000Z",
+      text: "This is a comment.",
+    },
+    {
+      id: 2,
+      author_username: "Brendan Jarvis",
+      created_at: "2021-06-01T00:00:00.000Z",
+      updated_at: "2021-06-01T00:00:00.000Z",
+      text: "This is another comment.",
+    },
+  ];
 
   if (!comments) {
     return (
@@ -53,7 +50,6 @@ export default async function Comments({ postId }: { postId: number }) {
       </div>
     );
   }
-
 
   return (
     <div className="mx-auto w-full max-w-2xl">

@@ -18,7 +18,7 @@ export default function Error({
 
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center">
-      <h1 className="bg-citrus-blaze my-2 py-2 text-center text-3xl font-bold uppercase">
+      <h1 className="my-2 bg-citrus-blaze py-2 text-center text-3xl font-bold uppercase">
         Error
       </h1>
       <div className="py-4">
@@ -34,7 +34,7 @@ export default function Error({
           </Link>
         </Button>
         <Button
-          className="bg-sunny-yellow hover:text-sunny-yellow font-semibold text-gray-700 hover:bg-gray-700"
+          className="bg-sunny-yellow font-semibold text-gray-700 hover:bg-gray-700 hover:text-sunny-yellow"
           onClick={
             // Attempt to recover by trying to re-render the segment
             () => reset()

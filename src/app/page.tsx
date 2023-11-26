@@ -35,7 +35,7 @@ export default async function Home() {
           <ul className="my-auto text-foreground">
             {posts?.map((post) => (
               <Link key={post.id} href={`/blog/${post.id}`}>
-                <li className="decoration-soft-lilac font-light underline">
+                <li className="font-light underline decoration-soft-lilac">
                   {post.title} - {dayjs(post.created_at).format("DD MMM YYYY")}
                 </li>
               </Link>
