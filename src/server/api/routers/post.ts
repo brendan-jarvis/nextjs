@@ -3,6 +3,8 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { posts } from "~/server/db/schema";
 
+import { eq } from 'drizzle-orm';
+
 export const postRouter = createTRPCRouter({
   create: publicProcedure
     .input(
@@ -40,7 +42,7 @@ export const postRouter = createTRPCRouter({
     )
     .query(({ ctx, input }) => {
       return ctx.db.query.posts.findFirst({
-        where: { id: input.id },
+        where: eq(posts.id, input.id)
       });
     }),
 });
