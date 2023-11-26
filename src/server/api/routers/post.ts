@@ -4,14 +4,6 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { posts } from "~/server/db/schema";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   create: publicProcedure
     .input(
       z.object({
@@ -28,9 +20,27 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.db.query.posts.findMany({
+      orderBy: (posts, { desc }) => [desc(posts.created_at)],
+    });
+  }),
+
   getLatest: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.posts.findFirst({
       orderBy: (posts, { desc }) => [desc(posts.created_at)],
     });
   }),
+
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.query.posts.findFirst({
+        where: { id: input.id },
+      });
+    }),
 });
