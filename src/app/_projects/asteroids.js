@@ -1,0 +1,274 @@
+import React, { useRef, useEffect, useState, useMemo } from "react";
+import Head from "next/head";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { CameraControls, Stars, Line, Text, Text3D } from "@react-three/drei";
+import { Physics } from "@react-three/cannon";
+
+import { Press_Start_2P } from "@next/font/google";
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+console.log(pressStart2P);
+
+const AsteroidSpawner = ({ count = 1 }) => {
+  const [asteroids, setAsteroids] = useState([]);
+
+  useMemo(() => {
+    function getRandomBetweenRanges() {
+      const randomNumber = Math.random() * 100 - 50;
+
+      if (randomNumber >= -10 && randomNumber <= 10) {
+        return getRandomBetweenRanges();
+      }
+      return randomNumber;
+    }
+
+    for (let i = 0; i < count; i++) {
+      const asteroidSpeed = Math.random() * 2 + 5;
+      const directionX = Math.random() * 2 - 1;
+      const directionY = Math.random() * 2 - 1;
+      const position = [getRandomBetweenRanges(), getRandomBetweenRanges(), 0];
+
+      const asteroid = (
+        <mesh key={i} position={position}>
+          <octahedronGeometry />
+          <meshStandardMaterial
+            color={`hsl(${Math.random() * 360}, 100%, 50%)`}
+          />
+        </mesh>
+      );
+
+      setAsteroids((prev) => [
+        ...prev,
+        { asteroid, asteroidSpeed, directionX, directionY },
+      ]);
+    }
+  }, [count]);
+
+  return (
+    <>
+      {asteroids.map(
+        ({ asteroid, asteroidSpeed, directionX, directionY }, i) => (
+          <Asteroid
+            key={i}
+            asteroid={asteroid}
+            asteroidSpeed={asteroidSpeed}
+            directionX={directionX}
+            directionY={directionY}
+          />
+        ),
+      )}
+    </>
+  );
+};
+
+const Asteroid = ({ asteroid, asteroidSpeed, directionX, directionY }) => {
+  const meshRef = useRef();
+
+  useFrame((state, delta) => {
+    meshRef.current.position.x += directionX * asteroidSpeed * delta;
+    meshRef.current.position.y += directionY * asteroidSpeed * delta;
+
+    const { x, y } = meshRef.current.position;
+    const bounds = {
+      min: { x: -50, y: -50 },
+      max: { x: 50, y: 50 },
+    };
+
+    if (x < bounds.min.x) {
+      meshRef.current.position.x = bounds.max.x;
+    }
+    if (x > bounds.max.x) {
+      meshRef.current.position.x = bounds.min.x;
+    }
+    if (y < bounds.min.y) {
+      meshRef.current.position.y = bounds.max.y;
+    }
+    if (y > bounds.max.y) {
+      meshRef.current.position.y = bounds.min.y;
+    }
+  });
+
+  return <>{React.cloneElement(asteroid, { ref: meshRef })}</>;
+};
+
+const Spaceship = () => {
+  const spaceshipRef = useRef();
+  const accelerationRef = useRef(0.0);
+  const enginesFiringRef = useRef(false);
+  const speed = 0.1;
+  const turnSpeed = 0.3;
+  const friction = 0.996;
+
+  useFrame((state, delta) => {
+    spaceshipRef.current.position.x +=
+      Math.cos(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
+      accelerationRef.current;
+    spaceshipRef.current.position.y +=
+      Math.sin(spaceshipRef.current.rotation.z + (90 * Math.PI) / 180) *
+      accelerationRef.current;
+
+    accelerationRef.current *= friction;
+
+    if (accelerationRef.current < 0) {
+      accelerationRef.current = 0;
+    }
+
+    const { x, y } = spaceshipRef.current.position;
+    const bounds = {
+      min: { x: -50, y: -50 },
+      max: { x: 50, y: 50 },
+    };
+
+    if (x < bounds.min.x) {
+      spaceshipRef.current.position.x = bounds.max.x;
+    }
+    if (x > bounds.max.x) {
+      spaceshipRef.current.position.x = bounds.min.x;
+    }
+    if (y < bounds.min.y) {
+      spaceshipRef.current.position.y = bounds.max.y;
+    }
+    if (y > bounds.max.y) {
+      spaceshipRef.current.position.y = bounds.min.y;
+    }
+  });
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      switch (e.key) {
+        case "ArrowUp":
+          accelerationRef.current += speed;
+          enginesFiringRef.current = true;
+          break;
+        case "ArrowDown":
+          if (accelerationRef.current > 0) accelerationRef.current -= speed;
+          break;
+        case "ArrowLeft":
+          spaceshipRef.current.rotation.z += turnSpeed;
+          break;
+        case "ArrowRight":
+          spaceshipRef.current.rotation.z -= turnSpeed;
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [speed]);
+
+  return (
+    <Line
+      ref={spaceshipRef}
+      points={[-1, -1, 0, 1, -1, 0, 0, 1, 0, -1, -1, 0]}
+      color="white"
+    />
+  );
+};
+
+const PlayArea = () => {
+  const playAreaRef = useRef();
+  return (
+    <Line
+      ref={playAreaRef}
+      points={[
+        -50, -50, 0, 50, -50, 0, 50, 50, 0, 50, 50, 0, -50, 50, 0, -50, -50, 0,
+      ]}
+      color="white"
+      lineWidth={1}
+    />
+  );
+};
+
+const Hud = () => {
+  const hudRef = useRef();
+  const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3);
+
+  useFrame((state, delta) => {
+    hudRef.current.position.x = state.camera.position.x;
+    hudRef.current.position.y = state.camera.position.y;
+  });
+
+  return (
+    <group ref={hudRef}>
+      <Text
+        className={pressStart2P.className}
+        color="white"
+        fontSize={8}
+        position={[0, 55, 0]}
+        rotation={[0, 0, 0]}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Asteroids
+      </Text>
+      <Text
+        color="white"
+        fontSize={6}
+        position={[-25, -55, 0]}
+        rotation={[0, 0, 0]}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Score: {score}
+      </Text>
+      <Text
+        color="white"
+        fontSize={6}
+        position={[25, -55, 0]}
+        rotation={[0, 0, 0]}
+        anchorX="center"
+        anchorY="middle"
+      >
+        Lives: {lives}
+      </Text>
+    </group>
+  );
+};
+
+const Asteroids = () => {
+  const cameraControlRef = useRef();
+
+  return (
+    <>
+      <Head>
+        <title>Asteroids</title>
+      </Head>
+      <Canvas camera={{ zoom: 7 }} orthographic shadows color="black">
+        <CameraControls ref={cameraControlRef} />
+
+        <Physics>
+          <Spaceship />
+          <AsteroidSpawner count={100} />
+        </Physics>
+
+        <Hud />
+
+        <PlayArea />
+        <Stars
+          radius={50}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={50}
+          fade
+          speed={1}
+        />
+        <hemisphereLight intensity={0.6} color="#8040df" groundColor="yellow" />
+        <directionalLight
+          position={[10, 10, 10]}
+          intensity={2}
+          color={"#FFF"}
+          castShadow
+        />
+      </Canvas>
+    </>
+  );
+};
+
+export default Asteroids;
