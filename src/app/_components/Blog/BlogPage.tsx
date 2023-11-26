@@ -46,7 +46,15 @@ export default async function Blog({ id }: { id: number }) {
     );
   }
 
-  const htmlContent = await remark().use(remarkHtml).process(post.content);
+  let htmlContent;
+  if (post.content !== null) {
+    htmlContent = await remark().use(remarkHtml).process(post.content);
+  } else {
+    // Handle the case when post.content is null
+    // For example, assign a default value or skip the processing
+    htmlContent = await remark().use(remarkHtml).process("No content");
+  }
+
 
   return (
     <div className="mx-auto min-h-screen min-w-full bg-background p-4">

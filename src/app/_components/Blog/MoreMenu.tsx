@@ -14,26 +14,26 @@ export function MoreMenu({ commentId }: { commentId: number }) {
 
   async function deleteComment() {
     // delete the comment
-    //const { error } = await supabase
-    //     .from("comments")
-    //   .delete()
-    // .eq("id", commentId);
-    console.log("Deleting comment...");
+    // e.g. const { error } = await api.comment.deleteComment.mutation({ id: commentId });
 
-    if (error) {
-      toast({
-        title: "Error deleting comment.",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Comment deleted.",
-        description: "Your comment has been deleted.",
-      });
-
-      // TODO: Refresh comments
-    }
+    //    if (error) {
+    //      toast({
+    //        title: "Error deleting comment.",
+    //        description: error.message,
+    //        variant: "destructive",
+    //      });
+    //    } else {
+    //      toast({
+    //        title: "Comment deleted.",
+    //        description: "Your comment has been deleted.",
+    //      });
+    //
+    //      // TODO: Refresh comments
+    //    }
+    toast({
+      title: "Comment deleted.",
+      description: "Your comment has been deleted.",
+    });
   }
 
   return (

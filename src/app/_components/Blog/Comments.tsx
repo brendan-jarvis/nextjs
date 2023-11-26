@@ -1,10 +1,38 @@
 import dayjs from "dayjs";
-import AddComment from "./AddComment";
+//import AddComment from "./AddComment";
 
-import { api } from "~/trpc/server";
+//import { api } from "~/trpc/server";
 
 export default async function Comments({ postId }: { postId: number }) {
-  const comments = await api.comment.getAll(postId);
+  //const comments = await api.comment.getAll(postId);
+  // Comment type
+  type Comment = {
+    id: number;
+    author_username: string;
+    created_at: string;
+    updated_at: string;
+    text: string;
+  };
+
+  const comments:
+    Comment[]
+    = [
+      {
+        id: 1,
+        author_username: "Brendan Jarvis",
+        created_at: "2021-06-01T00:00:00.000Z",
+        updated_at: "2021-06-01T00:00:00.000Z",
+        text: "This is a comment.",
+      },
+      {
+        id: 2,
+        author_username: "Brendan Jarvis",
+        created_at: "2021-06-01T00:00:00.000Z",
+        updated_at: "2021-06-01T00:00:00.000Z",
+        text: "This is another comment.",
+      },
+    ];
+
 
   if (!comments) {
     return (
@@ -22,10 +50,10 @@ export default async function Comments({ postId }: { postId: number }) {
       <div className="mx-auto w-full max-w-2xl">
         <h2 className="text-xl font-bold">Comments</h2>
         <p className="text-sm text-gray-600">No comments on this post yet!</p>
-        <AddComment session={session} postId={postId} />
       </div>
     );
   }
+
 
   return (
     <div className="mx-auto w-full max-w-2xl">
