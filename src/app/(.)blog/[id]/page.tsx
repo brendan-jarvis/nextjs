@@ -8,7 +8,7 @@ export default async function BlogModal({
 }) {
   return (
     <Modal>
-      <Blog params={params} />
+      <Blog id={Number(params.id)} />
     </Modal>
   );
 }

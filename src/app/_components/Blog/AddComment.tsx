@@ -125,7 +125,7 @@ export default function AddComment({ session, postId }: ComponentProps) {
             )}
           />
           <div className="flex flex-col items-center">
-            <Button className="bg-soft-lilac hover:bg-soft-lilac/80 focus:bg-soft-lilac/80 w-full text-slate-800 hover:underline focus:underline" variant="secondary" disabled={loading} type="submit">{loading ? "Posting..." : "Submit"}</Button>
+            <Button className="w-full bg-soft-lilac text-slate-800 hover:bg-soft-lilac/80 hover:underline focus:bg-soft-lilac/80 focus:underline" variant="secondary" disabled={loading} type="submit">{loading ? "Posting..." : "Submit"}</Button>
           </div>
         </form>
       </Form>
