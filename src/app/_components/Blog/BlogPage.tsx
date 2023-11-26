@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { Badge } from "@/app/_components/ui/badge";
-import Comments from "@/app/_components/Blog/Comments";
+//import Comments from "@/app/_components/Blog/Comments";
 
 import { api } from "~/trpc/server";
 
@@ -46,7 +46,7 @@ export default async function Blog({ id }: { id: number }) {
     );
   }
 
-  const htmlContent = remark().use(remarkHtml).process(post.content);
+  const htmlContent = await remark().use(remarkHtml).process(post.content);
 
   return (
     <div className="mx-auto min-h-screen min-w-full bg-background p-4">
@@ -78,7 +78,7 @@ export default async function Blog({ id }: { id: number }) {
         </Button>
       </div>
       <div className="mt-8 flex justify-center">
-        <Comments postId={id} />
+        <p>Comments go here</p>
       </div>
     </div>
   );
