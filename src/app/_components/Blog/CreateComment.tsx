@@ -1,11 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import { useToast } from "@/app/_components/ui/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/app/_components/ui/form";
+import { Textarea } from "@/app/_components/ui/textarea"
+import { Button } from "@/app/_components/ui/button"
 
 import { api } from "~/trpc/react";
 
@@ -15,9 +23,8 @@ const formSchema = z.object({
 });
 
 export function CreateComment({ post_id }: { post_id: number }) {
+  const { toast } = useToast();
   const router = useRouter();
-  const [content, setContent] = useState("");
-  const values = { author_id: 1111, post_id: post_id, content: content };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,32 +37,46 @@ export function CreateComment({ post_id }: { post_id: number }) {
   const createComment = api.comment.create.useMutation({
     onSuccess: () => {
       router.refresh();
-      setContent("");
+      toast({
+        title: "Comment submitted.",
+        description: "Your comment has been successfully submitted.",
+      })
+    },
+
+    onError: (error) => {
+      toast({
+        title: "Error submitting comment.",
+        description: error.message,
+        variant: "destructive"
+      });
     },
   });
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createComment.mutate(values);
-      }}
-      className="flex flex-col gap-2"
-    >
-      <input
-        type="text"
-        placeholder="Post your reply"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createComment.isLoading}
-      >
-        {createComment.isLoading ? "Posting..." : "Submit"}
-      </button>
-    </form>
-  );
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    createComment.mutate({ author_id: 1111, post_id: post_id, content: values.text})
+  }  
+
+return (
+  <div className="grid w-full gap-1.5">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1 py-4">
+        <FormField
+          control={form.control}
+          name="text"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Textarea placeholder="Post your reply" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col items-center">
+          <Button className="w-full bg-soft-lilac text-slate-800 hover:bg-soft-lilac/80 hover:underline focus:bg-soft-lilac/80 focus:underline" variant="secondary" disabled={createComment.isLoading} type="submit">{createComment.isLoading ? "Posting..." : "Submit"}</Button>
+        </div>
+      </form>
+    </Form>
+  </div>
+);
 }
