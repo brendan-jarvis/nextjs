@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 //import AddComment from "./AddComment";
 import { CreateComment } from "./CreateComment";
+import { MoreMenu } from "./MoreMenu";
 
 import { api } from "~/trpc/server";
 
@@ -37,12 +38,10 @@ export default async function Comments({ post_id }: { post_id: number }) {
             <p className="text-sm text-gray-600">
               {comment.author_id} -{" "}
               {dayjs(comment.created_at).format("DD MMM YYYY")}
+              {comment.updated_at > comment.created_at &&
+                ` (updated ${dayjs(comment.updated_at).format("DD MMM YYYY")})`}
             </p>
-            {comment.updated_at > comment.created_at && (
-              <p className="text-sm text-gray-600">
-                (updated {dayjs(comment.updated_at).format("DD MMM YYYY")})
-              </p>
-            )}
+            <MoreMenu commentId={comment.id} />
           </div>
           <p className="text-gray-800">{comment.content}</p>
         </div>

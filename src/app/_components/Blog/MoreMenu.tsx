@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { MoreHorizontal } from "lucide-react";
 import {
@@ -9,32 +10,29 @@ import {
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
 
+import { api } from "~/trpc/react";
+
 export function MoreMenu({ commentId }: { commentId: number }) {
   const { toast } = useToast();
+  const router = useRouter();
 
-  async function deleteComment() {
-    // delete the comment
-    // e.g. const { error } = await api.comment.deleteComment.mutation({ id: commentId });
+  const deleteComment = api.comment.deleteById.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      toast({
+        title: "Comment deleted.",
+        description: "Your comment has been successfully deleted.",
+      });
+    },
 
-    //    if (error) {
-    //      toast({
-    //        title: "Error deleting comment.",
-    //        description: error.message,
-    //        variant: "destructive",
-    //      });
-    //    } else {
-    //      toast({
-    //        title: "Comment deleted.",
-    //        description: "Your comment has been deleted.",
-    //      });
-    //
-    //      // TODO: Refresh comments
-    //    }
-    toast({
-      title: "Comment deleted.",
-      description: "Your comment has been deleted.",
-    });
-  }
+    onError: (error) => {
+      toast({
+        title: "Error deleting comment.",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  })
 
   return (
     <DropdownMenu>
@@ -44,7 +42,9 @@ export function MoreMenu({ commentId }: { commentId: number }) {
       <DropdownMenuContent>
         <DropdownMenuItem
           className="font-bold text-destructive hover:cursor-pointer"
-          onClick={() => deleteComment()}
+          onClick={() => {
+            deleteComment.mutate({ id: commentId });
+          }}
         >
           DELETE
         </DropdownMenuItem>

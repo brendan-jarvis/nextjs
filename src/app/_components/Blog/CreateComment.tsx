@@ -12,8 +12,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/app/_components/ui/form";
-import { Textarea } from "@/app/_components/ui/textarea"
-import { Button } from "@/app/_components/ui/button"
+import { Textarea } from "@/app/_components/ui/textarea";
+import { Button } from "@/app/_components/ui/button";
 
 import { api } from "~/trpc/react";
 
@@ -40,43 +40,54 @@ export function CreateComment({ post_id }: { post_id: number }) {
       toast({
         title: "Comment submitted.",
         description: "Your comment has been successfully submitted.",
-      })
+      });
     },
 
     onError: (error) => {
       toast({
         title: "Error submitting comment.",
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    createComment.mutate({ author_id: 1111, post_id: post_id, content: values.text})
-  }  
+    createComment.mutate({
+      author_id: 1111,
+      post_id: post_id,
+      content: values.text,
+    });
+  }
 
-return (
-  <div className="grid w-full gap-1.5">
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1 py-4">
-        <FormField
-          control={form.control}
-          name="text"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea placeholder="Post your reply" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex flex-col items-center">
-          <Button className="w-full bg-soft-lilac text-slate-800 hover:bg-soft-lilac/80 hover:underline focus:bg-soft-lilac/80 focus:underline" variant="secondary" disabled={createComment.isLoading} type="submit">{createComment.isLoading ? "Posting..." : "Submit"}</Button>
-        </div>
-      </form>
-    </Form>
-  </div>
-);
+  return (
+    <div className="grid w-full gap-1.5">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1 py-4">
+          <FormField
+            control={form.control}
+            name="text"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea placeholder="Post your reply" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-col items-center">
+            <Button
+              className="w-full bg-soft-lilac text-slate-800 hover:bg-soft-lilac/80 hover:underline focus:bg-soft-lilac/80 focus:underline"
+              variant="secondary"
+              disabled={createComment.isLoading}
+              type="submit"
+            >
+              {createComment.isLoading ? "Posting..." : "Submit"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
 }
