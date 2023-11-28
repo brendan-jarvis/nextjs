@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import Nav from "@/app/_components/Nav";
 import Footer from "@/app/_components/Footer";
 import { Toaster } from "@/app/_components/ui/toaster";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,12 +31,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
-          <main className="flex min-h-screen flex-col items-center">
-            <Nav />
-            {children}
-            <Footer />
-          </main>
-          <Toaster />
+          <ClerkProvider>
+            <main className="flex min-h-screen flex-col items-center">
+              <Nav />
+              {children}
+              <Footer />
+            </main>
+            <Toaster />
+          </ClerkProvider>
         </TRPCReactProvider>
       </body>
     </html>

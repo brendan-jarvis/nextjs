@@ -1,8 +1,29 @@
 import BlogButton from "./BlogButton";
 import HomeButton from "./HomeButton";
-import LoginButton from "./LoginButton";
+//import LoginButton from "./LoginButton";
+import { UserButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { Button } from "@/app/_components/ui/button";
 
 export const dynamic = "force-dynamic";
+
+const LoginButton = () => {
+  return (
+    <>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+      <SignedOut>
+        <Button
+          variant="ghost"
+          className="rounded-md px-3 py-2 font-semibold no-underline hover:underline"
+          asChild
+        >
+          <SignInButton />
+        </Button>
+      </SignedOut>
+    </>
+  );
+};
 
 export default async function Nav() {
   return (
@@ -12,6 +33,6 @@ export default async function Nav() {
         <BlogButton />
         <LoginButton />
       </div>
-    </nav>
+        </nav>
   );
 }
