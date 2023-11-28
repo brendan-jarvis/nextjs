@@ -1,35 +1,11 @@
 import dayjs from "dayjs";
 //import AddComment from "./AddComment";
 
-//import { api } from "~/trpc/server";
+import { api } from "~/trpc/server";
+import type { comments } from "~/server/db/schema";
 
-export default async function Comments({ postId }: { postId: number }) {
-  //const comments = await api.comment.getAll(postId);
-  // Comment type
-  type Comment = {
-    id: number;
-    author_username: string;
-    created_at: string;
-    updated_at: string;
-    text: string;
-  };
-
-  const comments: Comment[] = [
-    {
-      id: 1,
-      author_username: "Brendan Jarvis",
-      created_at: "2021-06-01T00:00:00.000Z",
-      updated_at: "2021-06-01T00:00:00.000Z",
-      text: "This is a comment.",
-    },
-    {
-      id: 2,
-      author_username: "Brendan Jarvis",
-      created_at: "2021-06-01T00:00:00.000Z",
-      updated_at: "2021-06-01T00:00:00.000Z",
-      text: "This is another comment.",
-    },
-  ];
+export default async function Comments({ post_id }: { post_id: number }) {
+  const comments = await api.comment.getAllByPostId.query({ post_id: post_id });
 
   if (!comments) {
     return (
@@ -58,16 +34,16 @@ export default async function Comments({ postId }: { postId: number }) {
         <div className="my-4 w-full" key={comment.id}>
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              {comment.author_username} -{" "}
+              {comment.author_id} -{" "}
               {dayjs(comment.created_at).format("DD MMM YYYY")}
             </p>
+            {comment.updated_at > comment.created_at && (
+              <p className="text-sm text-gray-600">
+                (updated {dayjs(comment.updated_at).format("DD MMM YYYY")})
+              </p>
+            )}
           </div>
-          {comment.updated_at !== comment.created_at && (
-            <p className="text-sm text-gray-600">
-              (updated {dayjs(comment.updated_at).format("DD MMM YYYY")})
-            </p>
-          )}
-          <p className="text-gray-800">{comment.text}</p>
+          <p className="text-gray-800">{comment.content}</p>
         </div>
       ))}
     </div>

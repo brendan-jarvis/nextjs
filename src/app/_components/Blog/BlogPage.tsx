@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { Badge } from "@/app/_components/ui/badge";
-//import Comments from "@/app/_components/Blog/Comments";
+import Comments from "@/app/_components/Blog/Comments";
 
 import { api } from "~/trpc/server";
 
@@ -85,7 +85,7 @@ export default async function Blog({ id }: { id: number }) {
         </Button>
       </div>
       <div className="mt-8 flex justify-center">
-        <p>Comments go here</p>
+        <Comments post_id={id} />
       </div>
     </div>
   );
