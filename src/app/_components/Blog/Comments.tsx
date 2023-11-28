@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 //import AddComment from "./AddComment";
+import { CreateComment } from "./CreateComment";
 
 import { api } from "~/trpc/server";
-import type { comments } from "~/server/db/schema";
 
 export default async function Comments({ post_id }: { post_id: number }) {
   const comments = await api.comment.getAllByPostId.query({ post_id: post_id });
@@ -30,6 +30,7 @@ export default async function Comments({ post_id }: { post_id: number }) {
   return (
     <div className="mx-auto w-full max-w-2xl">
       <h2 className="text-xl font-bold">Comments</h2>
+      <CreateComment post_id={post_id} />
       {comments.map((comment) => (
         <div className="my-4 w-full" key={comment.id}>
           <div className="flex items-center justify-between">
