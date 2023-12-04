@@ -50,12 +50,13 @@ export const commentRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
+        author_id: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
 
-      if (!authorId) {
+      if (!authorId || authorId !== input.author_id) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
         });

@@ -12,7 +12,13 @@ import {
 
 import { api } from "~/trpc/react";
 
-export function MoreMenu({ commentId }: { commentId: number }) {
+export function MoreMenu({
+  authorId,
+  commentId,
+}: {
+  authorId: string;
+  commentId: number;
+}) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -32,7 +38,7 @@ export function MoreMenu({ commentId }: { commentId: number }) {
         variant: "destructive",
       });
     },
-  })
+  });
 
   return (
     <DropdownMenu>
@@ -43,7 +49,7 @@ export function MoreMenu({ commentId }: { commentId: number }) {
         <DropdownMenuItem
           className="font-bold text-destructive hover:cursor-pointer"
           onClick={() => {
-            deleteComment.mutate({ id: commentId });
+            deleteComment.mutate({ author_id: authorId, id: commentId });
           }}
         >
           DELETE

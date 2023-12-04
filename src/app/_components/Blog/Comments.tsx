@@ -41,7 +41,7 @@ export default async function Comments({ post_id }: { post_id: number }) {
               {comment.updated_at > comment.created_at &&
                 ` (updated ${dayjs(comment.updated_at).format("DD MMM YYYY")})`}
             </p>
-            <MoreMenu commentId={comment.id} />
+            <MoreMenu authorId={comment.author_id} commentId={comment.id} />
           </div>
           <p className="text-gray-800">{comment.content}</p>
         </div>
