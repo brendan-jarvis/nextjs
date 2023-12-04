@@ -18,7 +18,6 @@ import { Button } from "@/app/_components/ui/button";
 import { api } from "~/trpc/react";
 
 const formSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters long"),
   text: z.string().min(3, "Comment must be at least 3 characters long"),
 });
 
@@ -29,7 +28,6 @@ export function CreateComment({ post_id }: { post_id: number }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "Anonymous",
       text: "",
     },
   });
@@ -54,7 +52,6 @@ export function CreateComment({ post_id }: { post_id: number }) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     createComment.mutate({
-      author_id: 1111,
       post_id: post_id,
       content: values.text,
     });
