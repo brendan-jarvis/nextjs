@@ -10,4 +10,6 @@ const post = {
 
 // TODO: seed the database with a post
 
+console.log("Seeding database with post: ", post);
+
 console.log("Seed complete!");
