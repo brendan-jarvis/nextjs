@@ -23,6 +23,7 @@ export default async function Comments({ post_id }: { post_id: number }) {
     return (
       <div className="mx-auto w-full max-w-2xl">
         <h2 className="text-xl font-bold">Comments</h2>
+        <CreateComment post_id={post_id} />
         <p className="text-sm text-gray-600">No comments on this post yet!</p>
       </div>
     );
