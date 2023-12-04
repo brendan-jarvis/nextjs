@@ -50,7 +50,7 @@ export const commentRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        author_id: z.string(),
+        author_id: z.string().min(1).max(64),
       }),
     )
     .mutation(async ({ ctx, input }) => {
