@@ -70,3 +70,7 @@ export const profiles = mysqlTable(
     usernameIndex: index("username_idx").on(example.username),
   }),
 );
+
+// Export types
+export type Post = typeof posts.$inferSelect; // Return type when queried
+export type Comment = typeof comments.$inferSelect; // Return type when queried
