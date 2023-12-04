@@ -5,9 +5,9 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { clerkClient } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/_components/ui/avatar"
 import { api } from "~/trpc/server";
-import type { Comment } from "~/server/db/schema";
+import type { SelectComment } from "~/server/db/schema";
 
-async function CommentView({ comment }: { comment: Comment }) {
+async function CommentView({ comment }: { comment: SelectComment }) {
   const user = await clerkClient.users.getUser(comment.author_id);
 
   return (

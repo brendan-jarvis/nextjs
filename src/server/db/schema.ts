@@ -72,5 +72,5 @@ export const profiles = mysqlTable(
 );
 
 // Export types
-export type Post = typeof posts.$inferSelect; // Return type when queried
-export type Comment = typeof comments.$inferSelect; // Return type when queried
+export type SelectPost = typeof posts.$inferSelect; // Return type when queried
+export type SelectComment = typeof comments.$inferSelect; // Return type when queried
