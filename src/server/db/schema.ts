@@ -59,18 +59,6 @@ export const comments = mysqlTable(
   }),
 );
 
-export const profiles = mysqlTable(
-  "profile",
-  {
-    id: int("id").primaryKey().autoincrement(),
-    username: varchar("username", { length: 256 }).unique(),
-    avatar_url: varchar("avatar_url", { length: 256 }),
-  },
-  (example) => ({
-    usernameIndex: index("username_idx").on(example.username),
-  }),
-);
-
 // Export types
 export type SelectPost = typeof posts.$inferSelect; // Return type when queried
 export type SelectComment = typeof comments.$inferSelect; // Return type when queried
