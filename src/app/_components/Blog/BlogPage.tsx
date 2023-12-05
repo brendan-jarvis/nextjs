@@ -73,7 +73,7 @@ export default async function Blog({ id }: { id: number }) {
         ))}
       </div>
       <div
-        className="prose prose-stone mx-auto prose-h2:bg-citrus-blaze prose-h2:lowercase prose-h2:text-slate-800"
+        className="prose prose-stone mx-auto py-2 prose-h2:bg-citrus-blaze prose-h2:lowercase prose-h2:text-slate-800"
         dangerouslySetInnerHTML={{ __html: String(htmlContent) }}
       />
       <div className="mt-8 flex justify-center">
