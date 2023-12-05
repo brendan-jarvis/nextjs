@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/_components/ui/use-toast";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Flag, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,9 +15,11 @@ import { api } from "~/trpc/react";
 export function MoreMenu({
   authorId,
   commentId,
+  currentUserId,
 }: {
   authorId: string;
   commentId: number;
+  currentUserId: string;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -46,13 +48,25 @@ export function MoreMenu({
         <MoreHorizontal size={12} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        {currentUserId === authorId && (
+          <DropdownMenuItem
+            className="font-bold text-destructive hover:cursor-pointer"
+            onClick={() => {
+              deleteComment.mutate({ author_id: authorId, id: commentId });
+            }}
+          >
+            <Trash2 size={16} className="mr-2" />
+            DELETE
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
-          className="font-bold text-destructive hover:cursor-pointer"
+          className="font-bold hover:cursor-pointer"
           onClick={() => {
-            deleteComment.mutate({ author_id: authorId, id: commentId });
+            alert(`Comment reported!`);
           }}
         >
-          DELETE
+          <Flag size={16} className="mr-2" />
+          Report post
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
