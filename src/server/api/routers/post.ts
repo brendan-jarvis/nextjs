@@ -1,9 +1,15 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  privateProcedure,
+} from "~/server/api/trpc";
 import { posts } from "~/server/db/schema";
+import { comments } from "~/server/db/schema";
 
-import { eq } from 'drizzle-orm';
+import { eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 
 export const postRouter = createTRPCRouter({
   create: publicProcedure
@@ -42,7 +48,31 @@ export const postRouter = createTRPCRouter({
     )
     .query(({ ctx, input }) => {
       return ctx.db.query.posts.findFirst({
-        where: eq(posts.id, input.id)
+        where: eq(posts.id, input.id),
       });
+    }),
+
+  /**
+   * Planetscale doesn't support FOREIGN KEY constraints,
+   * so we need to handle this functionality in the application layer
+   */
+  deletePostAndComments: privateProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        postAuthorId: z.string().min(1).max(64),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+
+      if (!authorId || authorId !== input.postAuthorId) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      await ctx.db.delete(posts).where(eq(posts.id, input.id));
+      await ctx.db.delete(comments).where(eq(comments.post_id, input.id));
     }),
 });
