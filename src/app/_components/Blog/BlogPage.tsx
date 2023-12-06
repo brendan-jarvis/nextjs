@@ -7,8 +7,10 @@ import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { Badge } from "@/app/_components/ui/badge";
 import Comments from "@/app/_components/Blog/Comments";
+import DeletePost from "@/app/_components/Blog/DeletePost";
 
 import { api } from "~/trpc/server";
+import { currentUser } from "@clerk/nextjs";
 
 export const revalidate = 3600;
 
@@ -37,6 +39,7 @@ export async function generateStaticParams() {
 
 export default async function Blog({ id }: { id: number }) {
   const post = await api.post.getById.query({ id: id });
+  const user = await currentUser();
 
   if (!post) {
     return (
@@ -60,9 +63,12 @@ export default async function Blog({ id }: { id: number }) {
       <h1 className="my-2 bg-seafoam-green py-2 text-center text-3xl font-bold uppercase">
         {post.title}
       </h1>
+      {user?.id && (
+        <DeletePost postId={id} authorId={post.author_id} currentUserId={user.id} />
+      )}
       <p className="my-2 bg-sunny-yellow p-1 text-center text-sm">
         {dayjs(post.created_at).format("DD MMM YYYY")}
-        {post.updated_at !== post.created_at &&
+        {post.updated_at > post.created_at &&
           ` (updated ${dayjs(post.updated_at).format("DD MMM YYYY")})`}
       </p>
       <div className="flex justify-center">
