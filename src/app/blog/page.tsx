@@ -41,7 +41,7 @@ export default async function BlogPage() {
                   alt={post.title}
                   width={804}
                   height={452}
-                  className="rounded-md border bg-muted transition-colors"
+                  className="aspect-square rounded-md border bg-muted object-cover transition-colors"
                   priority={index <= 1}
                 />
               )}
