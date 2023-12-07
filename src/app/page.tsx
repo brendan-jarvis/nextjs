@@ -1,12 +1,14 @@
 import Link from "next/link";
+import { allPosts } from "contentlayer/generated";
+import { compareDesc } from "date-fns";
 import dayjs from "dayjs";
 
-import { api } from "~/trpc/server";
-
-export const revalidate = 3600;
-
 export default async function Home() {
-  const posts = await api.post.getAll.query();
+  const posts = allPosts
+    .filter((post) => post.published)
+    .sort((a, b) => {
+      return compareDesc(new Date(a.date), new Date(b.date));
+    });
 
   return (
     <div className="flex w-full flex-1 flex-col items-center gap-20">
@@ -33,10 +35,10 @@ export default async function Home() {
         <section>
           <h2 className="mb-4 text-4xl font-bold">Blog</h2>
           <ul className="my-auto text-foreground">
-            {posts?.map((post) => (
-              <Link key={post.id} href={`/blog/${post.id}`}>
+            {posts?.map((post, index) => (
+              <Link key={index} href={post.slug}>
                 <li className="font-light underline decoration-soft-lilac">
-                  {post.title} - {dayjs(post.created_at).format("DD MMM YYYY")}
+                  {post.title} - {dayjs(post.date).format("DD MMM YYYY")}
                 </li>
               </Link>
             ))}
