@@ -35,6 +35,7 @@
     "drizzle-orm": "^0.28.5",
     "lucide-react": "^0.293.0",
     "next": "^14.0.3",
+    "next-contentlayer": "^0.3.4",
     "posthog-js": "^1.93.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
