@@ -2,7 +2,7 @@ import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
+// import remarkGfm from "remark-gfm";
 
 /** @type {import('contentlayer/source-files').ComputedFields} */
 const computedFields = {
@@ -61,9 +61,13 @@ export default makeSource({
     rehypePlugins: [
       rehypeSlug,
       [
+        // @ts-expect-error rehype-pretty-code types are wrong
         rehypePrettyCode,
         {
           theme: "github-dark",
+          /**
+           * @param {{ children: string | any[]; }} node
+           */
           onVisitLine(node) {
             // Prevent lines from collapsing in `display: grid` mode, and allow empty
             // lines to be copy/pasted
@@ -71,9 +75,15 @@ export default makeSource({
               node.children = [{ type: "text", value: " " }];
             }
           },
+          /**
+           * @param {{ properties: { className: string[]; }; }} node
+           */
           onVisitHighlightedLine(node) {
             node.properties.className.push("line--highlighted");
           },
+          /**
+           * @param {{ properties: { className: string[]; }; }} node
+           */
           onVisitHighlightedWord(node) {
             node.properties.className = ["word--highlighted"];
           },
