@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { allPosts } from "contentlayer/generated";
 import { compareDesc } from "date-fns";
+import dayjs from "dayjs";
 
 export const metadata = {
   title: "Blog",
@@ -49,7 +50,9 @@ export default async function BlogPage() {
                 <p className="text-muted-foreground">{post.description}</p>
               )}
               {post.date && (
-                <p className="text-sm text-muted-foreground">{post.date}</p>
+                <p className="text-sm text-muted-foreground">
+                  {dayjs(post.date).format("DD MMM YYYY")}
+                </p>
               )}
               <Link href={post.slug} className="absolute inset-0">
                 <span className="sr-only">View Article</span>
