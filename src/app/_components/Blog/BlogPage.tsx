@@ -1,6 +1,4 @@
 import dayjs from "dayjs";
-import { remark } from "remark";
-import remarkHtml from "remark-html";
 import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
@@ -49,15 +47,6 @@ export default async function Blog({ id }: { id: number }) {
     );
   }
 
-  let htmlContent;
-  if (post.content !== null) {
-    htmlContent = await remark().use(remarkHtml).process(post.content);
-  } else {
-    // Handle the case when post.content is null
-    // For example, assign a default value or skip the processing
-    htmlContent = await remark().use(remarkHtml).process("No content");
-  }
-
   return (
     <div className="mx-auto min-h-screen min-w-full bg-background p-4">
       <h1 className="my-2 bg-seafoam-green py-2 text-center text-3xl font-bold uppercase">
@@ -78,10 +67,9 @@ export default async function Blog({ id }: { id: number }) {
           </Badge>
         ))}
       </div>
-      <div
-        className="prose prose-stone mx-auto py-2 prose-h2:bg-citrus-blaze prose-h2:lowercase prose-h2:text-slate-800"
-        dangerouslySetInnerHTML={{ __html: String(htmlContent) }}
-      />
+      <div className="prose prose-stone mx-auto py-2 prose-h2:bg-citrus-blaze prose-h2:lowercase prose-h2:text-slate-800">
+        HTML GOES HERE
+      </div>
       <div className="mt-8 flex justify-center">
         <Button asChild variant="ghost">
           <Link href="/blog" className="font-normal underline">
@@ -91,7 +79,7 @@ export default async function Blog({ id }: { id: number }) {
         </Button>
       </div>
       <div className="mt-8 flex justify-center">
-        <Comments post_id={id} />
+        < Comments post_id={id} />
       </div>
     </div>
   );
