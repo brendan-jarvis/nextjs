@@ -19,7 +19,8 @@ interface PostPageProps {
   };
 }
 
-async function getPostFromParams(params) {
+async function getPostFromParams(params: { slug: string[] }) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   const slug = params?.slug?.join("/");
   const post = allPosts.find((post) => post.slugAsParams === slug);
 
