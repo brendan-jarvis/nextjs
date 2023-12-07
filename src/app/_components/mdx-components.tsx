@@ -93,15 +93,11 @@ const components = {
       {...props}
     />
   ),
-  img: ({
-    className,
-    alt,
-    ...props
-  }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+  img: ({ className, alt, src }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <Image
       className={cn("rounded-md border", className)}
-      alt={alt}
-      {...props}
+      alt={alt ? alt : "Blog image"}
+      src={src ? src : "/images/placeholder.jpg"}
     />
   ),
   hr: ({ ...props }) => <hr className="my-4 md:my-8" {...props} />,
