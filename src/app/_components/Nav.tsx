@@ -33,6 +33,6 @@ export default async function Nav() {
         <BlogButton />
         <LoginButton />
       </div>
-        </nav>
+    </nav>
   );
 }

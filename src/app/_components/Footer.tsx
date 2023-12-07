@@ -11,15 +11,16 @@ export default function Footer() {
           className="font-bold hover:underline"
           rel="noreferrer"
         >
-         Planetscale 
-        </Link>{", "}
+          Planetscale
+        </Link>
+        {", "}
         <Link
           href="https://nextjs.org/"
           target="_blank"
           className="font-bold hover:underline"
           rel="noreferrer"
         >
-        Next.js
+          Next.js
         </Link>
         {", "}
         <Link
@@ -28,16 +29,18 @@ export default function Footer() {
           className="font-bold hover:underline"
           rel="noreferrer"
         >
-        Tailwind CSS
-        </Link>{", and "}
+          Tailwind CSS
+        </Link>
+        {", and "}
         <Link
           href="https://clerk.com/"
           target="_blank"
           className="font-bold hover:underline"
           rel="noreferrer"
-          >
+        >
           Clerk
-        </Link>.
+        </Link>
+        .
       </p>
     </footer>
   );

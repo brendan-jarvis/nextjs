@@ -64,7 +64,11 @@ export default async function Blog({ id }: { id: number }) {
         {post.title}
       </h1>
       {user?.id && (
-        <DeletePost postId={id} authorId={post.author_id} currentUserId={user.id} />
+        <DeletePost
+          postId={id}
+          authorId={post.author_id}
+          currentUserId={user.id}
+        />
       )}
       <p className="my-2 bg-sunny-yellow p-1 text-center text-sm">
         {dayjs(post.created_at).format("DD MMM YYYY")}
