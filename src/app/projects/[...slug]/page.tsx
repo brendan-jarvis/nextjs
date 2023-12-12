@@ -98,9 +98,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <Image
           src={project.image}
           alt={project.title}
-          width={720}
-          height={405}
-          className="my-8 rounded-md border bg-muted transition-colors"
+          height={500}
+          width={500}
+          className="my-8 aspect-square rounded-md border bg-muted object-cover transition-colors hover:object-scale-down"
           priority
         />
       )}
