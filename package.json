@@ -40,6 +40,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
+    "remark-gfm": "^3.0.1",
     "server-only": "^0.0.1",
     "shiki": "^0.14.5",
     "superjson": "^2.2.1",
