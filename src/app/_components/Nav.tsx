@@ -1,4 +1,5 @@
 import BlogButton from "./BlogButton";
+import ProjectsButton from "./ProjectsButton";
 import HomeButton from "./HomeButton";
 //import LoginButton from "./LoginButton";
 import { UserButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
@@ -31,6 +32,7 @@ export default async function Nav() {
       <div className="flex w-full max-w-4xl items-center justify-between p-3 text-sm">
         <HomeButton />
         <BlogButton />
+        <ProjectsButton />
         <LoginButton />
       </div>
     </nav>
