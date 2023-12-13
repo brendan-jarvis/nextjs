@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "contentlayer build && next build",
     "db:push": "dotenv drizzle-kit push:mysql",
     "db:studio": "dotenv drizzle-kit studio",
-    "dev": "next dev",
+    "dev": "concurrently \"contentlayer dev\" \"next dev\"",
     "lint": "next lint",
     "start": "next start"
   },
@@ -28,17 +28,21 @@
     "@trpc/server": "^10.43.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "concurrently": "^8.2.2",
+    "contentlayer": "^0.3.4",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "drizzle-orm": "^0.28.5",
     "lucide-react": "^0.293.0",
     "next": "^14.0.3",
+    "next-contentlayer": "^0.3.4",
     "posthog-js": "^1.93.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
-    "remark": "^15.0.1",
-    "remark-html": "^16.0.1",
+    "remark-gfm": "^3.0.1",
     "server-only": "^0.0.1",
+    "shiki": "^0.14.5",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
@@ -61,11 +65,21 @@
     "postcss": "^8.4.31",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
+    "rehype": "^13.0.1",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.12.0",
+    "rehype-slug": "^6.0.0",
+    "remark": "^15.0.1",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.1.6"
   },
   "ct3aMetadata": {
     "initVersion": "7.24.0"
   },
-  "packageManager": "npm@9.7.2"
+  "packageManager": "npm@9.7.2",
+  "overrides": {
+    "next-contentlayer": {
+      "next": "$next"
+    }
+  }
 }
