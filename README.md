@@ -2,6 +2,8 @@
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
+Blog and project pages are written in MDX and converted to typesafe JSON using [Contentlayer](https://contentlayer.dev/), inspired by [this blog](https://github.com/shadcn-ui/taxonomy).
+
 ## What's next?
 
 1. Check if the following can be removed from package.json. Requires packages/next-contentlayer/package.json to have peerDependencies of `"next": "^12 || ^13 || ^14",`.
