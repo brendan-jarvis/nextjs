@@ -32,12 +32,6 @@ export default function AuthButton({
   const router = useRouter();
 
   const logout = async () => {
-    console.log("Logging out");
-    const error = false;
-
-    if (error) {
-      throw error;
-    }
     router.refresh();
   };
 

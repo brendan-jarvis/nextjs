@@ -9,9 +9,8 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/app/_components/ui/button";
-// import { Icons } from "@/components/icons";
 import { ChevronLeft } from "lucide-react";
-import dayjs from "dayjs";
+import { format } from "date-fns";
 
 interface PostPageProps {
   params: Promise<{
@@ -40,17 +39,19 @@ export async function generateMetadata({
     return {};
   }
 
-  // const ogUrl = new URL(`${url}/api/og`);
-  // ogUrl.searchParams.set("heading", post.title);
-  // ogUrl.searchParams.set("type", "Blog Post");
-  // ogUrl.searchParams.set("mode", "dark");
-
   return {
     title: post.title,
     description: post.description,
     authors: post.authors.map((author) => ({
       name: author,
     })),
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: "article",
+      publishedTime: post.date,
+      images: post.image ? [{ url: post.image }] : [],
+    },
   };
 }
 
@@ -85,7 +86,7 @@ export default async function PostPage({ params }: PostPageProps) {
             dateTime={post.date}
             className="block text-sm text-muted-foreground"
           >
-            Published on {dayjs(post.date).format("DD MMM YYYY")}
+            Published on {format(new Date(post.date), "dd MMM yyyy")}
           </time>
         )}
         <h1 className="font-heading mt-2 inline-block text-4xl leading-tight lg:text-5xl">

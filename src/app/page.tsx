@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { allPosts, allProjects } from "contentlayer/generated";
-import { compareDesc } from "date-fns";
-import dayjs from "dayjs";
+import { compareDesc, format } from "date-fns";
 
 export default async function Home() {
   const posts = allPosts
@@ -41,20 +40,23 @@ export default async function Home() {
         <section>
           <h2 className="mb-4 text-4xl font-bold">Blog</h2>
           <ul className="my-auto text-foreground">
-            {posts?.map((post, index) => (
-              <Link key={index} href={post.slug}>
-                <li className="font-light underline decoration-soft-lilac">
-                  {post.title} - {dayjs(post.date).format("DD MMM YYYY")}
-                </li>
-              </Link>
+            {posts?.map((post) => (
+              <li key={post._id}>
+                <Link
+                  href={post.slug}
+                  className="font-light underline decoration-soft-lilac"
+                >
+                  {post.title} - {format(new Date(post.date), "dd MMM yyyy")}
+                </Link>
+              </li>
             ))}
           </ul>
         </section>
         <section>
           <h2 className="mb-4 text-4xl font-bold">Projects</h2>
           <ul className="my-auto text-foreground">
-            {projects?.map((project, index) => (
-              <li key={index} className="py-2">
+            {projects?.map((project) => (
+              <li key={project._id} className="py-2">
                 <Link
                   className="bg-seafoam-green font-semibold text-gray-700"
                   href={project.slug}
@@ -62,7 +64,7 @@ export default async function Home() {
                   {project.title}
                 </Link>
                 <p className="bg-sunny-yellow text-sm font-light">
-                  {dayjs(project.date).format("DD MMM YYYY")}
+                  {format(new Date(project.date), "dd MMM yyyy")}
                 </p>
                 <p className="font-light">{project.description}</p>
               </li>
