@@ -97,7 +97,7 @@ const components = {
     <Image
       className={cn("rounded-md border", className)}
       alt={alt ? alt : "Blog image"}
-      src={src ? src : "/images/placeholder.jpg"}
+      src={typeof src === "string" ? src : "/images/placeholder.jpg"}
     />
   ),
   hr: ({ ...props }) => <hr className="my-4 md:my-8" {...props} />,
@@ -159,7 +159,6 @@ export function Mdx({ code }: MdxProps) {
 
   return (
     <div className="mdx">
-      {/* @ts-expect-error - TODO: review this error */}
       <Component components={components} />
     </div>
   );

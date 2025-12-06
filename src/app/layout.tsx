@@ -1,9 +1,7 @@
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 import type { Metadata } from "next";
-import { TRPCReactProvider } from "~/trpc/react";
 import Nav from "@/app/_components/Nav";
 import Footer from "@/app/_components/Footer";
 import { Toaster } from "@/app/_components/ui/toaster";
@@ -30,16 +28,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          <ClerkProvider>
-            <main className="flex min-h-screen flex-col items-center">
-              <Nav />
-              {children}
-              <Footer />
-            </main>
-            <Toaster />
-          </ClerkProvider>
-        </TRPCReactProvider>
+        <ClerkProvider>
+          <main className="flex min-h-screen flex-col items-center">
+            <Nav />
+            {children}
+            <Footer />
+          </main>
+          <Toaster />
+        </ClerkProvider>
       </body>
     </html>
   );
