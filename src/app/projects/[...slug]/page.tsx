@@ -14,18 +14,18 @@ import { ChevronLeft } from "lucide-react";
 import dayjs from "dayjs";
 
 interface ProjectPageProps {
-  params: {
+  params: Promise<{
     slug: string[];
-  };
+  }>;
 }
 
-async function getProjectFromParams(params: { slug: string[] }) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  const slug = params?.slug?.join("/");
-  const project = allProjects.find((project) => project.slugAsParams === slug);
+async function getProjectFromParams(params: Promise<{ slug: string[] }>) {
+  const { slug } = await params;
+  const slugPath = slug?.join("/");
+  const project = allProjects.find((project) => project.slugAsParams === slugPath);
 
   if (!project) {
-    null;
+    return null;
   }
 
   return project;
@@ -54,9 +54,7 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams(): Promise<
-  ProjectPageProps["params"][]
-> {
+export async function generateStaticParams() {
   return allProjects.map((project) => ({
     slug: project.slugAsParams.split("/"),
   }));

@@ -4,14 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "contentlayer build && next build",
-    "dev": "concurrently \"contentlayer dev\" \"next dev\"",
+    "build": "contentlayer2 build && next build",
+    "dev": "concurrently \"contentlayer2 dev\" \"next dev\"",
     "lint": "next lint",
     "start": "next start"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.0",
     "@hookform/resolvers": "^5.2.2",
+    "@mdx-js/react": "^3.1.1",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-label": "^2.1.8",
@@ -22,14 +23,14 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "concurrently": "^9.2.1",
-    "contentlayer": "^0.3.4",
+    "contentlayer2": "^0.5.8",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
     "lucide-react": "^0.556.0",
-    "next": "^16.0.7",
-    "next-contentlayer": "^0.3.4",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "next": "^15.5.7",
+    "next-contentlayer2": "^0.5.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.68.0",
     "shiki": "^3.19.0",
     "tailwind-merge": "^3.4.0",
@@ -42,12 +43,13 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/eslint": "^9.6.1",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
     "autoprefixer": "^10.4.22",
     "eslint": "^9.39.1",
+    "eslint-config-next": "^15.5.7",
     "npm-check-updates": "^19.1.2",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
@@ -58,14 +60,15 @@
     "rehype-slug": "^6.0.0",
     "remark": "^15.0.1",
     "tailwindcss": "^4.1.17",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.48.1"
   },
   "ct3aMetadata": {
     "initVersion": "7.24.0"
   },
   "packageManager": "npm@11.6.4",
   "overrides": {
-    "next-contentlayer": {
+    "next-contentlayer2": {
       "next": "$next"
     }
   }

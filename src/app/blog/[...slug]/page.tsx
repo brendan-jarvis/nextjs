@@ -14,18 +14,18 @@ import { ChevronLeft } from "lucide-react";
 import dayjs from "dayjs";
 
 interface PostPageProps {
-  params: {
+  params: Promise<{
     slug: string[];
-  };
+  }>;
 }
 
-async function getPostFromParams(params: { slug: string[] }) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  const slug = params?.slug?.join("/");
-  const post = allPosts.find((post) => post.slugAsParams === slug);
+async function getPostFromParams(params: Promise<{ slug: string[] }>) {
+  const { slug } = await params;
+  const slugPath = slug?.join("/");
+  const post = allPosts.find((post) => post.slugAsParams === slugPath);
 
   if (!post) {
-    null;
+    return null;
   }
 
   return post;
@@ -54,9 +54,7 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams(): Promise<
-  PostPageProps["params"][]
-> {
+export async function generateStaticParams() {
   return allPosts.map((post) => ({
     slug: post.slugAsParams.split("/"),
   }));
