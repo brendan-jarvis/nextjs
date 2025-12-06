@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { allPosts } from "contentlayer/generated";
-import { compareDesc } from "date-fns";
-import dayjs from "dayjs";
+import { compareDesc, format } from "date-fns";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Blog",
 };
 
@@ -41,7 +41,7 @@ export default async function BlogPage() {
                   alt={post.title}
                   width={804}
                   height={452}
-                  className="aspect-square rounded-md border bg-muted object-cover transition-colors"
+                  className="aspect-video rounded-md border bg-muted object-cover transition-colors"
                   priority={index <= 1}
                 />
               )}
@@ -51,7 +51,7 @@ export default async function BlogPage() {
               )}
               {post.date && (
                 <p className="text-sm text-muted-foreground">
-                  {dayjs(post.date).format("DD MMM YYYY")}
+                  {format(new Date(post.date), "dd MMM yyyy")}
                 </p>
               )}
               <Link href={post.slug} className="absolute inset-0">
