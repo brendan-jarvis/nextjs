@@ -1,26 +1,65 @@
 # Blog
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A personal blog and portfolio built with Next.js 15, featuring static MDX content powered by [Contentlayer2](https://github.com/timlrx/contentlayer2).
 
-Blog and project pages are written in MDX and converted to typesafe JSON using [Contentlayer](https://contentlayer.dev/), inspired by [this blog](https://github.com/shadcn-ui/taxonomy).
+## Tech Stack
 
-## What's next?
+- **Framework**: [Next.js 15](https://nextjs.org/) with App Router
+- **Content**: MDX via Contentlayer2
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Authentication**: [Clerk](https://clerk.com/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **Hosting**: [Vercel](https://vercel.com/)
 
-1. Check if the following can be removed from package.json. Requires packages/next-contentlayer/package.json to have peerDependencies of `"next": "^12 || ^13 || ^14",`.
+## Getting Started
 
-```markdown
-"overrides": {
-"next-contentlayer": {
-"next": "$next"
-}
-}
+```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Add your Clerk keys to .env
+
+# Run development server
+npm run dev
 ```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Project Structure
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```
+src/
+├── app/                 # Next.js App Router pages
+│   ├── blog/           # Blog listing and posts
+│   ├── projects/       # Project listing and details
+│   └── _components/    # Shared React components
+├── content/            # MDX content files
+│   ├── blog/           # Blog posts
+│   └── projects/       # Project writeups
+└── lib/                # Utility functions
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Content
+
+Blog posts and projects are written in MDX and stored in the `content/` directory. Contentlayer2 processes these files into type-safe JSON at build time.
+
+To add a new post, create an MDX file in `content/blog/` with frontmatter:
+
+```mdx
+---
+title: My Post Title
+description: A brief description
+date: 2024-01-01
+published: true
+authors:
+  - Brendan Jarvis
+---
+
+Your content here...
+```
+
+## License
+
+MIT
