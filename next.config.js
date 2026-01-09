@@ -7,6 +7,8 @@ import { withContentlayer } from "next-contentlayer2";
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  reactStrictMode: false,
+};
 
 export default withContentlayer(config);
