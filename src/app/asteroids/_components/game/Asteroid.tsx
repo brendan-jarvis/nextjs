@@ -35,7 +35,9 @@ function createAsteroidPoints(radius: number, seed: number): [number, number, nu
   }
 
   // Close the shape
-  points.push(points[0]);
+  if (points[0]) {
+    points.push(points[0]);
+  }
 
   return points;
 }
@@ -43,9 +45,15 @@ function createAsteroidPoints(radius: number, seed: number): [number, number, nu
 // Create a filled shape geometry from points
 function createFillGeometry(points: [number, number, number][]): ShapeGeometry {
   const shape = new Shape();
-  shape.moveTo(points[0][0], points[0][1]);
-  for (let i = 1; i < points.length; i++) {
-    shape.lineTo(points[i][0], points[i][1]);
+  const first = points[0];
+  if (first) {
+    shape.moveTo(first[0], first[1]);
+    for (let i = 1; i < points.length; i++) {
+      const pt = points[i];
+      if (pt) {
+        shape.lineTo(pt[0], pt[1]);
+      }
+    }
   }
   return new ShapeGeometry(shape);
 }
