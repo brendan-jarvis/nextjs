@@ -145,6 +145,7 @@ export function GameScene() {
       for (let j = i + 1; j < updatedAsteroids.length; j++) {
         const a1 = updatedAsteroids[i];
         const a2 = updatedAsteroids[j];
+        if (!a1 || !a2) continue;
 
         // Create consistent pair key
         const pairKey = a1.id < a2.id ? `${a1.id}:${a2.id}` : `${a2.id}:${a1.id}`;

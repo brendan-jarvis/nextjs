@@ -39,7 +39,7 @@ function createParticles(size: number, colors: string[]): Particle[] {
       vy: Math.sin(angle) * speed,
       length: 0.5 + Math.random() * size * 0.5,
       angle: angle,
-      color: colors[Math.floor(Math.random() * colors.length)],
+      color: colors[Math.floor(Math.random() * colors.length)] ?? "#ffffff",
     });
   }
   return particles;
