@@ -11,7 +11,7 @@ export default async function Home() {
   const projects = allProjects
     .filter((project) => project.published)
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
-    .slice(0, 3);
+    .slice(0, 4);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
@@ -98,48 +98,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Recent writing */}
-      <section className="mb-16">
-        <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
-            Recent writing
-          </h2>
-          <Link
-            href="/blog"
-            className="text-muted-foreground hover:text-foreground text-sm font-medium"
-          >
-            All posts →
-          </Link>
-        </div>
-
-        <div className="space-y-6">
-          {posts.length > 0 ? (
-            posts.map((post) => (
-              <article key={post._id} className="group">
-                <Link href={post.slug} className="block">
-                  <h3 className="decoration-soft-lilac text-lg font-semibold underline group-hover:decoration-2">
-                    {post.title}
-                  </h3>
-                  <div className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
-                    <time>{format(new Date(post.date), "dd MMM yyyy")}</time>
-                    {post.description && (
-                      <>
-                        <span>•</span>
-                        <span className="line-clamp-1">{post.description}</span>
-                      </>
-                    )}
-                  </div>
-                </Link>
-              </article>
-            ))
-          ) : (
-            <p className="text-muted-foreground">No published posts yet.</p>
-          )}
-        </div>
-      </section>
-
       {/* Featured projects */}
-      <section>
+      <section className="mb-16">
         <div className="mb-6 flex items-baseline justify-between">
           <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
             Featured projects
@@ -177,6 +137,46 @@ export default async function Home() {
         ) : (
           <p className="text-muted-foreground">No published projects yet.</p>
         )}
+      </section>
+
+      {/* Recent writing */}
+      <section>
+        <div className="mb-6 flex items-baseline justify-between">
+          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
+            Recent writing
+          </h2>
+          <Link
+            href="/blog"
+            className="text-muted-foreground hover:text-foreground text-sm font-medium"
+          >
+            All posts →
+          </Link>
+        </div>
+
+        <div className="space-y-6">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <article key={post._id} className="group">
+                <Link href={post.slug} className="block">
+                  <h3 className="decoration-soft-lilac text-lg font-semibold underline group-hover:decoration-2">
+                    {post.title}
+                  </h3>
+                  <div className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
+                    <time>{format(new Date(post.date), "dd MMM yyyy")}</time>
+                    {post.description && (
+                      <>
+                        <span>•</span>
+                        <span className="line-clamp-1">{post.description}</span>
+                      </>
+                    )}
+                  </div>
+                </Link>
+              </article>
+            ))
+          ) : (
+            <p className="text-muted-foreground">No published posts yet.</p>
+          )}
+        </div>
       </section>
     </div>
   );
