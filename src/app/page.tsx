@@ -20,75 +20,79 @@ export default async function Home() {
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           Brendan Jarvis
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-xl">
-          <span className="bg-citrus-blaze p-1 text-slate-100">
-            Full-stack web developer
-          </span>{" "}
-          with 2+ years commercial C#/.NET and JavaScript experience.
-        </p>
 
-        <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground">
-          Kia ora. I build and maintain production systems for the New Zealand Department of
-          Corrections and New Zealand Parole Board. I work daily with AI coding agents (Claude
-          Code) to accelerate investigation and remediation while rigorously validating every
-          output. Career-changer with a background in science, law, and government administration.
-          Active self-directed portfolio in TypeScript, React/Next.js, and Python.
-        </p>
-
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/projects"
-            className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-          >
-            Explore projects
-          </Link>
-          <Link
-            href="/blog"
-            className="inline-flex items-center rounded-md border border-input bg-background px-5 py-2.5 text-sm font-medium transition hover:bg-accent hover:text-accent-foreground"
-          >
-            Read writing
-          </Link>
-        </div>
-
-        <p className="mt-4 text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-4 text-xs">
           New Zealand-based • Eligible for Australian Special Category visa
+        </p>
+
+        <p className="mx-auto mt-4 max-w-2xl text-xl">
+          <span className="bg-citrus-blaze text-grey-900 p-1">Kia ora</span>, I
+          am a full-stack web developer with commercial C#/.NET and JavaScript
+          experience.
+        </p>
+
+        <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-base">
+          I build and maintain production systems for the New Zealand Department
+          of Corrections and New Zealand Parole Board.
         </p>
       </section>
 
       {/* What I bring (directly echoes CV) */}
       <section className="mb-16">
-        <h2 className="mb-6 text-2xl font-semibold tracking-tight">What I bring</h2>
+        <h2 className="bg-seafoam-green mb-6 text-2xl font-semibold tracking-tight">
+          What I bring
+        </h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="font-medium">Production systems in regulated environments</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Own and support the NZ Parole Board Hearing Management System (PBHS) on Microsoft
-              Dynamics 365 — C# plugins, Azure Logic Apps integration to legacy systems, Cloud
-              Flows, and L2/L3 incident response under real compliance obligations.
+          <div className="bg-card rounded-lg border p-6">
+            <h3 className="bg-citrus-blaze font-medium">
+              Production systems in regulated environments
+            </h3>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Own and support the NZ Parole Board Hearing Management System
+              (PBHS) on Microsoft Dynamics 365.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              C# plugins, Azure Logic Apps integration to legacy systems, Cloud
+              Flows, and L2/L3 incident response under real compliance
+              obligations.
             </p>
           </div>
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="font-medium">Responsible AI-augmented development</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Use Claude Code daily for code navigation, defect investigation, and rapid
-              remediation. Every AI-generated output is reviewed and validated before it ships to
-              production.
+          <div className="bg-card rounded-lg border p-6">
+            <h3 className="bg-citrus-blaze font-medium">
+              Responsible AI-augmented development
+            </h3>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Use Claude Code daily for code navigation, defect investigation,
+              and rapid remediation.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Every AI-generated output is reviewed and validated before it
+              ships to production.
             </p>
           </div>
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="font-medium">End-to-end ownership &amp; integration</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Full-stack work across C#/.NET (MVC, WCF, Dataverse plugins), Azure services,
-              Oracle PL/SQL, and frontend (Kendo UI, React). Delivered fixes and features through
-              go-live and ongoing support with tight release cadences.
+          <div className="bg-card rounded-lg border p-6">
+            <h3 className="bg-citrus-blaze font-medium">
+              End-to-end ownership &amp; integration
+            </h3>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Full-stack work across C#/.NET (MVC, WCF, Dataverse plugins),
+              Azure services, Oracle PL/SQL, and frontend (Kendo UI, React).
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Delivered fixes and features through go-live and ongoing support
+              with tight release cadences.
             </p>
           </div>
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="font-medium">Self-directed modern portfolio</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Active work in TypeScript, React/Next.js (this site), Python tooling, and
-              interactive 3D (Three.js). Career-changer who brings structured thinking from law
-              and science into engineering.
+          <div className="bg-card rounded-lg border p-6">
+            <h3 className="bg-citrus-blaze font-medium">
+              Self-directed modern portfolio
+            </h3>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Active work in TypeScript, React/Next.js, and Python tooling.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Career-changer who brings structured thinking from law and science
+              into engineering.
             </p>
           </div>
         </div>
@@ -97,10 +101,12 @@ export default async function Home() {
       {/* Recent writing */}
       <section className="mb-16">
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">Recent writing</h2>
+          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
+            Recent writing
+          </h2>
           <Link
             href="/blog"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground text-sm font-medium"
           >
             All posts →
           </Link>
@@ -111,10 +117,10 @@ export default async function Home() {
             posts.map((post) => (
               <article key={post._id} className="group">
                 <Link href={post.slug} className="block">
-                  <h3 className="text-lg font-semibold underline decoration-soft-lilac group-hover:decoration-2">
+                  <h3 className="decoration-soft-lilac text-lg font-semibold underline group-hover:decoration-2">
                     {post.title}
                   </h3>
-                  <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
                     <time>{format(new Date(post.date), "dd MMM yyyy")}</time>
                     {post.description && (
                       <>
@@ -135,10 +141,12 @@ export default async function Home() {
       {/* Featured projects */}
       <section>
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">Featured projects</h2>
+          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
+            Featured projects
+          </h2>
           <Link
             href="/projects"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground text-sm font-medium"
           >
             All projects →
           </Link>
@@ -150,19 +158,19 @@ export default async function Home() {
               <Link
                 key={project._id}
                 href={project.slug}
-                className="group block rounded-lg border bg-card p-6 transition hover:border-foreground/20"
+                className="group bg-card hover:border-foreground/20 block rounded-lg border p-6 transition"
               >
-                <h3 className="bg-seafoam-green p-1 text-lg font-semibold text-gray-700 group-hover:underline">
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:underline">
                   {project.title}
                 </h3>
+                <div className="pt-1 text-xs font-light text-gray-900">
+                  {format(new Date(project.date), "MMM yyyy")}
+                </div>
                 {project.description && (
-                  <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
+                  <p className="text-muted-foreground mt-2 line-clamp-3 text-sm">
                     {project.description}
                   </p>
                 )}
-                <div className="mt-4 bg-sunny-yellow p-1 text-xs font-light text-gray-700">
-                  {format(new Date(project.date), "MMM yyyy")}
-                </div>
               </Link>
             ))}
           </div>
