@@ -20,8 +20,11 @@ export default async function Home() {
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           Brendan Jarvis
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-xl text-muted-foreground">
-          Full-stack web developer with 2+ years commercial C#/.NET and JavaScript experience.
+        <p className="mx-auto mt-4 max-w-2xl text-xl">
+          <span className="bg-citrus-blaze p-1 text-slate-100">
+            Full-stack web developer
+          </span>{" "}
+          with 2+ years commercial C#/.NET and JavaScript experience.
         </p>
 
         <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground">
@@ -45,30 +48,6 @@ export default async function Home() {
           >
             Read writing
           </Link>
-          <a
-            href="https://github.com/brendan-jarvis"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-md border border-input bg-background px-5 py-2.5 text-sm font-medium transition hover:bg-accent hover:text-accent-foreground"
-          >
-            GitHub
-          </a>
-          <a
-            href="https://x.com/brendanjjarvis"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-md border border-input bg-background px-5 py-2.5 text-sm font-medium transition hover:bg-accent hover:text-accent-foreground"
-          >
-            X / Twitter
-          </a>
-          <a
-            href="https://linkedin.com/in/brendan-jarvis-813742106"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center rounded-md border border-input bg-background px-5 py-2.5 text-sm font-medium transition hover:bg-accent hover:text-accent-foreground"
-          >
-            LinkedIn
-          </a>
         </div>
 
         <p className="mt-4 text-xs text-muted-foreground">
@@ -115,28 +94,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Interactive / Demo highlight (maps to portfolio in CV) */}
-      <section className="mb-16">
-        <div className="rounded-lg border bg-card p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Interactive demo</h2>
-              <p className="mt-2 text-muted-foreground">
-                Self-contained 3D game built with React, Three.js, and TypeScript. Real-time
-                physics, collision detection, particle systems, and game state management.
-                Demonstrates frontend architecture and client-side logic.
-              </p>
-            </div>
-            <Link
-              href="/asteroids"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 sm:shrink-0"
-            >
-              Play Asteroids →
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Recent writing */}
       <section className="mb-16">
         <div className="mb-6 flex items-baseline justify-between">
@@ -154,7 +111,7 @@ export default async function Home() {
             posts.map((post) => (
               <article key={post._id} className="group">
                 <Link href={post.slug} className="block">
-                  <h3 className="text-lg font-semibold group-hover:underline">
+                  <h3 className="text-lg font-semibold underline decoration-soft-lilac group-hover:decoration-2">
                     {post.title}
                   </h3>
                   <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
@@ -195,7 +152,7 @@ export default async function Home() {
                 href={project.slug}
                 className="group block rounded-lg border bg-card p-6 transition hover:border-foreground/20"
               >
-                <h3 className="text-lg font-semibold group-hover:underline">
+                <h3 className="bg-seafoam-green p-1 text-lg font-semibold text-gray-700 group-hover:underline">
                   {project.title}
                 </h3>
                 {project.description && (
@@ -203,7 +160,7 @@ export default async function Home() {
                     {project.description}
                   </p>
                 )}
-                <div className="mt-4 text-xs text-muted-foreground">
+                <div className="mt-4 bg-sunny-yellow p-1 text-xs font-light text-gray-700">
                   {format(new Date(project.date), "MMM yyyy")}
                 </div>
               </Link>
