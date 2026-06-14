@@ -26,7 +26,7 @@ export default async function Home() {
         </p>
 
         <p className="mx-auto mt-4 max-w-2xl text-xl">
-          <span className="bg-citrus-blaze p-1 text-slate-100">Kia ora</span>, I
+          <span className="bg-citrus-blaze text-grey-900 p-1">Kia ora</span>, I
           am a full-stack web developer with commercial C#/.NET and JavaScript
           experience.
         </p>
@@ -39,48 +39,60 @@ export default async function Home() {
 
       {/* What I bring (directly echoes CV) */}
       <section className="mb-16">
-        <h2 className="mb-6 text-2xl font-semibold tracking-tight">
+        <h2 className="bg-seafoam-green mb-6 text-2xl font-semibold tracking-tight">
           What I bring
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="font-medium">
+            <h3 className="bg-citrus-blaze font-medium">
               Production systems in regulated environments
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Own and support the NZ Parole Board Hearing Management System
-              (PBHS) on Microsoft Dynamics 365 — C# plugins, Azure Logic Apps
-              integration to legacy systems, Cloud Flows, and L2/L3 incident
-              response under real compliance obligations.
+              (PBHS) on Microsoft Dynamics 365.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              C# plugins, Azure Logic Apps integration to legacy systems, Cloud
+              Flows, and L2/L3 incident response under real compliance
+              obligations.
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="font-medium">
+            <h3 className="bg-citrus-blaze font-medium">
               Responsible AI-augmented development
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Use Claude Code daily for code navigation, defect investigation,
-              and rapid remediation. Every AI-generated output is reviewed and
-              validated before it ships to production.
+              and rapid remediation.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Every AI-generated output is reviewed and validated before it
+              ships to production.
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="font-medium">
+            <h3 className="bg-citrus-blaze font-medium">
               End-to-end ownership &amp; integration
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Full-stack work across C#/.NET (MVC, WCF, Dataverse plugins),
               Azure services, Oracle PL/SQL, and frontend (Kendo UI, React).
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
               Delivered fixes and features through go-live and ongoing support
               with tight release cadences.
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="font-medium">Self-directed modern portfolio</h3>
+            <h3 className="bg-citrus-blaze font-medium">
+              Self-directed modern portfolio
+            </h3>
             <p className="text-muted-foreground mt-2 text-sm">
-              Active work in TypeScript, React/Next.js (this site), Python
-              tooling, and interactive 3D (Three.js). Career-changer who brings
-              structured thinking from law and science into engineering.
+              Active work in TypeScript, React/Next.js, and Python tooling.
+            </p>
+            <p className="text-muted-foreground mt-2 text-sm">
+              Career-changer who brings structured thinking from law and science
+              into engineering.
             </p>
           </div>
         </div>
@@ -89,7 +101,7 @@ export default async function Home() {
       {/* Recent writing */}
       <section className="mb-16">
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">
+          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
             Recent writing
           </h2>
           <Link
@@ -129,7 +141,7 @@ export default async function Home() {
       {/* Featured projects */}
       <section>
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">
+          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
             Featured projects
           </h2>
           <Link
@@ -148,17 +160,17 @@ export default async function Home() {
                 href={project.slug}
                 className="group bg-card hover:border-foreground/20 block rounded-lg border p-6 transition"
               >
-                <h3 className="bg-seafoam-green p-1 text-lg font-semibold text-gray-700 group-hover:underline">
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:underline">
                   {project.title}
                 </h3>
+                <div className="pt-1 text-xs font-light text-gray-900">
+                  {format(new Date(project.date), "MMM yyyy")}
+                </div>
                 {project.description && (
                   <p className="text-muted-foreground mt-2 line-clamp-3 text-sm">
                     {project.description}
                   </p>
                 )}
-                <div className="bg-sunny-yellow mt-4 p-1 text-xs font-light text-gray-700">
-                  {format(new Date(project.date), "MMM yyyy")}
-                </div>
               </Link>
             ))}
           </div>
