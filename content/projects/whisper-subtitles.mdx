@@ -13,7 +13,10 @@ I built this tool as a personal learning project to explore Python development, 
 
 Whisper Subtitles scans a directory (or a single file) for compatible audio and video files and generates `.srt` subtitle files using Whisper locally on your machine. This keeps everything private—no data is sent to external servers for transcription.
 
+After starting small I added a number of features to expand it into a more useful CLI tool.
+
 Key features:
+
 - Supports a range of Whisper models (tiny through large, including English-only variants)
 - Optional language specification and conditioning on previous text
 - Configurable maximum subtitle line length
@@ -23,23 +26,16 @@ Key features:
 
 ## Learnings
 
-This was my first real dive into:
+I had previously learned Python at University, but never built an actual project with it before. This was my first real dive into:
+
 - Building and distributing Python CLIs (using `setup.py`, `pyproject.toml`, and creating source distributions)
-- Integrating ML models and managing their dependencies (PyTorch, etc.)
+- Integrating ML models and managing their dependencies
 - File discovery and batch processing
 - GitHub Actions for CI/CD (building and publishing the package)
 - Handling real-world transcription imperfections (the tool includes basic line-length correction; full editing still recommended with tools like Subtitle Edit)
-
-## Usage
-
-After installation (via pip from source or the package), run:
-
-```bash
-whisper_subtitles -m medium.en -l en -i ./media -o ./subtitles
-```
 
 See the [full README](https://github.com/brendan-jarvis/whisper_subtitles) for all options and installation details.
 
 It's useful for transcribing podcasts, adding subtitles to personal videos, or creating DIY karaoke files from music.
 
-The generated subtitles are generally decent with mid-tier models (e.g. `medium.en`) but often benefit from manual review and timing adjustments.
+The generated subtitles are generally decent with mid-tier models (e.g. `medium.en`) but often benefit from higher-tier models, manual review, and timing adjustments.
