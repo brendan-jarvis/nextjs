@@ -35,16 +35,18 @@ export default async function ProjectsPage() {
               key={project._id}
               className="group relative flex flex-col space-y-2"
             >
-              {project.image && (
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={804}
-                  height={452}
-                  className="aspect-video rounded-md border bg-muted object-cover transition-colors"
-                  priority={index <= 1}
-                />
-              )}
+              <div className="aspect-video overflow-hidden rounded-md border bg-muted">
+                {project.image && (
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    width={804}
+                    height={452}
+                    className="h-full w-full object-cover transition-colors"
+                    priority={index <= 1}
+                  />
+                )}
+              </div>
               <h2 className="text-2xl font-extrabold">{project.title}</h2>
               {project.description && (
                 <p className="text-muted-foreground">{project.description}</p>
