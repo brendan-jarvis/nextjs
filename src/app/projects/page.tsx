@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Projects",
 };
 
-export default async function BlogPage() {
+export default async function ProjectsPage() {
   const projects = allProjects
     .filter((project) => project.published)
     .sort((a, b) => {
@@ -23,7 +23,7 @@ export default async function BlogPage() {
             Projects
           </h1>
           <p className="text-xl text-muted-foreground">
-            Projects I've worked on and what I've learned from them.
+            Projects I&apos;ve worked on and what I&apos;ve learned from them.
           </p>
         </div>
       </div>

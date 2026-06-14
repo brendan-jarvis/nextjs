@@ -6,15 +6,6 @@ export default function Footer() {
       <p>
         Powered by{" "}
         <Link
-          href="https://planetscale.com/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Planetscale
-        </Link>
-        {", "}
-        <Link
           href="https://nextjs.org/"
           target="_blank"
           className="font-bold hover:underline"
@@ -31,7 +22,7 @@ export default function Footer() {
         >
           Tailwind CSS
         </Link>
-        {", and "}
+        {", "}
         <Link
           href="https://clerk.com/"
           target="_blank"
@@ -39,6 +30,15 @@ export default function Footer() {
           rel="noreferrer"
         >
           Clerk
+        </Link>
+        {", and "}
+        <Link
+          href="https://vercel.com/"
+          target="_blank"
+          className="font-bold hover:underline"
+          rel="noreferrer"
+        >
+          Vercel
         </Link>
         .
       </p>
