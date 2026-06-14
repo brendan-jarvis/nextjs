@@ -9,5 +9,6 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  // Updated matcher: removed legacy tRPC reference (tRPC and DB removed; see PRs #8, #9)
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/api/(.*)"],
 };

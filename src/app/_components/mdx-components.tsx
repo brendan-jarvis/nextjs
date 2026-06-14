@@ -96,7 +96,7 @@ const components = {
   img: ({ className, alt, src }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <Image
       className={cn("rounded-md border", className)}
-      alt={alt ? alt : "Blog image"}
+      alt={alt ?? "Blog image"}
       src={typeof src === "string" ? src : "/images/placeholder.jpg"}
     />
   ),

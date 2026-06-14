@@ -54,9 +54,7 @@ export function Explosion({ position, size, onComplete, colors = DEFAULT_COLORS 
   const colorsRef = useRef(colors);
 
   // Initialize particles once
-  if (particlesRef.current === null) {
-    particlesRef.current = createParticles(size, colorsRef.current);
-  }
+  particlesRef.current ??= createParticles(size, colorsRef.current);
 
   useFrame((_, delta) => {
     if (!groupRef.current || !particlesRef.current) return;
