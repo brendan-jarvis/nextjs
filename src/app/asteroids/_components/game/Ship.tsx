@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback, useMemo } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import { Shape, ShapeGeometry } from "three";
@@ -85,7 +85,7 @@ export function Ship({ onPositionUpdate }: ShipProps) {
   }, [BULLET_SPEED]);
 
   // Update ship physics
-  useFrame((_, delta) => {
+  useFrame((_, _delta) => {
     if (!groupRef.current || state.phase !== "playing") return;
 
     const keys = keysRef.current;
