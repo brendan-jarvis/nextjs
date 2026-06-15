@@ -22,7 +22,7 @@ export default async function ProjectsPage() {
           <h1 className="font-heading inline-block text-4xl tracking-tight lg:text-5xl">
             Projects
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-muted-foreground text-xl">
             Projects I&apos;ve worked on and what I&apos;ve learned from them.
           </p>
         </div>
@@ -35,9 +35,11 @@ export default async function ProjectsPage() {
               key={project._id}
               className="group relative flex flex-col space-y-2"
             >
-              <div className="aspect-video overflow-hidden rounded-md border bg-muted">
+              <div className="bg-muted aspect-video overflow-hidden rounded-md border">
                 <Image
-                  src={project.image ?? "/images/projects/project_placeholder.jpg"}
+                  src={
+                    project.image ?? "/images/projects/project_placeholder2.jpg"
+                  }
                   alt={project.title}
                   width={804}
                   height={452}
@@ -50,7 +52,7 @@ export default async function ProjectsPage() {
                 <p className="text-muted-foreground">{project.description}</p>
               )}
               {project.date && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {format(new Date(project.date), "dd MMM yyyy")}
                 </p>
               )}
