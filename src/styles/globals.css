@@ -73,3 +73,95 @@
     @apply bg-background text-foreground;
   }
 }
+
+.kiaora-highlight {
+  position: relative;
+  color: inherit;
+  animation: kiaora-color 700ms ease-out forwards;
+}
+
+.kiaora-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #EA6E4B;
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: kiaora-highlight 700ms ease-out forwards;
+}
+
+@keyframes kiaora-highlight {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes kiaora-color {
+  to {
+    color: #111827; /* approx text-grey-900 / dark */
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blinking-cursor {
+  position: relative;
+  display: inline-block;
+  padding: 0 2px;
+  color: inherit;
+  animation: blinking-cursor-text 2s step-end infinite;
+  animation-delay: 750ms;
+}
+
+.blinking-cursor::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background-color: #EA6E4B;
+  z-index: -1;
+  animation: blinking-cursor-block 2s step-end infinite;
+  animation-delay: 750ms;
+}
+
+@keyframes blinking-cursor-block {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes blinking-cursor-text {
+  0%, 100% {
+    color: #111827; /* dark on orange block */
+  }
+  50% {
+    color: inherit;
+  }
+}
+
+.hover-highlight {
+  background-image: linear-gradient(#EA6E4B, #EA6E4B);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  color: inherit;
+  transition: background-size 700ms ease-out, color 700ms ease-out;
+}
+
+.hover-highlight:hover {
+  background-size: 100% 100%;
+  color: #111827;
+}

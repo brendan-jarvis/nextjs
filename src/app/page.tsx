@@ -26,9 +26,9 @@ export default async function Home() {
         </p>
 
         <p className="mx-auto mt-4 max-w-2xl text-xl">
-          <span className="bg-citrus-blaze text-grey-900 p-1">Kia ora</span>, I
-          am a full-stack web developer with commercial C#/.NET and JavaScript
-          experience.
+          <span className="kiaora-highlight p-1">Kia ora</span>, I am a
+          full-stack web developer with commercial C#/.NET, Dynamics 365, and
+          React experience<span className="blinking-cursor">.</span>
         </p>
 
         <p className="text-muted-foreground mx-auto mt-6 max-w-2xl text-base">
@@ -39,12 +39,12 @@ export default async function Home() {
 
       {/* What I bring (directly echoes CV) */}
       <section className="mb-16">
-        <h2 className="bg-seafoam-green mb-6 text-2xl font-semibold tracking-tight">
-          What I bring
+        <h2 className="mb-6 text-2xl font-semibold tracking-tight">
+          <span className="bg-seafoam-green">What I bring</span>
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="bg-citrus-blaze font-medium">
+            <h3 className="hover-highlight font-medium">
               Production systems in regulated environments
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
@@ -58,7 +58,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="bg-citrus-blaze font-medium">
+            <h3 className="hover-highlight font-medium">
               Responsible AI-augmented development
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
@@ -71,7 +71,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="bg-citrus-blaze font-medium">
+            <h3 className="hover-highlight font-medium">
               End-to-end ownership &amp; integration
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
@@ -84,7 +84,7 @@ export default async function Home() {
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="bg-citrus-blaze font-medium">
+            <h3 className="hover-highlight font-medium">
               Self-directed modern portfolio
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
