@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/app/_components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { format } from "date-fns";
+import { Comments } from "@/app/_components/Comments";
 
 interface PostPageProps {
   params: Promise<{
@@ -104,6 +105,7 @@ export default async function PostPage({ params }: PostPageProps) {
         />
       )}
       <Mdx code={post.body.code} />
+      <Comments postTitle={post.title} />
       <hr className="mt-12" />
       <div className="flex justify-center py-6 lg:py-10">
         <Link href="/blog" className={cn(buttonVariants({ variant: "ghost" }))}>
