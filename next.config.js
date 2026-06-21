@@ -26,11 +26,14 @@ const config = {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
-          // Basic CSP - tighten as needed (e.g. for analytics, images, etc.)
+          // CSP tuned for Clerk + Supabase + Next.js
+          // - script-src: allow Clerk's browser bundle (clerk.browser.js)
+          // - frame-src: Clerk uses iframes for sign-in flows, UserButton, etc.
+          // - connect-src: includes wss for Clerk realtime
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://*.clerk.accounts.dev https://*.supabase.co;",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: https://*.clerk.accounts.dev; font-src 'self'; connect-src 'self' https://*.clerk.accounts.dev wss://*.clerk.accounts.dev https://*.supabase.co; frame-src https://*.clerk.accounts.dev;",
           },
         ],
       },
