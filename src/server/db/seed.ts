@@ -165,8 +165,9 @@ async function seed() {
       })
       .returning();
 
+    // Note: we still use numeric postId internally; the public API now uses postTitle
     console.log(
-      `Inserted test comment from Grok on post ${motorcyclePostId} (comment id: ${comment.id})`,
+      `Inserted test comment from Grok on post (id: ${motorcyclePostId}) (comment id: ${comment.id})`,
     );
   }
 

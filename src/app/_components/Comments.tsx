@@ -6,22 +6,20 @@ import { useUser, SignedIn, SignedOut } from "@clerk/nextjs";
 
 import { api } from "~/trpc/react";
 import { Button } from "@/app/_components/ui/button";
+import { toast } from "@/app/_components/ui/use-toast";
 
 interface CommentsProps {
   postTitle: string;
 }
 
 export function Comments({ postTitle }: CommentsProps) {
-  const { data: post, isLoading: postLoading } =
-    api.content.getPostByTitle.useQuery({ title: postTitle });
-
   const {
     data: comments,
     isLoading: commentsLoading,
     refetch,
   } = api.content.getCommentsForPost.useQuery(
-    { postId: post?.id ?? 0 },
-    { enabled: !!post },
+    { postTitle },
+    { enabled: !!postTitle },
   );
 
   const { user, isSignedIn } = useUser();
@@ -47,7 +45,11 @@ export function Comments({ postTitle }: CommentsProps) {
     },
     onError: (err) => {
       console.error("Failed to post comment:", err);
-      alert("Failed to post comment. Please try again.");
+      toast({
+        title: "Failed to post comment",
+        description: "Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -59,7 +61,11 @@ export function Comments({ postTitle }: CommentsProps) {
     },
     onError: (err) => {
       console.error("Failed to update comment:", err);
-      alert("Failed to update comment. Please try again.");
+      toast({
+        title: "Failed to update comment",
+        description: "Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -69,18 +75,22 @@ export function Comments({ postTitle }: CommentsProps) {
     },
     onError: (err) => {
       console.error("Failed to delete comment:", err);
-      alert("Failed to delete comment. Please try again.");
+      toast({
+        title: "Failed to delete comment",
+        description: "Please try again.",
+        variant: "destructive",
+      });
     },
   });
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (!post || !newComment.trim() || !isSignedIn) return;
+    if (!postTitle || !newComment.trim() || !isSignedIn) return;
 
     setIsSubmitting(true);
     try {
       await createComment.mutateAsync({
-        postId: post.id,
+        postTitle,
         content: newComment.trim(),
       });
     } finally {
@@ -172,10 +182,6 @@ export function Comments({ postTitle }: CommentsProps) {
       void saveEdit();
     }
   };
-
-  if (!post && !postLoading) {
-    return null;
-  }
 
   return (
     <div className="mt-12 w-full">

@@ -41,49 +41,22 @@ export const contentRouter = createTRPCRouter({
     return result;
   }),
 
-  getPostByTitle: publicProcedure
-    .input(z.object({ title: z.string() }))
-    .query(async ({ input }) => {
-      const result = await db
-        .select()
-        .from(posts)
-        .where(eq(posts.title, input.title))
-        .limit(1);
-      return result[0] ?? null;
-    }),
-
-  // Helper to see what the current user looks like from Clerk (for debugging)
-  // Call this from the client (e.g. in browser console via tRPC or a temp button)
-  getCurrentUserInfo: protectedProcedure.query(async ({ ctx }) => {
-    const clerk = await clerkClient();
-    const user = await clerk.users.getUser(ctx.auth.userId);
-    return {
-      userId: ctx.auth.userId,
-      fullName: user.fullName,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      primaryEmail: user.primaryEmailAddress?.emailAddress,
-      // Common nice display formats:
-      // fullName || `${firstName} ${lastName?.[0]}.` || username || firstName
-    };
-  }),
-
   getCommentsForPost: publicProcedure
-    .input(z.object({ postId: z.number() }))
+    .input(z.object({ postTitle: z.string() }))
     .query(async ({ input }) => {
       const result = await db
-        .select()
+        .select({ comment: comments })
         .from(comments)
-        .where(eq(comments.postId, input.postId));
-      return result;
+        .innerJoin(posts, eq(comments.postId, posts.id))
+        .where(eq(posts.title, input.postTitle));
+      return result.map((r) => r.comment);
     }),
 
   // Example insert (protected)
   createComment: protectedProcedure
     .input(
       z.object({
-        postId: z.number(),
+        postTitle: z.string(),
         content: z.string().min(1).max(2000),
       }),
     )
@@ -98,6 +71,20 @@ export const contentRouter = createTRPCRouter({
         });
       }
       lastCommentTimestamps.set(ctx.auth.userId, now);
+
+      // Resolve post by title (stable identifier from contentlayer)
+      const [post] = await db
+        .select()
+        .from(posts)
+        .where(eq(posts.title, input.postTitle))
+        .limit(1);
+
+      if (!post) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Post not found",
+        });
+      }
 
       // Fetch nice display name from Clerk instead of raw user ID
       const clerk = await clerkClient();
@@ -117,7 +104,7 @@ export const contentRouter = createTRPCRouter({
       const [newComment] = await db
         .insert(comments)
         .values({
-          postId: input.postId,
+          postId: post.id,
           authorId: ctx.auth.userId, // keep the ID for reference / future
           authorName,
           content: input.content,

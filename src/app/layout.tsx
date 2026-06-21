@@ -32,12 +32,7 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <Providers>
           <ClerkProvider
-            publishableKey={
-              process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ??
-              // Valid-format dummy key for static prerender during builds/CI without real Clerk keys.
-              // See isPublishableKey in @clerk/shared (must be pk_test_ + base64(frontendApi + "$") with dot in api)
-              "pk_test_Y2xlcmsuZXhhbXBsZS5jb20k"
-            }
+            publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
           >
             <main className="flex min-h-screen flex-col items-center">
               <Nav />
