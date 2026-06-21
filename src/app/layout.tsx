@@ -6,6 +6,7 @@ import Nav from "@/app/_components/Nav";
 import Footer from "@/app/_components/Footer";
 import { Toaster } from "@/app/_components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Providers } from "@/app/providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,21 +30,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <ClerkProvider
-          publishableKey={
-            process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ??
-            // Valid-format dummy key for static prerender during builds/CI without real Clerk keys.
-            // See isPublishableKey in @clerk/shared (must be pk_test_ + base64(frontendApi + "$") with dot in api)
-            "pk_test_Y2xlcmsuZXhhbXBsZS5jb20k"
-          }
-        >
-          <main className="flex min-h-screen flex-col items-center">
-            <Nav />
-            {children}
-            <Footer />
-          </main>
-          <Toaster />
-        </ClerkProvider>
+        <Providers>
+          <ClerkProvider
+            publishableKey={
+              process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ??
+              // Valid-format dummy key for static prerender during builds/CI without real Clerk keys.
+              // See isPublishableKey in @clerk/shared (must be pk_test_ + base64(frontendApi + "$") with dot in api)
+              "pk_test_Y2xlcmsuZXhhbXBsZS5jb20k"
+            }
+          >
+            <main className="flex min-h-screen flex-col items-center">
+              <Nav />
+              {children}
+              <Footer />
+            </main>
+            <Toaster />
+          </ClerkProvider>
+        </Providers>
       </body>
     </html>
   );

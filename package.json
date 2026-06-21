@@ -6,7 +6,7 @@
   "scripts": {
     "build": "contentlayer2 build && next build",
     "dev": "concurrently \"contentlayer2 dev\" \"next dev\"",
-    "lint": "next lint",
+    "lint": "eslint src",
     "start": "next start",
     "seed": "bun run src/server/db/seed.ts"
   },

@@ -43,6 +43,12 @@ yarn-error.log*
 
 # contentlayer
 .contentlayer
+
+# Supabase CLI (commit config/migrations, but ignore local cache and env)
+supabase/.temp
+supabase/.env
+supabase/.env.*
+
 # npm
 package-lock.json
 

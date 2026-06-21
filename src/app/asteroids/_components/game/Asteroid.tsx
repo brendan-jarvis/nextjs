@@ -21,7 +21,10 @@ function seededRandom(seed: number): () => number {
 }
 
 // Generate classic asteroid outline points
-function createAsteroidPoints(radius: number, seed: number): [number, number, number][] {
+function createAsteroidPoints(
+  radius: number,
+  seed: number,
+): [number, number, number][] {
   const random = seededRandom(seed);
   const segments = 9 + Math.floor(random() * 4); // 9-12 sides
   const points: [number, number, number][] = [];
@@ -65,7 +68,7 @@ export function Asteroid({ data, onPositionUpdate }: AsteroidProps) {
   const seed = useMemo(() => {
     let hash = 0;
     for (let i = 0; i < data.id.length; i++) {
-      hash = ((hash << 5) - hash) + data.id.charCodeAt(i);
+      hash = (hash << 5) - hash + data.id.charCodeAt(i);
       hash = hash & hash;
     }
     return Math.abs(hash);
@@ -74,12 +77,12 @@ export function Asteroid({ data, onPositionUpdate }: AsteroidProps) {
   // Generate classic asteroid outline
   const outlinePoints = useMemo(
     () => createAsteroidPoints(data.radius, seed),
-    [data.radius, seed]
+    [data.radius, seed],
   );
 
   const fillGeometry = useMemo(
     () => createFillGeometry(outlinePoints),
-    [outlinePoints]
+    [outlinePoints],
   );
 
   // Report position for collision detection
@@ -100,11 +103,7 @@ export function Asteroid({ data, onPositionUpdate }: AsteroidProps) {
         <meshBasicMaterial color="#000000" />
       </mesh>
       {/* Classic line outline */}
-      <Line
-        points={outlinePoints}
-        color="#ffffff"
-        lineWidth={1.5}
-      />
+      <Line points={outlinePoints} color="#ffffff" lineWidth={1.5} />
     </group>
   );
 }

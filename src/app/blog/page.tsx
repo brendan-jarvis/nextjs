@@ -22,7 +22,7 @@ export default async function BlogPage() {
           <h1 className="font-heading inline-block text-4xl tracking-tight lg:text-5xl">
             Blog
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-muted-foreground text-xl">
             A blog built using Contentlayer. Posts are written in MDX.
           </p>
         </div>
@@ -41,7 +41,7 @@ export default async function BlogPage() {
                   alt={post.title}
                   width={804}
                   height={452}
-                  className="aspect-video rounded-md border bg-muted object-cover transition-colors"
+                  className="bg-muted aspect-video rounded-md border object-cover transition-colors"
                   priority={index <= 1}
                 />
               )}
@@ -50,7 +50,7 @@ export default async function BlogPage() {
                 <p className="text-muted-foreground">{post.description}</p>
               )}
               {post.date && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {format(new Date(post.date), "dd MMM yyyy")}
                 </p>
               )}

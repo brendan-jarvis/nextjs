@@ -28,7 +28,8 @@ function GameContent() {
 
   useEffect(() => {
     const checkMobile = () => {
-      const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      const isTouchDevice =
+        "ontouchstart" in window || navigator.maxTouchPoints > 0;
       const isSmallScreen = window.innerWidth < 768;
       setIsMobile(isTouchDevice && isSmallScreen);
     };

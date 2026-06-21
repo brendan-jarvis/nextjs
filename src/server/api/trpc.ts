@@ -3,8 +3,6 @@ import superjson from "superjson";
 import { getAuth } from "@clerk/nextjs/server";
 import type { NextRequest } from "next/server";
 
-import { env } from "~/env";
-
 /**
  * 1. CONTEXT
  *
@@ -36,7 +34,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
         ...shape.data,
         zodError:
           error.cause instanceof Error && error.cause.name === "ZodError"
-            ? (error.cause as any).issues
+            ? (error.cause as { issues?: unknown }).issues
             : null,
       },
     };

@@ -27,7 +27,14 @@ export function Ship({ onPositionUpdate }: ShipProps) {
   const turningRightRef = useRef(false);
   const rcsAnimRef = useRef(0);
 
-  const { SHIP_ACCELERATION, SHIP_FRICTION, SHIP_TURN_SPEED, SHIP_MAX_SPEED, BOUNDS, BULLET_SPEED } = GAME_CONFIG;
+  const {
+    SHIP_ACCELERATION,
+    SHIP_FRICTION,
+    SHIP_TURN_SPEED,
+    SHIP_MAX_SPEED,
+    BOUNDS,
+    BULLET_SPEED,
+  } = GAME_CONFIG;
 
   // Store dispatch in ref to avoid re-creating event listeners
   const dispatchRef = useRef(dispatch);
@@ -108,17 +115,23 @@ export function Ship({ onPositionUpdate }: ShipProps) {
     thrustingRef.current = isThrusting;
 
     if (isThrusting) {
-      const thrustX = Math.cos(rotationRef.current + Math.PI / 2) * SHIP_ACCELERATION;
-      const thrustY = Math.sin(rotationRef.current + Math.PI / 2) * SHIP_ACCELERATION;
+      const thrustX =
+        Math.cos(rotationRef.current + Math.PI / 2) * SHIP_ACCELERATION;
+      const thrustY =
+        Math.sin(rotationRef.current + Math.PI / 2) * SHIP_ACCELERATION;
 
       velocityRef.current.x += thrustX;
       velocityRef.current.y += thrustY;
 
       // Clamp speed
-      const speed = Math.sqrt(velocityRef.current.x ** 2 + velocityRef.current.y ** 2);
+      const speed = Math.sqrt(
+        velocityRef.current.x ** 2 + velocityRef.current.y ** 2,
+      );
       if (speed > SHIP_MAX_SPEED) {
-        velocityRef.current.x = (velocityRef.current.x / speed) * SHIP_MAX_SPEED;
-        velocityRef.current.y = (velocityRef.current.y / speed) * SHIP_MAX_SPEED;
+        velocityRef.current.x =
+          (velocityRef.current.x / speed) * SHIP_MAX_SPEED;
+        velocityRef.current.y =
+          (velocityRef.current.y / speed) * SHIP_MAX_SPEED;
       }
 
       // Animate flame flicker
@@ -153,12 +166,13 @@ export function Ship({ onPositionUpdate }: ShipProps) {
     onPositionUpdate(
       groupRef.current.position.x,
       groupRef.current.position.y,
-      rotationRef.current
+      rotationRef.current,
     );
 
     // Blink effect for invulnerability (slower flicker)
     if (state.ship.isInvulnerable) {
-      blinkRef.current = Math.floor(state.ship.invulnerabilityTimer / 15) % 2 === 0;
+      blinkRef.current =
+        Math.floor(state.ship.invulnerabilityTimer / 15) % 2 === 0;
     } else {
       blinkRef.current = true;
     }
@@ -196,7 +210,8 @@ export function Ship({ onPositionUpdate }: ShipProps) {
   const isVisible = !state.ship.isInvulnerable || blinkRef.current;
 
   // Thruster flame points - flickering triangle behind the ship
-  const flameSize = 1 + Math.sin(flameFlickerRef.current) * 0.5 + Math.random() * 0.3;
+  const flameSize =
+    1 + Math.sin(flameFlickerRef.current) * 0.5 + Math.random() * 0.3;
   const thrusterPoints: [number, number, number][] = [
     [-0.8, -1.5, 0],
     [0, -1.5 - flameSize * 1.5, 0],
@@ -205,13 +220,21 @@ export function Ship({ onPositionUpdate }: ShipProps) {
 
   // Flame colors based on flicker
   const flameColors = ["#ff4400", "#ff6600", "#ff8800", "#ffaa00", "#ffcc00"];
-  const flameColor = flameColors[Math.floor(Math.abs(Math.sin(flameFlickerRef.current * 2)) * flameColors.length)];
+  const flameColor =
+    flameColors[
+      Math.floor(
+        Math.abs(Math.sin(flameFlickerRef.current * 2)) * flameColors.length,
+      )
+    ];
 
   // RCS thruster cone - animated spray pattern
   rcsAnimRef.current += 0.4;
 
   // Generate cone lines with animated variation
-  const generateRcsCone = (baseX: number, direction: number): [number, number, number][][] => {
+  const generateRcsCone = (
+    baseX: number,
+    direction: number,
+  ): [number, number, number][][] => {
     const lines: [number, number, number][][] = [];
     const numLines = 5;
     const baseAngle = direction > 0 ? 0 : Math.PI; // Right or left
@@ -219,7 +242,7 @@ export function Ship({ onPositionUpdate }: ShipProps) {
 
     for (let i = 0; i < numLines; i++) {
       // Distribute lines across the cone with some randomness
-      const t = (i / (numLines - 1)) - 0.5; // -0.5 to 0.5
+      const t = i / (numLines - 1) - 0.5; // -0.5 to 0.5
       const angle = baseAngle + t * spreadAngle;
 
       // Animate length with offset per line
@@ -231,30 +254,45 @@ export function Ship({ onPositionUpdate }: ShipProps) {
       const endX = startX + Math.cos(angle) * length;
       const endY = startY + Math.sin(angle) * length;
 
-      lines.push([[startX, startY, 0], [endX, endY, 0]]);
+      lines.push([
+        [startX, startY, 0],
+        [endX, endY, 0],
+      ]);
     }
     return lines;
   };
 
   const leftRcsLines = turningLeftRef.current ? generateRcsCone(0.5, 1) : [];
-  const rightRcsLines = turningRightRef.current ? generateRcsCone(-0.5, -1) : [];
+  const rightRcsLines = turningRightRef.current
+    ? generateRcsCone(-0.5, -1)
+    : [];
 
   return (
     <group ref={groupRef}>
       {/* RCS thrusters for turning - cone shaped sprays */}
-      {turningLeftRef.current && isVisible && leftRcsLines.map((points, i) => (
-        <Line key={`left-rcs-${i}`} points={points} color="#ffffff" lineWidth={1} />
-      ))}
-      {turningRightRef.current && isVisible && rightRcsLines.map((points, i) => (
-        <Line key={`right-rcs-${i}`} points={points} color="#ffffff" lineWidth={1} />
-      ))}
+      {turningLeftRef.current &&
+        isVisible &&
+        leftRcsLines.map((points, i) => (
+          <Line
+            key={`left-rcs-${i}`}
+            points={points}
+            color="#ffffff"
+            lineWidth={1}
+          />
+        ))}
+      {turningRightRef.current &&
+        isVisible &&
+        rightRcsLines.map((points, i) => (
+          <Line
+            key={`right-rcs-${i}`}
+            points={points}
+            color="#ffffff"
+            lineWidth={1}
+          />
+        ))}
       {/* Main thruster flame */}
       {thrustingRef.current && isVisible && (
-        <Line
-          points={thrusterPoints}
-          color={flameColor}
-          lineWidth={2}
-        />
+        <Line points={thrusterPoints} color={flameColor} lineWidth={2} />
       )}
       {/* Solid black fill to occlude stars */}
       <mesh geometry={shipFillGeometry} visible={isVisible}>

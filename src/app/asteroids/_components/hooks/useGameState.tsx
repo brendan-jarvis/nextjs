@@ -1,7 +1,18 @@
 "use client";
 
-import { useReducer, useCallback, useEffect, createContext, useContext } from "react";
-import type { GameState, GameAction, AsteroidData, AsteroidSize } from "../types/game";
+import {
+  useReducer,
+  useCallback,
+  useEffect,
+  createContext,
+  useContext,
+} from "react";
+import type {
+  GameState,
+  GameAction,
+  AsteroidData,
+  AsteroidSize,
+} from "../types/game";
 import { GAME_CONFIG } from "../constants/gameConfig";
 
 const initialShip = {
@@ -46,9 +57,10 @@ function createInitialAsteroids(count: number): AsteroidData[] {
 }
 
 function getInitialState(): GameState {
-  const storedHighScore = typeof window !== "undefined"
-    ? parseInt(localStorage.getItem("asteroidsHighScore") ?? "0", 10)
-    : 0;
+  const storedHighScore =
+    typeof window !== "undefined"
+      ? parseInt(localStorage.getItem("asteroidsHighScore") ?? "0", 10)
+      : 0;
 
   return {
     phase: "start",
@@ -74,8 +86,8 @@ export function splitAsteroid(asteroid: AsteroidData): AsteroidData[] {
     id: `${asteroid.id}-${index}-${Date.now()}`,
     position: { ...asteroid.position },
     velocity: {
-      x: Math.cos(asteroid.rotation + direction * Math.PI / 4) * config.speed,
-      y: Math.sin(asteroid.rotation + direction * Math.PI / 4) * config.speed,
+      x: Math.cos(asteroid.rotation + (direction * Math.PI) / 4) * config.speed,
+      y: Math.sin(asteroid.rotation + (direction * Math.PI) / 4) * config.speed,
     },
     rotation: Math.random() * Math.PI * 2,
     size: newSize,
@@ -92,7 +104,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         score: 0,
         lives: GAME_CONFIG.STARTING_LIVES,
         level: 1,
-        ship: { ...initialShip, isInvulnerable: true, invulnerabilityTimer: GAME_CONFIG.INVULNERABILITY_DURATION },
+        ship: {
+          ...initialShip,
+          isInvulnerable: true,
+          invulnerabilityTimer: GAME_CONFIG.INVULNERABILITY_DURATION,
+        },
         asteroids: createInitialAsteroids(GAME_CONFIG.INITIAL_ASTEROID_COUNT),
         bullets: [],
       };
@@ -122,7 +138,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         score: 0,
         lives: GAME_CONFIG.STARTING_LIVES,
         level: 1,
-        ship: { ...initialShip, isInvulnerable: true, invulnerabilityTimer: GAME_CONFIG.INVULNERABILITY_DURATION },
+        ship: {
+          ...initialShip,
+          isInvulnerable: true,
+          invulnerabilityTimer: GAME_CONFIG.INVULNERABILITY_DURATION,
+        },
         asteroids: createInitialAsteroids(GAME_CONFIG.INITIAL_ASTEROID_COUNT),
         bullets: [],
         highScore: state.highScore,
@@ -138,15 +158,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
 
     case "GAME_TICK": {
-      const { asteroids, bullets: updatedBullets, removedBulletIds, scoreToAdd, shipHit, tickInvulnerability } = action.payload;
+      const {
+        asteroids,
+        bullets: updatedBullets,
+        removedBulletIds,
+        scoreToAdd,
+        shipHit,
+        tickInvulnerability,
+      } = action.payload;
 
       // Preserve newly fired bullets that weren't in the payload
       // (They were added via FIRE_SHOT after useFrame read state.bullets)
       // But exclude bullets that were intentionally removed (expired or collided)
-      const payloadBulletIds = new Set(updatedBullets.map(b => b.id));
+      const payloadBulletIds = new Set(updatedBullets.map((b) => b.id));
       const removedIds = new Set(removedBulletIds);
       const newlyFiredBullets = state.bullets.filter(
-        b => !payloadBulletIds.has(b.id) && !removedIds.has(b.id)
+        (b) => !payloadBulletIds.has(b.id) && !removedIds.has(b.id),
       );
       const mergedBullets = [...updatedBullets, ...newlyFiredBullets];
 
@@ -204,7 +231,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
     case "NEXT_LEVEL": {
       const newLevel = state.level + 1;
-      const asteroidCount = GAME_CONFIG.INITIAL_ASTEROID_COUNT + (newLevel - 1) * GAME_CONFIG.ASTEROIDS_PER_LEVEL;
+      const asteroidCount =
+        GAME_CONFIG.INITIAL_ASTEROID_COUNT +
+        (newLevel - 1) * GAME_CONFIG.ASTEROIDS_PER_LEVEL;
 
       return {
         ...state,
@@ -268,7 +297,13 @@ export function useGameActions() {
   return {
     startGame: useCallback(() => dispatch({ type: "START_GAME" }), [dispatch]),
     pauseGame: useCallback(() => dispatch({ type: "PAUSE_GAME" }), [dispatch]),
-    resumeGame: useCallback(() => dispatch({ type: "RESUME_GAME" }), [dispatch]),
-    restartGame: useCallback(() => dispatch({ type: "RESTART_GAME" }), [dispatch]),
+    resumeGame: useCallback(
+      () => dispatch({ type: "RESUME_GAME" }),
+      [dispatch],
+    ),
+    restartGame: useCallback(
+      () => dispatch({ type: "RESTART_GAME" }),
+      [dispatch],
+    ),
   };
 }

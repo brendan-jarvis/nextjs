@@ -21,7 +21,9 @@ interface ProjectPageProps {
 async function getProjectFromParams(params: Promise<{ slug: string[] }>) {
   const { slug } = await params;
   const slugPath = slug?.join("/");
-  const project = allProjects.find((project) => project.slugAsParams === slugPath);
+  const project = allProjects.find(
+    (project) => project.slugAsParams === slugPath,
+  );
 
   if (!project) {
     return null;
@@ -69,12 +71,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <article className="container relative max-w-3xl py-6 lg:py-10">
+    <article className="relative container max-w-3xl py-6 lg:py-10">
       <Link
         href="/projects"
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "absolute left-[-200px] top-14 hidden xl:inline-flex",
+          "absolute top-14 left-[-50] hidden xl:inline-flex",
         )}
       >
         <ChevronLeft className="mr-2 h-4 w-4" />
@@ -83,8 +85,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <div>
         {project.date && (
           <time
-            dateTime={project.date}
-            className="block text-sm text-muted-foreground"
+            dateTime={new Date(project.date).toISOString()}
+            className="text-muted-foreground block text-sm"
           >
             Published on {format(new Date(project.date), "dd MMM yyyy")}
           </time>
@@ -99,7 +101,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           alt={project.title}
           height={500}
           width={500}
-          className="my-8 aspect-square rounded-md border bg-muted object-cover transition-transform hover:scale-105"
+          className="bg-muted my-8 aspect-square rounded-md border object-cover transition-transform hover:scale-105"
           priority
         />
       )}

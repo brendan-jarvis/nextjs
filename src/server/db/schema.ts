@@ -1,4 +1,13 @@
-import { pgTable, serial, text, timestamp, varchar, integer, boolean, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+  integer,
+  boolean,
+  jsonb,
+} from "drizzle-orm/pg-core";
 
 /**
  * Posts table - stores full blog post content from MDX.
@@ -15,7 +24,10 @@ export const posts = pgTable("posts", {
   authors: jsonb("authors").$type<string[]>().default([]).notNull(),
   date: timestamp("date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
   tags: varchar("tags", { length: 256 }),
 });
 
@@ -26,9 +38,13 @@ export const comments = pgTable("comments", {
   id: serial("id").primaryKey(),
   postId: integer("post_id").notNull(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
+  authorName: varchar("author_name", { length: 128 }),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 /**
@@ -47,7 +63,10 @@ export const projects = pgTable("projects", {
   authors: jsonb("authors").$type<string[]>().default([]).notNull(),
   date: timestamp("date").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 // Export types

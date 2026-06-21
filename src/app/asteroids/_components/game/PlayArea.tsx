@@ -16,11 +16,5 @@ export function PlayArea() {
     [min, min, 0],
   ];
 
-  return (
-    <Line
-      points={points}
-      color="#333333"
-      lineWidth={1}
-    />
-  );
+  return <Line points={points} color="#333333" lineWidth={1} />;
 }

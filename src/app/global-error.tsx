@@ -18,14 +18,16 @@ export default function Error({
 
   return (
     <div className="mx-auto flex min-h-screen flex-col items-center">
-      <h1 className="my-2 bg-citrus-blaze py-2 text-center text-3xl font-bold uppercase">
+      <h1 className="bg-citrus-blaze my-2 py-2 text-center text-3xl font-bold uppercase">
         Error
       </h1>
       <div className="py-4">
         <p className="mb-2">Something went wrong!</p>
-        <pre className="whitespace-pre-wrap rounded border bg-white p-2 text-sm font-light text-red-500">
-          {error.message}
-        </pre>
+        {process.env.NODE_ENV !== "production" && (
+          <pre className="rounded border bg-white p-2 text-sm font-light whitespace-pre-wrap text-red-500">
+            {error.message}
+          </pre>
+        )}
       </div>
       <div className="flex flex-row gap-2">
         <Button asChild variant="outline">
@@ -34,7 +36,7 @@ export default function Error({
           </Link>
         </Button>
         <Button
-          className="bg-sunny-yellow font-semibold text-gray-700 hover:bg-gray-700 hover:text-sunny-yellow"
+          className="bg-sunny-yellow hover:text-sunny-yellow font-semibold text-gray-700 hover:bg-gray-700"
           onClick={
             // Attempt to recover by trying to re-render the segment
             () => reset()

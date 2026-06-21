@@ -9,7 +9,8 @@ const pressStart2P = Press_Start_2P({
 
 export const metadata: Metadata = {
   title: "Asteroids - A Three.js Game",
-  description: "Classic Asteroids game built with Three.js and React Three Fiber",
+  description:
+    "Classic Asteroids game built with Three.js and React Three Fiber",
 };
 
 export default function AsteroidsLayout({
@@ -18,7 +19,9 @@ export default function AsteroidsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${pressStart2P.variable} fixed inset-0 overflow-hidden bg-black`}>
+    <div
+      className={`${pressStart2P.variable} fixed inset-0 overflow-hidden bg-black`}
+    >
       {children}
     </div>
   );

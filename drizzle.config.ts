@@ -19,7 +19,7 @@ const getDatabaseUrl = () => {
 const url = getDatabaseUrl();
 if (!url) {
   throw new Error(
-    "No database connection string found. Add DATABASE_URL (or POSTGRES_URL_NON_POOLING etc.) to .env or .env.development.local. Get it from your Supabase dashboard."
+    "No database connection string found. Add DATABASE_URL (or POSTGRES_URL_NON_POOLING etc.) to .env or .env.development.local. Get it from your Supabase dashboard.",
   );
 }
 

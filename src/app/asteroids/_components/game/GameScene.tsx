@@ -23,7 +23,7 @@ function checkCollision(
   pos1: { x: number; y: number },
   radius1: number,
   pos2: { x: number; y: number },
-  radius2: number
+  radius2: number,
 ): boolean {
   const dx = pos1.x - pos2.x;
   const dy = pos1.y - pos2.y;
@@ -99,18 +99,27 @@ export function GameScene() {
   const [explosions, setExplosions] = useState<ExplosionData[]>([]);
   const pendingExplosions = useRef<ExplosionData[]>([]);
 
-  const updateShipPosition = useCallback((x: number, y: number, rotation: number) => {
-    shipPositionRef.current = { x, y };
-    shipRotationRef.current = rotation;
-  }, []);
+  const updateShipPosition = useCallback(
+    (x: number, y: number, rotation: number) => {
+      shipPositionRef.current = { x, y };
+      shipRotationRef.current = rotation;
+    },
+    [],
+  );
 
-  const updateAsteroidPosition = useCallback((id: string, x: number, y: number) => {
-    asteroidsRef.current.set(id, { x, y });
-  }, []);
+  const updateAsteroidPosition = useCallback(
+    (id: string, x: number, y: number) => {
+      asteroidsRef.current.set(id, { x, y });
+    },
+    [],
+  );
 
-  const updateBulletPosition = useCallback((id: string, x: number, y: number) => {
-    bulletsRef.current.set(id, { x, y });
-  }, []);
+  const updateBulletPosition = useCallback(
+    (id: string, x: number, y: number) => {
+      bulletsRef.current.set(id, { x, y });
+    },
+    [],
+  );
 
   // Game loop - collision detection
   useFrame((_, delta) => {
@@ -148,7 +157,8 @@ export function GameScene() {
         if (!a1 || !a2) continue;
 
         // Create consistent pair key
-        const pairKey = a1.id < a2.id ? `${a1.id}:${a2.id}` : `${a2.id}:${a1.id}`;
+        const pairKey =
+          a1.id < a2.id ? `${a1.id}:${a2.id}` : `${a2.id}:${a1.id}`;
 
         // Skip if on cooldown
         if (collisionCooldowns.current.has(pairKey)) continue;
@@ -175,8 +185,10 @@ export function GameScene() {
           const sep2 = (overlap / 2 + buffer) * (mass1 / totalMass);
 
           // Mass-weighted impulse for velocity change (elastic collision)
-          const dvn = (a1.velocity.x - a2.velocity.x) * nx + (a1.velocity.y - a2.velocity.y) * ny;
-          const impulse = -2 * dvn / totalMass;
+          const dvn =
+            (a1.velocity.x - a2.velocity.x) * nx +
+            (a1.velocity.y - a2.velocity.y) * ny;
+          const impulse = (-2 * dvn) / totalMass;
 
           updatedAsteroids[i] = {
             ...a1,
@@ -240,7 +252,14 @@ export function GameScene() {
       for (const asteroid of updatedAsteroids) {
         if (asteroidsToRemove.has(asteroid.id)) continue;
 
-        if (checkCollision(bullet.position, GAME_CONFIG.BULLET_RADIUS * 3, asteroid.position, asteroid.radius)) {
+        if (
+          checkCollision(
+            bullet.position,
+            GAME_CONFIG.BULLET_RADIUS * 3,
+            asteroid.position,
+            asteroid.radius,
+          )
+        ) {
           bulletsToRemove.add(bullet.id);
           asteroidsToRemove.add(asteroid.id);
           scoreToAdd += GAME_CONFIG.ASTEROID_SIZES[asteroid.size].points;
@@ -266,7 +285,9 @@ export function GameScene() {
     }
 
     // Apply asteroid destruction
-    updatedAsteroids = updatedAsteroids.filter(a => !asteroidsToRemove.has(a.id));
+    updatedAsteroids = updatedAsteroids.filter(
+      (a) => !asteroidsToRemove.has(a.id),
+    );
     updatedAsteroids.push(...newSplitAsteroids);
 
     // Spawn new large asteroids to replace destroyed ones (from screen edges)
@@ -275,14 +296,21 @@ export function GameScene() {
     }
 
     // Remove bullets that hit asteroids
-    updatedBullets = updatedBullets.filter(b => !bulletsToRemove.has(b.id));
+    updatedBullets = updatedBullets.filter((b) => !bulletsToRemove.has(b.id));
 
     // Ship-asteroid collisions (if not invulnerable)
     let shipHit = false;
     if (!state.ship.isInvulnerable) {
       const shipPos = shipPositionRef.current;
       for (const asteroid of updatedAsteroids) {
-        if (checkCollision(shipPos, GAME_CONFIG.SHIP_RADIUS, asteroid.position, asteroid.radius)) {
+        if (
+          checkCollision(
+            shipPos,
+            GAME_CONFIG.SHIP_RADIUS,
+            asteroid.position,
+            asteroid.radius,
+          )
+        ) {
           shipHit = true;
           // Spawn fiery ship explosion
           pendingExplosions.current.push({
@@ -297,7 +325,10 @@ export function GameScene() {
     }
 
     // Combine all removed bullet IDs (expired + collided)
-    const removedBulletIds = [...expiredBulletIds, ...Array.from(bulletsToRemove)];
+    const removedBulletIds = [
+      ...expiredBulletIds,
+      ...Array.from(bulletsToRemove),
+    ];
 
     // Dispatch single tick update
     const tickPayload: TickPayload = {
@@ -313,13 +344,13 @@ export function GameScene() {
 
     // Flush pending explosions to state
     if (pendingExplosions.current.length > 0) {
-      setExplosions(prev => [...prev, ...pendingExplosions.current]);
+      setExplosions((prev) => [...prev, ...pendingExplosions.current]);
       pendingExplosions.current = [];
     }
   });
 
   const removeExplosion = useCallback((id: string) => {
-    setExplosions(prev => prev.filter(e => e.id !== id));
+    setExplosions((prev) => prev.filter((e) => e.id !== id));
   }, []);
 
   return (

@@ -23,7 +23,14 @@ interface Particle {
 }
 
 const DEFAULT_COLORS = ["#ffffff"];
-const FLAME_COLORS = ["#ff4400", "#ff6600", "#ff8800", "#ffaa00", "#ffcc00", "#ffff00"];
+const FLAME_COLORS = [
+  "#ff4400",
+  "#ff6600",
+  "#ff8800",
+  "#ffaa00",
+  "#ffcc00",
+  "#ffff00",
+];
 
 function createParticles(size: number, colors: string[]): Particle[] {
   const particles: Particle[] = [];
@@ -47,7 +54,12 @@ function createParticles(size: number, colors: string[]): Particle[] {
 
 export { FLAME_COLORS };
 
-export function Explosion({ position, size, onComplete, colors = DEFAULT_COLORS }: ExplosionProps) {
+export function Explosion({
+  position,
+  size,
+  onComplete,
+  colors = DEFAULT_COLORS,
+}: ExplosionProps) {
   const groupRef = useRef<Group>(null);
   const particlesRef = useRef<Particle[] | null>(null);
   const lifetimeRef = useRef(1.0);
