@@ -26,7 +26,7 @@ export default async function Home() {
         </p>
 
         <p className="mx-auto mt-4 max-w-2xl text-xl">
-          <span className="kiaora-highlight p-1">Kia ora</span>, I am a
+          <span className="sweep-highlight p-1">Kia ora</span>, I am a
           full-stack web developer with commercial C#/.NET, Dynamics 365, and
           React experience<span className="blinking-cursor">.</span>
         </p>
@@ -37,10 +37,12 @@ export default async function Home() {
         </p>
       </section>
 
-      {/* What I bring (directly echoes CV) */}
+      {/* What I bring */}
       <section className="mb-16">
         <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-          <span className="bg-seafoam-green">What I bring</span>
+          <span className="sweep-highlight [--sweep-color:var(--color-seafoam-green)]">
+            What I bring
+          </span>
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="bg-card rounded-lg border p-6">
@@ -101,8 +103,10 @@ export default async function Home() {
       {/* Featured projects */}
       <section className="mb-16">
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
-            Featured projects
+          <h2 className="text-2xl font-semibold tracking-tight">
+            <span className="sweep-highlight [--sweep-color:var(--color-seafoam-green)]">
+              Featured projects
+            </span>
           </h2>
           <Link
             href="/projects"
@@ -142,8 +146,10 @@ export default async function Home() {
       {/* Recent writing */}
       <section>
         <div className="mb-6 flex items-baseline justify-between">
-          <h2 className="bg-seafoam-green text-2xl font-semibold tracking-tight">
-            Recent writing
+          <h2 className="text-2xl font-semibold tracking-tight">
+            <span className="sweep-highlight [--sweep-color:var(--color-seafoam-green)]">
+              Recent writing
+            </span>
           </h2>
           <Link
             href="/blog"
