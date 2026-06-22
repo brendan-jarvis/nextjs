@@ -46,8 +46,10 @@ export default async function Home() {
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="hover-highlight font-medium">
-              Production systems in regulated environments
+            <h3 className="font-medium">
+              <span className="hover-sweep [--sweep-color:var(--color-citrus-blaze)]">
+                Production systems in regulated environments
+              </span>
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Own and support the NZ Parole Board Hearing Management System
@@ -60,8 +62,10 @@ export default async function Home() {
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="hover-highlight font-medium">
-              Responsible AI-augmented development
+            <h3 className="font-medium">
+              <span className="hover-sweep [--sweep-color:var(--color-citrus-blaze)]">
+                Responsible AI-augmented development
+              </span>
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Use Claude Code daily for code navigation, defect investigation,
@@ -73,8 +77,10 @@ export default async function Home() {
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="hover-highlight font-medium">
-              End-to-end ownership &amp; integration
+            <h3 className="font-medium">
+              <span className="hover-sweep [--sweep-color:var(--color-citrus-blaze)]">
+                End-to-end ownership &amp; integration
+              </span>
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Full-stack work across C#/.NET (MVC, WCF, Dataverse plugins),
@@ -86,8 +92,10 @@ export default async function Home() {
             </p>
           </div>
           <div className="bg-card rounded-lg border p-6">
-            <h3 className="hover-highlight font-medium">
-              Self-directed modern portfolio
+            <h3 className="font-medium">
+              <span className="hover-sweep [--sweep-color:var(--color-citrus-blaze)]">
+                Self-directed modern portfolio
+              </span>
             </h3>
             <p className="text-muted-foreground mt-2 text-sm">
               Active work in TypeScript, React/Next.js, and Python tooling.
@@ -125,7 +133,9 @@ export default async function Home() {
                 className="group bg-card hover:border-foreground/20 block rounded-lg border p-6 transition"
               >
                 <h3 className="text-lg font-semibold text-gray-900 group-hover:underline">
-                  {project.title}
+                  <span className="hover-sweep [--sweep-color:var(--color-soft-lilac)]">
+                    {project.title}
+                  </span>
                 </h3>
                 <div className="pt-1 text-xs font-light text-gray-900">
                   {format(new Date(project.date), "MMM yyyy")}
@@ -147,7 +157,7 @@ export default async function Home() {
       <section>
         <div className="mb-6 flex items-baseline justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">
-            <span className="sweep-highlight [--sweep-color:var(--color-seafoam-green)]">
+            <span className="sweep-highlight px-1 py-0.5 [--sweep-color:var(--color-seafoam-green)]">
               Recent writing
             </span>
           </h2>

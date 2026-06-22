@@ -103,6 +103,13 @@
   animation: sweep-highlight 700ms ease-out forwards;
 }
 
+/* Repeat the sweep on mouseover (replays the highlight from left every time) */
+.sweep-highlight:hover::before {
+  transform: scaleX(0);
+  transition: none;
+  animation: sweep-highlight 700ms ease-out forwards;
+}
+
 @keyframes sweep-highlight {
   to {
     transform: scaleX(1);
@@ -177,4 +184,31 @@
 .hover-highlight:hover {
   background-size: 100% 100%;
   color: #111827;
+}
+
+/* Standalone mousehover highlight - supports color variable like sweep */
+.hover-sweep {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  z-index: 0;
+  color: inherit;
+  background-color: transparent !important;
+}
+
+.hover-sweep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--sweep-color, var(--color-citrus-blaze));
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hover-sweep:hover::before {
+  transform: scaleX(0);
+  transition: none;
+  animation: sweep-highlight 700ms ease-out forwards;
 }
