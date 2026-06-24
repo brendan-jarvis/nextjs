@@ -20,14 +20,14 @@ function parseFrontmatter(content: string): {
 } {
   const match = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/.exec(content);
   if (!match) {
-    return { frontmatter: {} as Frontmatter, body: content };
+    return { frontmatter: {} as unknown as Frontmatter, body: content };
   }
-  const yaml = match[1];
-  const body = match[2].trim();
+  const yaml = match[1] ?? "";
+  const body = (match[2] ?? "").trim();
   const frontmatter: Record<string, unknown> = {};
   const lines = yaml.split("\n");
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const line = (lines[i] ?? "").trim();
     const colonIndex = line.indexOf(":");
     if (colonIndex > -1) {
       const key = line.slice(0, colonIndex).trim();
@@ -37,7 +37,7 @@ function parseFrontmatter(content: string): {
         const list: string[] = [];
         let j = i + 1;
         while (j < lines.length) {
-          const next = lines[j].trim();
+          const next = (lines[j] ?? "").trim();
           if (next.startsWith("-")) {
             const item = next
               .slice(1)
@@ -65,7 +65,7 @@ function parseFrontmatter(content: string): {
       }
     }
   }
-  return { frontmatter: frontmatter as Frontmatter, body };
+  return { frontmatter: frontmatter as unknown as Frontmatter, body };
 }
 
 function readMdxFiles(
@@ -118,6 +118,7 @@ async function seed() {
       })
       .returning();
 
+    if (!inserted) throw new Error("Failed to insert post");
     console.log(`Inserted post: ${inserted.title} (id: ${inserted.id})`);
 
     if (filename.includes("restricted-licence")) {
@@ -147,6 +148,7 @@ async function seed() {
       })
       .returning();
 
+    if (!inserted) throw new Error("Failed to insert project");
     console.log(`Inserted project: ${inserted.title} (id: ${inserted.id})`);
   }
 
@@ -165,6 +167,7 @@ async function seed() {
       })
       .returning();
 
+    if (!comment) throw new Error("Failed to insert test comment");
     // Note: we still use numeric postId internally; the public API now uses postTitle
     console.log(
       `Inserted test comment from Grok on post (id: ${motorcyclePostId}) (comment id: ${comment.id})`,
