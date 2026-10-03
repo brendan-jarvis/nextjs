@@ -4,9 +4,11 @@ import { allPosts, allProjects } from "contentlayer/generated";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/blog", "/projects", "/asteroids"].map((path) => ({
-    url: `${siteUrl}${path}`,
-  }));
+  const staticRoutes = ["", "/blog", "/projects", "/asteroids", "/privacy"].map(
+    (path) => ({
+      url: `${siteUrl}${path}`,
+    }),
+  );
 
   const posts = allPosts
     .filter((post) => post.published)

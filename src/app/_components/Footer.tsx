@@ -51,6 +51,11 @@ export default function Footer() {
         </Link>
         .
       </p>
+      <p className="mt-2">
+        <Link href="/privacy" className="hover:underline">
+          Privacy
+        </Link>
+      </p>
     </footer>
   );
 }
