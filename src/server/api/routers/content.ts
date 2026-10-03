@@ -47,7 +47,7 @@ export const contentRouter = createTRPCRouter({
     .input(
       z.object({
         postTitle: z.string().min(1),
-        content: z.string().min(1).max(2000),
+        content: z.string().trim().min(1).max(2000),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -92,7 +92,7 @@ export const contentRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        content: z.string().min(1).max(2000),
+        content: z.string().trim().min(1).max(2000),
       }),
     )
     .mutation(async ({ input, ctx }) => {
