@@ -1,5 +1,5 @@
 import {
-  pgTable,
+  pgSchema,
   serial,
   text,
   timestamp,
@@ -13,10 +13,18 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
+ * Every table lives in the Supabase `nextjs` schema. The tables already
+ * exist there with row level security enabled and no policies, and the
+ * schema is not exposed to the Data API. The definitions below match
+ * the live tables exactly, so no migration is needed.
+ */
+export const nextjs = pgSchema("nextjs");
+
+/**
  * Posts table - stores full blog post content from MDX.
  * Supports migrating away from Contentlayer.
  */
-export const posts = pgTable("posts", {
+export const posts = nextjs.table("posts", {
   id: serial("id").primaryKey(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
@@ -37,7 +45,7 @@ export const posts = pgTable("posts", {
 /**
  * Comments table - linked to posts.
  */
-export const comments = pgTable("comments", {
+export const comments = nextjs.table("comments", {
   id: serial("id").primaryKey(),
   postId: integer("post_id").notNull(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
@@ -54,7 +62,7 @@ export const comments = pgTable("comments", {
  * Projects table - stores full project content from MDX.
  * Supports migrating away from Contentlayer.
  */
-export const projects = pgTable("projects", {
+export const projects = nextjs.table("projects", {
   id: serial("id").primaryKey(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
@@ -82,11 +90,10 @@ export type InsertProject = typeof projects.$inferInsert;
 
 /**
  * Auth.js tables. Column property names match @auth/drizzle-adapter.
- * These hold OAuth tokens and session tokens. RLS is enabled with no
- * policies so the Data API cannot read them. The app connects as the
- * table owner, which bypasses RLS.
+ * These hold OAuth tokens and session tokens. The app's database role
+ * must own the tables or have BYPASSRLS, because RLS has no policies.
  */
-export const users = pgTable("user", {
+export const users = nextjs.table("user", {
   id: text("id").primaryKey(),
   name: text("name"),
   email: text("email").unique(),
@@ -94,7 +101,7 @@ export const users = pgTable("user", {
   image: text("image"),
 });
 
-export const accounts = pgTable(
+export const accounts = nextjs.table(
   "account",
   {
     userId: text("userId")
@@ -117,7 +124,7 @@ export const accounts = pgTable(
   ],
 );
 
-export const sessions = pgTable(
+export const sessions = nextjs.table(
   "session",
   {
     sessionToken: text("sessionToken").primaryKey(),
@@ -129,7 +136,7 @@ export const sessions = pgTable(
   (session) => [index("session_user_id_idx").on(session.userId)],
 );
 
-export const verificationTokens = pgTable(
+export const verificationTokens = nextjs.table(
   "verificationToken",
   {
     identifier: text("identifier").notNull(),

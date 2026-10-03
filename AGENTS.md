@@ -57,7 +57,7 @@ bun run start
 - Use `~/*` or `@/*` aliases for `src/`.
 - Prefer server components; client only when needed (`"use client"`).
 - tRPC: `publicProcedure` for reads, `protectedProcedure` for comment writes (Auth.js session).
-- DB: Server-only (Drizzle). Never client-side. Use direct (non-pooling) Postgres URL.
+- DB: Server-only (Drizzle). Never client-side. Tables live in the Supabase `nextjs` schema (`pgSchema("nextjs")`). `DATABASE_URL` is the transaction pooler (port 6543), so postgres.js runs with `prepare: false`.
 - Styling: Tailwind + custom colors (`--color-citrus-blaze` etc. via @theme). Recent animations use CSS vars like `--sweep-color`.
 - MDX frontmatter required (title, date, published, etc.).
 - Imports: Type-only imports where possible.
@@ -84,6 +84,6 @@ bun run start
 - `metadataBase` is `https://brendan-jarvis.vercel.app`. There is no custom domain.
 - Worktrees have caused confusion historically — stick to `main` branch + git.
 - No tests; rely on lint + build + manual dev verification.
-- Database connection prefers non-pooling URLs for reliability.
+- `drizzle/0000_nextjs_baseline.sql` describes tables that already exist in Supabase. Do not run `drizzle-kit migrate` or `push` against production without review.
 
 Update this file when major stack/architecture changes occur.

@@ -56,7 +56,6 @@ src/
 Additional root files:
 
 - `drizzle.config.ts` + `drizzle/` – DB migrations
-- `supabase/` – Supabase CLI (link state + `supabase-rls-policies.sql` for optional RLS)
 
 ## Content
 
@@ -81,16 +80,15 @@ Your content here...
 
 Dynamic data (blog comments, projects metadata) is stored in Supabase Postgres and accessed via Drizzle + tRPC.
 
-- Run `bun run seed` to populate tables from the MDX files in `content/`.
+- Run `bun run seed` to populate tables from the MDX files in `content/`. Comments attach to a `posts` row found by title, so posting a comment fails until posts are seeded. The seed script deletes all comments, posts, and projects first.
 - Comments support create / edit / delete for the signed-in author. Sign-in is GitHub or Google via Auth.js. Sessions are stored in Supabase Postgres.
 - See `src/server/db/schema.ts` and `src/server/api/routers/content.ts`.
 
 ## Security Notes
 
-- Database access is **server-only** (Drizzle + direct Postgres client). No client-side DB access.
-- Optional RLS policies are in `supabase/supabase-rls-policies.sql`. Currently we rely on secret connection strings.
+- Database access is **server-only** (Drizzle + postgres.js over the Supabase transaction pooler). No client-side DB access.
+- All tables live in the `nextjs` schema, which the Supabase Data API does not expose. Every table has row level security enabled with no policies, so the app's database role must own the tables or have `BYPASSRLS`.
 - Sign-in is Auth.js with the GitHub and Google providers. Comment writes use a protected tRPC procedure and `session.user.id`. There is no auth middleware, so pages stay static.
-- Auth tables (`user`, `account`, `session`, `verificationToken`) have row level security enabled and no policies. The server connects as the table owner.
 - Run `bun audit` / `bun update` regularly. Some moderate vulns are in transitive deps of the build-time `contentlayer2` tool.
 - Keep secrets out of git (`.env` and `.env*.local` are ignored; only `.env.example` is committed).
 

@@ -6,10 +6,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    // Support plain and Vercel-prefixed Supabase vars
-    SUPABASE_URL: z.string().url(),
-    SUPABASE_ANON_KEY: z.string().min(1),
-    // Postgres connection - prefer a direct (non-pooling) URL.
+    // Postgres connection. Use the Supabase transaction pooler (port 6543).
     // At least one of the following must be provided (see src/server/db/index.ts).
     DATABASE_URL: z.string().url(),
     POSTGRES_URL: z.string().url().optional(),
@@ -27,13 +24,6 @@ export const env = createEnv({
   client: {},
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    SUPABASE_URL:
-      process.env.SUPABASE_URL ||
-      process.env.nextjs_blog_SUPABASE_URL ||
-      process.env.NEXT_PUBLIC_nextjs_blog_SUPABASE_URL,
-    SUPABASE_ANON_KEY:
-      process.env.SUPABASE_ANON_KEY ||
-      process.env.nextjs_blog_SUPABASE_ANON_KEY,
     DATABASE_URL:
       process.env.DATABASE_URL ||
       process.env.POSTGRES_URL ||

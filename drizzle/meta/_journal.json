@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1782033563930,
-      "tag": "0000_ambitious_layla_miller",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1782034325589,
-      "tag": "0001_groovy_carnage",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1782034943366,
-      "tag": "0002_busy_red_ghost",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1782036329334,
-      "tag": "0003_funny_typhoid_mary",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1791002423831,
-      "tag": "0004_nextauth",
+      "when": 1791012018739,
+      "tag": "0000_nextjs_baseline",
       "breakpoints": true
     }
   ]
