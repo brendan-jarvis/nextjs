@@ -24,21 +24,21 @@ export default function Footer() {
         </Link>
         {", "}
         <Link
-          href="https://clerk.com/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Clerk
-        </Link>
-        {", "}
-        <Link
           href="https://supabase.com/"
           target="_blank"
           className="font-bold hover:underline"
           rel="noreferrer"
         >
           Supabase
+        </Link>
+        {", "}
+        <Link
+          href="https://authjs.dev/"
+          target="_blank"
+          className="font-bold hover:underline"
+          rel="noreferrer"
+        >
+          Auth.js
         </Link>
         {", and "}
         <Link
@@ -50,6 +50,11 @@ export default function Footer() {
           Vercel
         </Link>
         .
+      </p>
+      <p className="mt-2">
+        <Link href="/privacy" className="hover:underline">
+          Privacy
+        </Link>
       </p>
     </footer>
   );

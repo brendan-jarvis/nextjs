@@ -1,1 +1,0 @@
-ALTER TABLE "comments" ADD COLUMN "author_name" varchar(128);

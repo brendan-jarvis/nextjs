@@ -95,9 +95,7 @@ async function seed() {
   const projectFiles = readMdxFiles(projectsDir);
 
   // Seed Posts (blog)
-  let motorcyclePostId: number | null = null;
-
-  for (const { frontmatter, body, filename } of blogFiles) {
+  for (const { frontmatter, body } of blogFiles) {
     const date = new Date(frontmatter.date);
     const [inserted] = await db
       .insert(posts)
@@ -120,10 +118,6 @@ async function seed() {
 
     if (!inserted) throw new Error("Failed to insert post");
     console.log(`Inserted post: ${inserted.title} (id: ${inserted.id})`);
-
-    if (filename.includes("restricted-licence")) {
-      motorcyclePostId = inserted.id;
-    }
   }
 
   // Seed Projects
@@ -150,28 +144,6 @@ async function seed() {
 
     if (!inserted) throw new Error("Failed to insert project");
     console.log(`Inserted project: ${inserted.title} (id: ${inserted.id})`);
-  }
-
-  // Add test comment from Grok on the motorcycle post
-  if (motorcyclePostId) {
-    const [comment] = await db
-      .insert(comments)
-      .values({
-        postId: motorcyclePostId,
-        authorId: "grok",
-        authorName: "Grok X",
-        content:
-          "Hey from Grok! This is a test comment added via the seed script to demonstrate the restored Supabase + Drizzle + tRPC database functionality. The restricted licence test tips are excellent — especially the advice on u-turns and handling the radio. Ride safe! 🤖🏍️",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .returning();
-
-    if (!comment) throw new Error("Failed to insert test comment");
-    // Note: we still use numeric postId internally; the public API now uses postTitle
-    console.log(
-      `Inserted test comment from Grok on post (id: ${motorcyclePostId}) (comment id: ${comment.id})`,
-    );
   }
 
   console.log("Seeding complete! Tables now contain full MDX content.");

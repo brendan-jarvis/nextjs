@@ -1,6 +1,27 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { allPosts, allProjects } from "contentlayer/generated";
 import { compareDesc, format } from "date-fns";
+
+import { siteDescription, siteName, siteUrl } from "@/lib/site";
+
+export const metadata: Metadata = {
+  openGraph: {
+    title: siteName,
+    description: siteDescription,
+    url: siteUrl,
+    siteName,
+    type: "website",
+    images: [
+      {
+        url: "/images/profile.jpg",
+        width: 400,
+        height: 400,
+        alt: "Brendan Jarvis",
+      },
+    ],
+  },
+};
 
 export default async function Home() {
   const posts = allPosts

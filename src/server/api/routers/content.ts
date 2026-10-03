@@ -1,18 +1,15 @@
 import { eq } from "drizzle-orm";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { clerkClient } from "@clerk/nextjs/server";
 
 import {
   createTRPCRouter,
-  publicProcedure,
   protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { posts, comments, projects } from "~/server/db/schema";
-import { TRPCError } from "@trpc/server";
 
-// Simple per-user rate limiter for comments (in-memory, resets on restart).
-// Good enough for a personal site. For multi-instance/prod, use Redis or Upstash.
 const COMMENT_RATE_LIMIT_MS = 3000;
 const lastCommentTimestamps = new Map<string, number>();
 
@@ -25,12 +22,6 @@ export const contentRouter = createTRPCRouter({
       };
     }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
-
-  // Example using Drizzle on Supabase Postgres
-  // Queries the posts table (similar to what was previously stored before migration to MDX)
   getPosts: publicProcedure.query(async () => {
     const result = await db.select().from(posts).limit(5);
     return result;
@@ -52,29 +43,27 @@ export const contentRouter = createTRPCRouter({
       return result.map((r) => r.comment);
     }),
 
-  // Example insert (protected)
   createComment: protectedProcedure
     .input(
       z.object({
-        postTitle: z.string(),
+        postTitle: z.string().min(1),
         content: z.string().min(1).max(2000),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      // Simple rate limit
+      const userId = ctx.session.user.id;
       const now = Date.now();
-      const last = lastCommentTimestamps.get(ctx.auth.userId) ?? 0;
+      const last = lastCommentTimestamps.get(userId) ?? 0;
       if (now - last < COMMENT_RATE_LIMIT_MS) {
         throw new TRPCError({
           code: "TOO_MANY_REQUESTS",
-          message: "Please wait a moment before posting another comment.",
+          message: "Please wait a moment before commenting again",
         });
       }
-      lastCommentTimestamps.set(ctx.auth.userId, now);
+      lastCommentTimestamps.set(userId, now);
 
-      // Resolve post by title (stable identifier from contentlayer)
       const [post] = await db
-        .select()
+        .select({ id: posts.id })
         .from(posts)
         .where(eq(posts.title, input.postTitle))
         .limit(1);
@@ -86,32 +75,17 @@ export const contentRouter = createTRPCRouter({
         });
       }
 
-      // Fetch nice display name from Clerk instead of raw user ID
-      const clerk = await clerkClient();
-      const user = await clerk.users.getUser(ctx.auth.userId);
-
-      // Prefer a friendly name like "Brendan J" or "Grok X"
-      // We avoid storing the raw Clerk userId for display purposes.
-      const authorName =
-        (user.firstName && user.lastName
-          ? `${user.firstName} ${user.lastName[0]}`
-          : null) ??
-        user.fullName ??
-        user.username ??
-        user.firstName ??
-        "Anonymous";
-
-      const [newComment] = await db
+      const [created] = await db
         .insert(comments)
         .values({
           postId: post.id,
-          authorId: ctx.auth.userId, // keep the ID for reference / future
-          authorName,
+          authorId: userId,
+          authorName: ctx.session.user.name ?? ctx.session.user.email,
           content: input.content,
         })
         .returning();
 
-      return newComment;
+      return created;
     }),
 
   updateComment: protectedProcedure
@@ -128,7 +102,7 @@ export const contentRouter = createTRPCRouter({
         .where(eq(comments.id, input.id))
         .limit(1);
 
-      if (existing?.authorId !== ctx.auth.userId) {
+      if (existing?.authorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You can only edit your own comments",
@@ -156,7 +130,7 @@ export const contentRouter = createTRPCRouter({
         .where(eq(comments.id, input.id))
         .limit(1);
 
-      if (existing?.authorId !== ctx.auth.userId) {
+      if (existing?.authorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You can only delete your own comments",

@@ -7,7 +7,7 @@ A personal blog and portfolio built with Next.js 15, featuring static MDX conten
 - **Framework**: [Next.js 15](https://nextjs.org/) with App Router
 - **Content**: MDX via Contentlayer2
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Authentication**: [Clerk](https://clerk.com/)
+- **Authentication**: [Auth.js](https://authjs.dev/) (NextAuth v5, GitHub + Google)
 - **API**: [tRPC](https://trpc.io/)
 - **Database**: [Supabase](https://supabase.com/) (Postgres) + [Drizzle ORM](https://orm.drizzle.team/)
 - **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
@@ -21,7 +21,7 @@ bun install
 
 # Set up environment variables
 cp .env.example .env
-# Add your Clerk + Supabase keys (see .env.example)
+# Add your Supabase keys and Auth.js GitHub/Google credentials (see .env.example)
 
 # (Optional) Seed the database with MDX content + sample comments
 bun run seed
@@ -41,9 +41,11 @@ src/
 │   ├── projects/            # Project listing and details
 │   ├── asteroids/           # Interactive Three.js game
 │   ├── _components/         # Shared React components (incl. Comments)
-│   └── api/trpc/            # tRPC endpoint
+│   ├── api/trpc/            # tRPC endpoint
+│   └── api/auth/            # Auth.js route
 ├── server/
-│   ├── api/                 # tRPC router + procedures (content, auth)
+│   ├── auth/                # Auth.js config (GitHub, Google, Drizzle adapter)
+│   ├── api/                 # tRPC router + procedures (content)
 │   └── db/                  # Drizzle schema, client, seed script
 ├── content/                  # MDX content files
 │   ├── blog/                # Blog posts
@@ -54,7 +56,6 @@ src/
 Additional root files:
 
 - `drizzle.config.ts` + `drizzle/` – DB migrations
-- `supabase/` – Supabase CLI (link state + `supabase-rls-policies.sql` for optional RLS)
 
 ## Content
 
@@ -79,16 +80,15 @@ Your content here...
 
 Dynamic data (blog comments, projects metadata) is stored in Supabase Postgres and accessed via Drizzle + tRPC.
 
-- Run `bun run seed` to populate tables from the MDX files in `content/`.
-- Comments support create / edit / delete (only for your own comments, enforced server-side).
+- Run `bun run seed` to populate tables from the MDX files in `content/`. Comments attach to a `posts` row found by title, so posting a comment fails until posts are seeded. The seed script deletes all comments, posts, and projects first.
+- Comments support create / edit / delete for the signed-in author. Sign-in is GitHub or Google via Auth.js. Sessions are stored in Supabase Postgres.
 - See `src/server/db/schema.ts` and `src/server/api/routers/content.ts`.
 
 ## Security Notes
 
-- Authentication via Clerk. Comment create/update/delete use protected tRPC procedures with server-side author checks (`authorId` from Clerk session).
-- Database access is **server-only** (Drizzle + direct Postgres client). No client-side DB access.
-- Optional RLS policies are in `supabase/supabase-rls-policies.sql`. Currently we rely on secret connection strings + app authorization.
-- Comments are limited to 2000 chars + 3-second per-user rate limit (server-side).
+- Database access is **server-only** (Drizzle + postgres.js over the Supabase transaction pooler). No client-side DB access.
+- All tables live in the `nextjs` schema, which the Supabase Data API does not expose. Every table has row level security enabled with no policies, so the app's database role must own the tables or have `BYPASSRLS`.
+- Sign-in is Auth.js with the GitHub and Google providers. Comment writes use a protected tRPC procedure and `session.user.id`. There is no auth middleware, so pages stay static.
 - Run `bun audit` / `bun update` regularly. Some moderate vulns are in transitive deps of the build-time `contentlayer2` tool.
 - Keep secrets out of git (`.env` and `.env*.local` are ignored; only `.env.example` is committed).
 

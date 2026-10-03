@@ -1,5 +1,5 @@
 import {
-  pgTable,
+  pgSchema,
   serial,
   text,
   timestamp,
@@ -7,13 +7,24 @@ import {
   integer,
   boolean,
   jsonb,
+  primaryKey,
+  index,
 } from "drizzle-orm/pg-core";
+import type { AdapterAccountType } from "next-auth/adapters";
+
+/**
+ * Every table lives in the Supabase `nextjs` schema. The tables already
+ * exist there with row level security enabled and no policies, and the
+ * schema is not exposed to the Data API. The definitions below match
+ * the live tables exactly, so no migration is needed.
+ */
+export const nextjs = pgSchema("nextjs");
 
 /**
  * Posts table - stores full blog post content from MDX.
  * Supports migrating away from Contentlayer.
  */
-export const posts = pgTable("posts", {
+export const posts = nextjs.table("posts", {
   id: serial("id").primaryKey(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
@@ -34,7 +45,7 @@ export const posts = pgTable("posts", {
 /**
  * Comments table - linked to posts.
  */
-export const comments = pgTable("comments", {
+export const comments = nextjs.table("comments", {
   id: serial("id").primaryKey(),
   postId: integer("post_id").notNull(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
@@ -51,7 +62,7 @@ export const comments = pgTable("comments", {
  * Projects table - stores full project content from MDX.
  * Supports migrating away from Contentlayer.
  */
-export const projects = pgTable("projects", {
+export const projects = nextjs.table("projects", {
   id: serial("id").primaryKey(),
   authorId: varchar("author_id", { length: 64 }).notNull(),
   title: varchar("title", { length: 256 }).notNull(),
@@ -76,3 +87,65 @@ export type SelectProject = typeof projects.$inferSelect;
 export type InsertPost = typeof posts.$inferInsert;
 export type InsertComment = typeof comments.$inferInsert;
 export type InsertProject = typeof projects.$inferInsert;
+
+/**
+ * Auth.js tables. Column property names match @auth/drizzle-adapter.
+ * These hold OAuth tokens and session tokens. The app's database role
+ * must own the tables or have BYPASSRLS, because RLS has no policies.
+ */
+export const users = nextjs.table("user", {
+  id: text("id").primaryKey(),
+  name: text("name"),
+  email: text("email").unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+});
+
+export const accounts = nextjs.table(
+  "account",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccountType>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
+  },
+  (account) => [
+    primaryKey({ columns: [account.provider, account.providerAccountId] }),
+    index("account_user_id_idx").on(account.userId),
+  ],
+);
+
+export const sessions = nextjs.table(
+  "session",
+  {
+    sessionToken: text("sessionToken").primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (session) => [index("session_user_id_idx").on(session.userId)],
+);
+
+export const verificationTokens = nextjs.table(
+  "verificationToken",
+  {
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (verificationToken) => [
+    primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  ],
+);
