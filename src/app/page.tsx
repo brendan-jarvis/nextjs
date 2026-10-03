@@ -4,6 +4,7 @@ import { allPosts, allProjects } from "contentlayer/generated";
 import { compareDesc, format } from "date-fns";
 
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
+import { ContactLinks } from "@/app/_components/ContactLinks";
 import { ProjectLinks } from "@/app/_components/ProjectLinks";
 
 export const metadata: Metadata = {
@@ -42,6 +43,8 @@ export default async function Home() {
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           Brendan Jarvis
         </h1>
+
+        <ContactLinks className="mt-6" />
 
         <p className="text-muted-foreground mt-4 text-xs">
           New Zealand-based • Eligible for Australian Special Category visa
