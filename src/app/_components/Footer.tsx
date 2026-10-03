@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { FileText, Github, Linkedin, Mail } from "lucide-react";
 
 import { contact } from "@/lib/site";
 
@@ -27,6 +27,16 @@ export default function Footer() {
         >
           <Linkedin className="h-4 w-4" aria-hidden="true" />
           LinkedIn
+        </a>
+        <a
+          href={contact.cv}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 font-medium hover:underline"
+        >
+          <FileText className="h-4 w-4" aria-hidden="true" />
+          CV
+          <span className="sr-only"> (PDF, opens in a new tab)</span>
         </a>
         <a
           href={`mailto:${contact.email}`}

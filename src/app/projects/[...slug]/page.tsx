@@ -72,13 +72,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <article className="relative container max-w-3xl py-6 lg:py-10">
+    <article className="container max-w-3xl py-6 lg:py-10">
       <Link
         href="/projects"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute top-14 left-[-50] hidden xl:inline-flex",
-        )}
+        className={cn(buttonVariants({ variant: "ghost" }), "mb-4 flex w-fit")}
       >
         <ChevronLeft className="mr-2 h-4 w-4" />
         See all projects
