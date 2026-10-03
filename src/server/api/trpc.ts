@@ -14,11 +14,29 @@ export const createTRPCContext = async (_opts: CreateContextOptions) => {
   return { session };
 };
 
+/**
+ * Only local development (`next dev`, not on a Vercel preview or production)
+ * may send internal error details (messages, stacks) to the client.
+ */
+export const exposeInternalErrors =
+  process.env.NODE_ENV === "development" &&
+  (!process.env.VERCEL_ENV || process.env.VERCEL_ENV === "development");
+
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
+  // Stacks are only added to error responses when isDev is true.
+  isDev: exposeInternalErrors,
   errorFormatter({ shape, error }) {
+    // Unexpected errors (e.g. a failed database query) can carry SQL text or
+    // other internals in their message. Replace it with a generic message;
+    // the full error is logged server-side by onError in the route handler.
+    // Expected errors (BAD_REQUEST with zod issues, UNAUTHORIZED, FORBIDDEN,
+    // NOT_FOUND, TOO_MANY_REQUESTS) keep their messages.
+    const hide =
+      !exposeInternalErrors && error.code === "INTERNAL_SERVER_ERROR";
     return {
       ...shape,
+      message: hide ? "Internal server error" : shape.message,
       data: {
         ...shape.data,
         zodError:

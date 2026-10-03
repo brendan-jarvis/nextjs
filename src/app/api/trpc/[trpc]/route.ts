@@ -13,6 +13,13 @@ const handler = (req: NextRequest) =>
     req,
     router: appRouter,
     createContext: ({ req: _ }) => createTRPCContext({ req }),
+    onError({ error, path }) {
+      // Log the full error (including its cause) server-side only. The client
+      // gets a generic message for these (see errorFormatter in trpc.ts).
+      if (error.code === "INTERNAL_SERVER_ERROR") {
+        console.error(`tRPC failed on ${path ?? "<no-path>"}:`, error);
+      }
+    },
   });
 
 export { handler as GET, handler as POST };
