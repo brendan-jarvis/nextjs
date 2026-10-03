@@ -1,8 +1,6 @@
-"use client";
-
 import * as React from "react";
 import Image from "next/image";
-import { useMDXComponent } from "next-contentlayer2/hooks";
+import { getMDXComponent } from "next-contentlayer2/hooks";
 
 import { cn } from "@/lib/utils";
 import { Callout } from "@/app/_components/callout";
@@ -154,8 +152,10 @@ interface MdxProps {
   code: string;
 }
 
+// A server component: the compiled MDX is evaluated (with new Function) on
+// the server only, so the browser CSP does not need 'unsafe-eval'.
 export function Mdx({ code }: MdxProps) {
-  const Component = useMDXComponent(code);
+  const Component = getMDXComponent(code);
 
   return (
     <div className="mdx">

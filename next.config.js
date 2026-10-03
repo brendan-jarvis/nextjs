@@ -27,9 +27,29 @@ const config = {
             value: "strict-origin-when-cross-origin",
           },
           {
-            key: "Content-Security-Policy",
+            key: "Permissions-Policy",
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://*.supabase.co;",
+              "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+          },
+          // 'unsafe-inline' stays in script-src because Next.js inlines its
+          // bootstrap and RSC payload scripts; nonces would make every page
+          // dynamic. MDX renders on the server, so 'unsafe-eval' is not needed.
+          // form-action allows the OAuth redirects that follow the Auth.js
+          // sign-in form.
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https:",
+              "font-src 'self'",
+              "connect-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self' https://github.com https://accounts.google.com",
+              "frame-ancestors 'none'",
+            ].join("; "),
           },
         ],
       },
