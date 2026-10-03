@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Brendan Jarvis">
-  <rect width="32" height="32" rx="7" fill="#3a1e66"/>
-  <text x="16" y="23" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" fill="#ea6e4b">B</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Brendan Jarvis">
+  <rect width="512" height="512" rx="96" fill="#13213f"/>
+  <defs><clipPath id="bOver"><path d="M0,210 H512 V512 H0 Z"/></clipPath></defs>
+  <g transform="translate(256 258) scale(1.18) translate(-260 -276)">
+    <path d="M270,140 H440 V176 H398 V378 C398,428 366,456 316,456 C266,456 236,428 236,384 V368 H296 V382 C296,394 302,400 314,400 C328,400 336,392 336,376 V176 H270 Z" fill="#13213f" stroke="#13213f" stroke-width="44" stroke-linejoin="round" fill-rule="evenodd"/>
+    <path d="M270,140 H440 V176 H398 V378 C398,428 366,456 316,456 C266,456 236,428 236,384 V368 H296 V382 C296,394 302,400 314,400 C328,400 336,392 336,376 V176 H270 Z" fill="#f3ead3" stroke="#f3ead3" stroke-width="0" stroke-linejoin="round" fill-rule="evenodd"/>
+    <path d="M270,140 H440 V176 H398 V378 C398,428 366,456 316,456 C266,456 236,428 236,384 V368 H296 V382 C296,394 302,400 314,400 C328,400 336,392 336,376 V176 H270 Z" fill="#d9a521" fill-rule="evenodd"/>
+    <path d="M80,96 H244 C286,96 304,122 304,160 C304,190 292,210 270,222 C326,232 350,258 350,298 C350,354 318,392 262,392 H80 V362 H98 V126 H80 Z M162,148 H230 C244,148 250,158 250,174 C250,192 244,204 230,204 H162 Z M162,258 H262 C280,258 288,272 288,296 C288,322 278,338 262,338 H162 Z" fill="#13213f" stroke="#13213f" stroke-width="44" stroke-linejoin="round" fill-rule="evenodd"/>
+    <path d="M80,96 H244 C286,96 304,122 304,160 C304,190 292,210 270,222 C326,232 350,258 350,298 C350,354 318,392 262,392 H80 V362 H98 V126 H80 Z M162,148 H230 C244,148 250,158 250,174 C250,192 244,204 230,204 H162 Z M162,258 H262 C280,258 288,272 288,296 C288,322 278,338 262,338 H162 Z" fill="#d9a521" stroke="#d9a521" stroke-width="0" stroke-linejoin="round" fill-rule="evenodd"/>
+    <path d="M80,96 H244 C286,96 304,122 304,160 C304,190 292,210 270,222 C326,232 350,258 350,298 C350,354 318,392 262,392 H80 V362 H98 V126 H80 Z M162,148 H230 C244,148 250,158 250,174 C250,192 244,204 230,204 H162 Z M162,258 H262 C280,258 288,272 288,296 C288,322 278,338 262,338 H162 Z" fill="#f3ead3" fill-rule="evenodd"/>
+  </g>
 </svg>
