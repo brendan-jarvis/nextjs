@@ -4,6 +4,7 @@ import { allPosts, allProjects } from "contentlayer/generated";
 import { compareDesc, format } from "date-fns";
 
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
+import { ProjectLinks } from "@/app/_components/ProjectLinks";
 
 export const metadata: Metadata = {
   openGraph: {
@@ -148,10 +149,9 @@ export default async function Home() {
         {projects.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2">
             {projects.map((project) => (
-              <Link
+              <article
                 key={project._id}
-                href={project.slug}
-                className="group bg-card hover:border-foreground/20 block rounded-lg border p-6 transition"
+                className="group bg-card hover:border-foreground/20 relative flex flex-col rounded-lg border p-6 transition"
               >
                 <h3 className="text-lg font-semibold text-gray-900 group-hover:underline">
                   <span className="hover-sweep [--sweep-color:var(--color-soft-lilac)]">
@@ -166,7 +166,14 @@ export default async function Home() {
                     {project.description}
                   </p>
                 )}
-              </Link>
+                <Link href={project.slug} className="absolute inset-0">
+                  <span className="sr-only">View {project.title}</span>
+                </Link>
+                <ProjectLinks
+                  project={project}
+                  className="relative z-10 mt-auto pt-4"
+                />
+              </article>
             ))}
           </div>
         ) : (

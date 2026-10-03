@@ -81,6 +81,11 @@ export const Project = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
+    // Optional source repository, shown next to `url` when present.
+    repo: {
+      type: "string",
+      required: false,
+    },
     authors: {
       // Reference types are not embedded.
       // Until this is fixed, we can use a simple list.

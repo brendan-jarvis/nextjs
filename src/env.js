@@ -21,6 +21,9 @@ export const env = createEnv({
     AUTH_GITHUB_SECRET: z.string().min(1).optional(),
     AUTH_GOOGLE_ID: z.string().min(1).optional(),
     AUTH_GOOGLE_SECRET: z.string().min(1).optional(),
+    // Vercel sends `Authorization: Bearer $CRON_SECRET` to cron routes
+    // when this is set. Optional: /api/keep-alive works without it.
+    CRON_SECRET: z.string().min(16).optional(),
   },
   client: {},
   runtimeEnv: {
@@ -44,6 +47,7 @@ export const env = createEnv({
     AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
+    CRON_SECRET: process.env.CRON_SECRET,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,

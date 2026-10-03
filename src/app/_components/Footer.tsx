@@ -1,8 +1,41 @@
 import Link from "next/link";
+import { Github, Linkedin, Mail } from "lucide-react";
+
+import { contact } from "@/lib/site";
 
 export default function Footer() {
   return (
     <footer className="border-t-foreground/10 mt-8 flex w-full flex-col justify-center border-t p-8 text-center text-xs">
+      <nav
+        aria-label="Contact"
+        className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm"
+      >
+        <a
+          href={contact.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 font-medium hover:underline"
+        >
+          <Github className="h-4 w-4" aria-hidden="true" />
+          GitHub
+        </a>
+        <a
+          href={contact.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 font-medium hover:underline"
+        >
+          <Linkedin className="h-4 w-4" aria-hidden="true" />
+          LinkedIn
+        </a>
+        <a
+          href={`mailto:${contact.email}`}
+          className="inline-flex items-center gap-1.5 font-medium hover:underline"
+        >
+          <Mail className="h-4 w-4" aria-hidden="true" />
+          {contact.email}
+        </a>
+      </nav>
       <p>
         Powered by{" "}
         <Link

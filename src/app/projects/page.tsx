@@ -4,6 +4,8 @@ import { allProjects } from "contentlayer/generated";
 import { compareDesc, format } from "date-fns";
 import type { Metadata } from "next";
 
+import { ProjectLinks } from "@/app/_components/ProjectLinks";
+
 export const metadata: Metadata = {
   title: "Projects",
 };
@@ -57,8 +59,10 @@ export default async function ProjectsPage() {
                 </p>
               )}
               <Link href={project.slug} className="absolute inset-0">
-                <span className="sr-only">View Article</span>
+                <span className="sr-only">View {project.title}</span>
               </Link>
+              {/* Above the card-wide link so these stay clickable. */}
+              <ProjectLinks project={project} className="relative z-10 pt-1" />
             </article>
           ))}
         </div>
