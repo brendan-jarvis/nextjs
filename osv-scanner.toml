@@ -1,0 +1,31 @@
+# OSV-Scanner ignores. Each entry is scoped to one advisory, has a reason and
+# expires so it gets re-checked. Re-run `osv-scanner scan source --lockfile
+# bun.lock` after dependency updates and drop entries that no longer match.
+
+# @opentelemetry/core 1.30.1, pulled in only by contentlayer2 0.5.8 (latest)
+# for build-time tracing. Fixed in 2.8.0, but forcing 2.x breaks
+# contentlayer2's tracing setup (the build fails). The bug is in inbound
+# `baggage` header parsing; nothing parses HTTP headers with this copy, and it
+# is not in the production server bundle.
+[[IgnoredVulns]]
+id = "GHSA-8988-4f7v-96qf"
+ignoreUntil = 2027-01-03
+reason = "Build-time only (contentlayer2 tracing); no inbound HTTP headers parsed; 2.x override breaks contentlayer2 build"
+
+# @opentelemetry/propagator-jaeger 1.30.1, same chain (contentlayer2 ->
+# @opentelemetry/sdk-trace-node 1.30.1, exact pin). The DoS needs a malformed
+# `uber-trace-id` header reaching a server that uses JaegerPropagator; the
+# contentlayer CLI is not an HTTP server and this is not in the runtime bundle.
+[[IgnoredVulns]]
+id = "GHSA-45rx-2jwx-cxfr"
+ignoreUntil = 2027-01-03
+reason = "Build-time only (contentlayer2 tracing), never handles HTTP requests; 2.x override breaks contentlayer2 build"
+
+# braces 3.0.3 is the latest release; no fixed version exists. Used through
+# micromatch by build and dev tooling (contentlayer2 file globbing, eslint,
+# tailwind). Patterns come from repo config, never from user input, and
+# braces is not in the production server bundle.
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2027-01-03
+reason = "No fix released (3.0.3 is latest); build/dev tooling only with repo-controlled glob patterns"
