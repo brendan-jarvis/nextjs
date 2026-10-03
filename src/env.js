@@ -7,8 +7,9 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     // Postgres connection. Use the Supabase transaction pooler (port 6543).
-    // At least one of the following must be provided (see src/server/db/index.ts).
-    DATABASE_URL: z.string().url(),
+    // Required in production (see src/server/db/index.ts). Preview
+    // deployments intentionally have no database access.
+    DATABASE_URL: z.string().url().optional(),
     POSTGRES_URL: z.string().url().optional(),
     POSTGRES_URL_NON_POOLING: z.string().url().optional(),
     nextjs_blog_POSTGRES_URL: z.string().url().optional(),
