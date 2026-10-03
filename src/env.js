@@ -17,10 +17,12 @@ export const env = createEnv({
     nextjs_blog_POSTGRES_URL: z.string().url().optional(),
     nextjs_blog_POSTGRES_URL_NON_POOLING: z.string().url().optional(),
     // Auth.js. Required for sign-in. Optional here so a build without
-    // Discord credentials still produces the static site.
+    // OAuth credentials still produces the static site.
     AUTH_SECRET: z.string().min(1).optional(),
-    AUTH_DISCORD_ID: z.string().min(1).optional(),
-    AUTH_DISCORD_SECRET: z.string().min(1).optional(),
+    AUTH_GITHUB_ID: z.string().min(1).optional(),
+    AUTH_GITHUB_SECRET: z.string().min(1).optional(),
+    AUTH_GOOGLE_ID: z.string().min(1).optional(),
+    AUTH_GOOGLE_SECRET: z.string().min(1).optional(),
   },
   client: {},
   runtimeEnv: {
@@ -47,8 +49,10 @@ export const env = createEnv({
     nextjs_blog_POSTGRES_URL_NON_POOLING:
       process.env.nextjs_blog_POSTGRES_URL_NON_POOLING,
     AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_DISCORD_ID: process.env.AUTH_DISCORD_ID,
-    AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
+    AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
+    AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
+    AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
+    AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,

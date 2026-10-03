@@ -4,7 +4,7 @@ This file provides persistent instructions for AI agents (Grok Build, Claude Cod
 
 ## Project Overview
 
-Personal blog + portfolio site. Static MDX content (blog posts, projects) via Contentlayer2, with comments and projects metadata backed by Supabase Postgres. Sign-in is Auth.js (NextAuth v5) with the Discord provider and database sessions stored in that same Postgres database. Interactive demo (asteroids game).
+Personal blog + portfolio site. Static MDX content (blog posts, projects) via Contentlayer2, with comments and projects metadata backed by Supabase Postgres. Sign-in is Auth.js (NextAuth v5) with the GitHub and Google providers and database sessions stored in that same Postgres database. Interactive demo (asteroids game).
 
 ## Tech Stack
 
@@ -12,7 +12,7 @@ Personal blog + portfolio site. Static MDX content (blog posts, projects) via Co
 - **Bun 1.3.14** (package manager + runtime)
 - **Contentlayer2** + MDX for content
 - **tRPC** (type-safe API) + **Drizzle ORM** + **postgres.js**
-- **Auth.js** (next-auth v5, Discord provider, Drizzle adapter, database sessions)
+- **Auth.js** (next-auth v5, GitHub + Google providers, Drizzle adapter, database sessions)
 - **Supabase** (Postgres)
 - **Tailwind v4** + shadcn/ui
 - **TypeScript** (strict)
@@ -79,7 +79,7 @@ bun run start
 
 - Env validation is strict and runs early (in next.config.js). Use `SKIP_ENV_VALIDATION=1` frequently.
 - Comments are loaded in the browser by post title. `auth()` runs on the tRPC route, not in the root layout, so pages stay static.
-- Sign-in needs `AUTH_SECRET`, `AUTH_DISCORD_ID`, and `AUTH_DISCORD_SECRET`. Auth.js reads the Discord pair by convention.
+- Sign-in needs `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`. Auth.js reads the provider pairs by convention.
 - CSP is customized in `next.config.js`.
 - `metadataBase` is `https://brendan-jarvis.vercel.app`. There is no custom domain.
 - Worktrees have caused confusion historically — stick to `main` branch + git.

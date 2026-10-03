@@ -225,7 +225,7 @@ export function Comments({ postTitle }: CommentsProps) {
           <button
             type="button"
             className="underline"
-            onClick={() => void signIn("discord")}
+            onClick={() => void signIn()}
           >
             Sign in
           </button>{" "}
