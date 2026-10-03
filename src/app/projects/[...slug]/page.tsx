@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { allProjects } from "contentlayer/generated";
 
 import { Mdx } from "@/app/_components/mdx-components";
+import { ProjectLinks } from "@/app/_components/ProjectLinks";
 
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -94,6 +95,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <h1 className="font-heading mt-2 inline-block text-4xl leading-tight lg:text-5xl">
           {project.title}
         </h1>
+        <ProjectLinks project={project} className="mt-6" />
       </div>
       {project.image && (
         <Image
