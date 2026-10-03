@@ -29,6 +29,13 @@
       "when": 1782036329334,
       "tag": "0003_funny_typhoid_mary",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791002423831,
+      "tag": "0004_nextauth",
+      "breakpoints": true
     }
   ]
 }

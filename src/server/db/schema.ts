@@ -7,7 +7,10 @@ import {
   integer,
   boolean,
   jsonb,
+  primaryKey,
+  index,
 } from "drizzle-orm/pg-core";
+import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
  * Posts table - stores full blog post content from MDX.
@@ -76,3 +79,66 @@ export type SelectProject = typeof projects.$inferSelect;
 export type InsertPost = typeof posts.$inferInsert;
 export type InsertComment = typeof comments.$inferInsert;
 export type InsertProject = typeof projects.$inferInsert;
+
+/**
+ * Auth.js tables. Column property names match @auth/drizzle-adapter.
+ * These hold OAuth tokens and session tokens. RLS is enabled with no
+ * policies so the Data API cannot read them. The app connects as the
+ * table owner, which bypasses RLS.
+ */
+export const users = pgTable("user", {
+  id: text("id").primaryKey(),
+  name: text("name"),
+  email: text("email").unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+});
+
+export const accounts = pgTable(
+  "account",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccountType>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
+  },
+  (account) => [
+    primaryKey({ columns: [account.provider, account.providerAccountId] }),
+    index("account_user_id_idx").on(account.userId),
+  ],
+);
+
+export const sessions = pgTable(
+  "session",
+  {
+    sessionToken: text("sessionToken").primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (session) => [index("session_user_id_idx").on(session.userId)],
+);
+
+export const verificationTokens = pgTable(
+  "verificationToken",
+  {
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (verificationToken) => [
+    primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  ],
+);

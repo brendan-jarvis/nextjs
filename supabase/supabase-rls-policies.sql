@@ -8,11 +8,9 @@
 -- Therefore, Row Level Security (RLS) is **not strictly required** for security **as long as**:
 --   1. Your DATABASE_URL / POSTGRES_* connection strings are kept secret.
 --   2. You never expose the Supabase anon key + tables to browser code.
---   3. Authorization logic lives in tRPC protected procedures (see src/server/api/routers/content.ts).
---
--- The comment ownership checks are done in application code:
---   - create: authorId = ctx.auth.userId (from Clerk)
---   - update/delete: only if existing.authorId === ctx.auth.userId
+--   3. Comment writes go through protected tRPC procedures. Auth.js sessions
+--      live in "user", "account", "session", and "verificationToken".
+--      Those tables have RLS enabled and no policies (see the Drizzle migration).
 --
 -- RECOMMENDED: Enable RLS anyway for defense-in-depth (especially if you ever use
 -- the Supabase JS client or allow direct DB connections).
@@ -22,9 +20,7 @@
 --   2. Use Supabase CLI: supabase db execute --file supabase-rls-policies.sql
 --      (after linking your project)
 --
--- Note: Because we authenticate with Clerk (not Supabase Auth), these policies
--- use `auth.uid()` which may be null unless you configure JWT claims or use service role.
--- For now, we keep SELECT open (public blog) and restrict writes to service role or app logic.
+-- These policies keep SELECT open. The app does not insert, update, or delete comments.
 --
 -- Tables created by Drizzle: posts, comments, projects
 
@@ -41,7 +37,7 @@ CREATE POLICY "Allow public read access to comments"
   USING (true);
 
 -- Only the application (service role or server with elevated key) can insert
--- We rely on app-layer auth; tighten if you map Clerk user to Supabase auth
+-- The app does not insert comments. This policy stays permissive for a direct connection.
 CREATE POLICY "Allow server-side inserts for comments"
   ON public.comments
   FOR INSERT

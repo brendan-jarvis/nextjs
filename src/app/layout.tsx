@@ -5,8 +5,8 @@ import type { Metadata } from "next";
 import Nav from "@/app/_components/Nav";
 import Footer from "@/app/_components/Footer";
 import { Toaster } from "@/app/_components/ui/toaster";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Providers } from "@/app/providers";
+import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,12 +14,28 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Brendan Jarvis - Blog",
-  description:
-    "Brendan Jarvis's blog about software development, motorcyling, and other things.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteName,
+    template: `%s · ${siteName}`,
+  },
+  description: siteDescription,
   authors: [{ name: "Brendan Jarvis", url: "https://x.com/brendanjjarvis" }],
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-  metadataBase: new URL("https://brendanjjarvis.com"),
+  openGraph: {
+    title: siteName,
+    description: siteDescription,
+    url: siteUrl,
+    siteName,
+    type: "website",
+    images: [
+      {
+        url: "/images/profile.jpg",
+        width: 400,
+        height: 400,
+        alt: "Brendan Jarvis",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -31,16 +47,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <Providers>
-          <ClerkProvider
-            publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-          >
-            <main className="flex min-h-screen flex-col items-center">
-              <Nav />
-              {children}
-              <Footer />
-            </main>
-            <Toaster />
-          </ClerkProvider>
+          <main className="flex min-h-screen flex-col items-center">
+            <Nav />
+            {children}
+            <Footer />
+          </main>
+          <Toaster />
         </Providers>
       </body>
     </html>
