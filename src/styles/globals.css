@@ -9,39 +9,40 @@
   --color-seafoam-green: #abe3d2;
   --color-orchid-pink: #d653a9;
   --color-bj-navy: #16223b; /* B/J mark (favicon, app icons) */
+  --color-paper: #f7f4ef;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
+    --background: 36 33% 95%;
+    --foreground: 222 46% 16%;
 
     --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
+    --card-foreground: 222 46% 16%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
+    --popover: 36 33% 95%;
+    --popover-foreground: 222 46% 16%;
 
-    --primary: 24 9.8% 10%;
-    --primary-foreground: 60 9.1% 97.8%;
+    --primary: 14 79% 61%;
+    --primary-foreground: 36 33% 95%;
 
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
+    --secondary: 222 46% 16%;
+    --secondary-foreground: 36 33% 95%;
 
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+    --muted: 34 28% 91%;
+    --muted-foreground: 220 10% 42%;
 
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
+    --accent: 34 28% 91%;
+    --accent-foreground: 222 46% 16%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
+    --destructive-foreground: 36 33% 95%;
 
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 20 14.3% 4.1%;
+    --border: 30 18% 86%;
+    --input: 30 18% 86%;
+    --ring: 14 79% 61%;
 
-    --radius: 0.5rem;
+    --radius: 2px;
   }
 
   .dark {
@@ -82,6 +83,20 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), serif;
+    font-weight: 400;
+  }
+}
+
+.spectrum-rule {
+  display: flex;
+  height: 4px;
+}
+.spectrum-rule > span {
+  flex: 1;
 }
 
 .sweep-highlight {

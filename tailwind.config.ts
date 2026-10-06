@@ -61,6 +61,11 @@ export default {
         "orchid-pink": "#D653A9",
         "bj-navy": "#16223B",
       },
+      fontFamily: {
+        sans: ["var(--font-text)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "serif"],
+        mono: ["var(--font-meta)", "ui-monospace", "monospace"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

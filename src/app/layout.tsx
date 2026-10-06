@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 
-import { Inter } from "next/font/google";
+import { IBM_Plex_Mono, Newsreader, Outfit } from "next/font/google";
 import type { Metadata } from "next";
 import Nav from "@/app/_components/Nav";
 import Footer from "@/app/_components/Footer";
@@ -8,9 +8,23 @@ import { Toaster } from "@/app/_components/ui/toaster";
 import { Providers } from "@/app/providers";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-sans",
+  weight: ["400", "500"],
+  variable: "--font-text",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400"],
+  variable: "--font-display",
+});
+
+const plex = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-meta",
 });
 
 export const metadata: Metadata = {
@@ -45,7 +59,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`${outfit.variable} ${newsreader.variable} ${plex.variable} font-sans`}>
         <Providers>
           <main className="flex min-h-screen flex-col items-center">
             <Nav />

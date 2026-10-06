@@ -1,15 +1,12 @@
-import { Button } from "@/app/_components/ui/button";
 import Link from "next/link";
 
 export default function ProjectsButton() {
   return (
-    <Button variant="ghost" asChild>
-      <Link
-        className="rounded-md py-2 font-semibold no-underline hover:underline"
-        href="/projects"
-      >
-        Projects
-      </Link>
-    </Button>
+    <Link
+      className="text-sm font-medium no-underline underline-offset-4 hover:underline hover:decoration-citrus-blaze hover:decoration-2"
+      href="/projects"
+    >
+      Projects
+    </Link>
   );
 }
