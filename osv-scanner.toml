@@ -29,3 +29,13 @@ reason = "Build-time only (contentlayer2 tracing), never handles HTTP requests; 
 id = "GHSA-vfj7-8cjw-p6xm"
 ignoreUntil = 2027-01-03
 reason = "No fix released (3.0.3 is latest); build/dev tooling only with repo-controlled glob patterns"
+
+# sprintf-js 1.0.3: no fixed release exists (1.1.3, the latest, is affected).
+# Reached only via gray-matter -> js-yaml 3 -> argparse 1, and argparse is
+# required solely by js-yaml's CLI binary (bin/js-yaml.js), never by the
+# library code gray-matter calls to parse repo-controlled MDX front matter.
+# Not in the build output; no attacker-controlled format strings.
+[[IgnoredVulns]]
+id = "GHSA-hp3w-g68c-fv3c"
+ignoreUntil = 2027-01-06
+reason = "No fix released (1.1.3 is latest and affected); only js-yaml 3's CLI loads argparse/sprintf-js; build-time, repo-controlled input"
