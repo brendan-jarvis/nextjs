@@ -8,6 +8,7 @@
   --color-sunny-yellow: #faf26f;
   --color-seafoam-green: #abe3d2;
   --color-orchid-pink: #d653a9;
+  --color-bj-navy: #16223b; /* B/J mark (favicon, app icons) */
 }
 
 @layer base {

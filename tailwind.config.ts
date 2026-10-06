@@ -59,6 +59,7 @@ export default {
         "sunny-yellow": "#FAF26F",
         "seafoam-green": "#ABE3D2",
         "orchid-pink": "#D653A9",
+        "bj-navy": "#16223B",
       },
       borderRadius: {
         lg: "var(--radius)",
