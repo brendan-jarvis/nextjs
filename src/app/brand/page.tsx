@@ -1,27 +1,9 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import { allPosts, allProjects } from "contentlayer/generated";
-import { compareDesc, format } from "date-fns";
-import {
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Circle,
-  Code,
-  ExternalLink,
-  FileText,
-  Gamepad2,
-  Github,
-  Linkedin,
-  Mail,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import type { ReactNode } from "react";
+import { IBM_Plex_Mono, Newsreader, Outfit } from "next/font/google";
 
 import BJMark from "@/app/_components/BJMark";
-import { ContactLinks } from "@/app/_components/ContactLinks";
-import { ProjectLinks } from "@/app/_components/ProjectLinks";
-import { Button } from "@/app/_components/ui/button";
 import { cn } from "@/lib/utils";
 
 // Internal reference page: not linked from the nav, not in the sitemap.
@@ -30,154 +12,106 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const accents = [
-  { name: "night-plum", hex: "#3A1E66", use: "Deep accent" },
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  weight: ["400"],
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+const plex = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const spectrum = [
+  { name: "Citrus", hex: "#EA6E4B", job: "Signal too" },
+  { name: "Sunny", hex: "#FAF26F", job: "Rule only" },
+  { name: "Seafoam", hex: "#ABE3D2", job: "Writing" },
+  { name: "Orchid", hex: "#D653A9", job: "A project" },
+  { name: "Lilac", hex: "#CDA8E2", job: "Display" },
+  { name: "Plum", hex: "#3A1E66", job: "Inverse" },
+];
+
+const roles = [
   {
-    name: "soft-lilac",
-    hex: "#CDA8E2",
-    use: "Project title sweep, post underline",
+    role: "Ink",
+    name: "bj-navy",
+    hex: "#16223B",
+    job: "Text, mark, primary surface.",
+    fg: "#F7F4EF",
   },
   {
+    role: "Paper",
+    name: "warm paper",
+    hex: "#F7F4EF",
+    job: "Page ground. Not pure white.",
+    fg: "#16223B",
+  },
+  {
+    role: "Signal",
     name: "citrus-blaze",
     hex: "#EA6E4B",
-    use: "Highlight sweep, cursor block",
-  },
-  { name: "sunny-yellow", hex: "#FAF26F", use: "Accent" },
-  { name: "seafoam-green", hex: "#ABE3D2", use: "Section heading sweep" },
-  { name: "orchid-pink", hex: "#D653A9", use: "Accent" },
-  { name: "bj-navy", hex: "#16223B", use: "B/J mark: favicon and app icons" },
-];
-
-// Values from src/styles/globals.css (:root and .dark), shadcn "stone".
-const themeTokens: { token: string; light: string; dark: string }[] = [
-  { token: "background", light: "#FFFFFF", dark: "#0C0A09" },
-  { token: "foreground", light: "#0C0A09", dark: "#FAFAF9" },
-  { token: "primary", light: "#1C1917", dark: "#FAFAF9" },
-  { token: "primary-foreground", light: "#FAFAF9", dark: "#1C1917" },
-  { token: "secondary / muted / accent", light: "#F5F5F4", dark: "#292524" },
-  { token: "muted-foreground", light: "#78716C", dark: "#A8A29E" },
-  { token: "border / input", light: "#E7E5E4", dark: "#292524" },
-  { token: "ring", light: "#0C0A09", dark: "#D6D3D1" },
-  { token: "destructive", light: "#EF4444", dark: "#7F1D1D" },
-];
-
-const typeScale = [
-  {
-    role: "Hero name",
-    cls: "text-5xl font-bold tracking-tight",
-    spec: "text-5xl → sm:text-6xl · 48/60px · line-height 1 · 700 · tracking-tight",
-    sample: "Brendan Jarvis",
-  },
-  {
-    role: "Page title",
-    cls: "text-4xl tracking-tight",
-    spec: "text-4xl → lg:text-5xl · 36px/40px · 400 · tracking-tight",
-    sample: "Projects",
-  },
-  {
-    role: "Section heading",
-    cls: "text-2xl font-semibold tracking-tight",
-    spec: "text-2xl · 24px/32px · 600 · tracking-tight",
-    sample: "Featured projects",
-  },
-  {
-    role: "Card title (list)",
-    cls: "text-2xl font-extrabold",
-    spec: "text-2xl · 24px/32px · 800",
-    sample: "Three.js Asteroids game",
-  },
-  {
-    role: "Card title (home)",
-    cls: "text-lg font-semibold",
-    spec: "text-lg · 18px/28px · 600",
-    sample: "Whisper Subtitles",
-  },
-  {
-    role: "Lead",
-    cls: "text-xl",
-    spec: "text-xl · 20px/28px · 400",
-    sample: "Kia ora, I am a full-stack web developer.",
-  },
-  {
-    role: "Body",
-    cls: "text-base",
-    spec: "text-base · 16px/24px · 400",
-    sample: "I build and maintain production systems.",
-  },
-  {
-    role: "UI / small",
-    cls: "text-sm font-medium",
-    spec: "text-sm · 14px/20px · 500 (nav 600–700)",
-    sample: "All projects →",
-  },
-  {
-    role: "Caption",
-    cls: "text-xs text-muted-foreground",
-    spec: "text-xs · 12px/16px · 400 · muted-foreground",
-    sample: "New Zealand-based",
+    job: "Button, link, focus, sweep.",
+    fg: "#F7F4EF",
   },
 ];
 
-const icons: { Icon: LucideIcon; name: string; where: string }[] = [
-  { Icon: Github, name: "Github", where: "Contact links" },
-  { Icon: Mail, name: "Mail", where: "Contact links" },
-  { Icon: Linkedin, name: "Linkedin", where: "Contact links" },
-  { Icon: FileText, name: "FileText", where: "Contact links (CV)" },
-  { Icon: ExternalLink, name: "ExternalLink", where: "Project: live site" },
-  { Icon: Code, name: "Code", where: "Project: source" },
-  { Icon: Gamepad2, name: "Gamepad2", where: "Project: on this site" },
-  { Icon: ChevronLeft, name: "ChevronLeft", where: "Back links" },
-  { Icon: ChevronRight, name: "ChevronRight", where: "Dropdown submenu" },
-  { Icon: Check, name: "Check", where: "Dropdown checkbox" },
-  { Icon: Circle, name: "Circle", where: "Dropdown radio" },
-  { Icon: X, name: "X", where: "Toast close" },
+const misuse = [
+  "Do not set body text in Inter on a rebuilt page.",
+  "Do not recolour the monogram with the spectrum.",
+  "Do not use yellow, lilac, or seafoam as text.",
+  "Do not border every card. The rule replaces the border.",
+  "Do not show a dark theme that is not switched on.",
+  "Do not put Kia ora in the nav.",
+  "Do not blend the bar into a gradient.",
+  "Do not add an eighth accent.",
 ];
 
-// One real project for each link style: on-site, GitHub source, live site.
-function oneProjectPerLinkKind<T extends { url: string }>(list: T[]) {
-  const kind = (url: string) =>
-    url.startsWith("/")
-      ? "internal"
-      : url.includes("github.com")
-        ? "repo"
-        : "live";
-  return list.filter(
-    (p, i) => list.findIndex((q) => kind(q.url) === kind(p.url)) === i,
+function Rule({ className }: { className?: string }) {
+  return (
+    <div className={cn("flex h-1", className)} aria-hidden="true">
+      {spectrum.map((band) => (
+        <span
+          key={band.hex}
+          className="flex-1"
+          style={{ background: band.hex }}
+        />
+      ))}
+    </div>
   );
 }
 
-const linkButton =
-  "border-input bg-background inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition";
-
 function Section({
   id,
+  kicker,
   title,
   note,
   children,
 }: {
   id: string;
+  kicker: string;
   title: string;
   note?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-8 py-10">
-      <h2 className="text-2xl font-semibold tracking-tight">
-        <span className="sweep-highlight px-1 py-0.5 [--sweep-color:var(--color-seafoam-green)]">
-          {title}
-        </span>
+    <section id={id} className="scroll-mt-8 py-12">
+      <p className={cn(plex.className, "text-[11px] tracking-wide text-[#EA6E4B]")}>
+        {kicker}
+      </p>
+      <h2 className={cn(newsreader.className, "mt-2 text-3xl text-[#16223B]")}>
+        {title}
       </h2>
       {note && (
-        <p className="text-muted-foreground mt-2 max-w-3xl text-sm">{note}</p>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[#5C6578]">{note}</p>
       )}
       <div className="mt-6">{children}</div>
     </section>
-  );
-}
-
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-muted-foreground mt-2 text-xs font-medium">{children}</p>
   );
 }
 
@@ -196,524 +130,388 @@ function MarkTile({
     <figure>
       <div
         className={cn(
-          "flex aspect-square items-center justify-center rounded-lg",
-          border && "border",
+          "flex aspect-square items-center justify-center",
+          border && "border border-[#E4DCD2]",
         )}
         style={{ background: bg, color: fg }}
       >
         <BJMark className="h-1/2 w-auto" label={label} />
       </div>
-      <Label>{label}</Label>
+      <figcaption
+        className={cn(plex.className, "mt-2 text-[10px] text-[#5C6578]")}
+      >
+        {label}
+      </figcaption>
     </figure>
   );
 }
 
-function Swatch({
-  hex,
-  name,
-  sub,
-}: {
-  hex: string;
-  name: string;
-  sub?: string;
-}) {
-  return (
-    <div>
-      <div className="h-16 rounded-md border" style={{ background: hex }} />
-      <p className="mt-2 text-sm font-semibold">{name}</p>
-      <p className="font-mono text-xs">{hex}</p>
-      {sub && <p className="text-muted-foreground text-xs">{sub}</p>}
-    </div>
-  );
-}
-
-function ButtonMatrix() {
-  const rows: {
-    name: string;
-    variant:
-      "default" | "secondary" | "outline" | "ghost" | "link" | "destructive";
-    hover: string;
-  }[] = [
-    { name: "default", variant: "default", hover: "bg-primary/90" },
-    { name: "secondary", variant: "secondary", hover: "bg-secondary/80" },
-    {
-      name: "outline",
-      variant: "outline",
-      hover: "bg-accent text-accent-foreground",
-    },
-    {
-      name: "ghost (nav)",
-      variant: "ghost",
-      hover: "bg-accent text-accent-foreground",
-    },
-    { name: "link", variant: "link", hover: "underline" },
-    { name: "destructive", variant: "destructive", hover: "bg-destructive/90" },
-  ];
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm">
-        <thead className="text-muted-foreground text-xs">
-          <tr>
-            <th className="py-2 pr-4 font-medium">Variant</th>
-            <th className="py-2 pr-4 font-medium">Rest</th>
-            <th className="py-2 pr-4 font-medium">Hover</th>
-            <th className="py-2 pr-4 font-medium">Focus-visible</th>
-            <th className="py-2 pr-4 font-medium">Disabled</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.name} className="border-t">
-              <td className="py-3 pr-4 font-mono text-xs">{r.name}</td>
-              <td className="py-3 pr-4">
-                <Button variant={r.variant}>Button</Button>
-              </td>
-              <td className="py-3 pr-4">
-                <Button variant={r.variant} className={r.hover}>
-                  Button
-                </Button>
-              </td>
-              <td className="py-3 pr-4">
-                <Button
-                  variant={r.variant}
-                  className="ring-ring ring-offset-background ring-2 ring-offset-2"
-                >
-                  Button
-                </Button>
-              </td>
-              <td className="py-3 pr-4">
-                <Button variant={r.variant} disabled>
-                  Button
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
 export default function BrandPage() {
-  const projects = allProjects
-    .filter((p) => p.published)
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
-  const post = allPosts
-    .filter((p) => p.published)
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))[0];
-  const featured = projects[0];
-  const withImage = projects.find((p) => p.image) ?? projects[0];
-
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-12">
-      <header className="flex items-center gap-4">
-        <BJMark className="h-14 w-auto" label="B/J monogram" />
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight">Brand assets</h1>
-          <p className="text-muted-foreground mt-1 text-sm">
-            The mark, colours, type and components as they ship on
-            brendan-jarvis.vercel.app. Internal reference, not indexed.
+    <div
+      className={cn(
+        outfit.className,
+        "w-full bg-[#F7F4EF] text-[#16223B]",
+      )}
+    >
+      <Rule />
+      <div className="mx-auto w-full max-w-5xl px-4 py-12">
+        <header>
+          <p className={cn(plex.className, "text-[11px] tracking-wide text-[#EA6E4B]")}>
+            BRAND GUIDELINES · INTERNAL · NOT INDEXED
           </p>
-        </div>
-      </header>
+          <h1
+            className={cn(
+              newsreader.className,
+              "mt-4 max-w-xl text-5xl leading-none text-[#16223B]",
+            )}
+          >
+            Not a component library.
+          </h1>
+          <p
+            className={cn(
+              newsreader.className,
+              "mt-2 text-3xl italic text-[#EA6E4B]",
+            )}
+          >
+            A palette with jobs.
+          </p>
+          <p className="mt-6 max-w-xl text-sm leading-6 text-[#5C6578]">
+            Newsreader for the name, Outfit for the work, citrus as the only
+            signal, the spectrum as a rule. The site chrome above this page
+            still ships Inter until those routes are rebuilt.
+          </p>
+        </header>
 
-      <Section
-        id="mark"
-        title="The B/J mark"
-        note="Single-colour monogram. The header uses one currentColor SVG (BJMark), so it is black on the light theme and would turn white under the .dark tokens. App and favicon versions are the navy mark on a white rounded tile. Keep clear space of at least a quarter of the mark height. The 16px favicon uses a pixel-hinted master."
-      >
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
-          <MarkTile
-            bg="#FFFFFF"
-            fg="#16223B"
-            label="Navy #16223B on white"
-            border
-          />
-          <MarkTile bg="#FFFFFF" fg="#000000" label="Black on white" border />
-          <MarkTile
-            bg="#0C0A09"
-            fg="#FFFFFF"
-            label="White on foreground #0C0A09"
-          />
-          <MarkTile bg="#16223B" fg="#FFFFFF" label="White on navy" />
-          <MarkTile bg="#F5F5F4" fg="#16223B" label="Navy on muted #F5F5F4" />
-          <MarkTile bg="#EA6E4B" fg="#000000" label="Black on citrus-blaze" />
-          <MarkTile bg="#ABE3D2" fg="#16223B" label="Navy on seafoam-green" />
-          <MarkTile bg="#3A1E66" fg="#FFFFFF" label="White on night-plum" />
-        </div>
-
-        <div className="mt-8 grid gap-6 sm:grid-cols-3">
-          <figure className="rounded-lg border p-6">
-            <div className="flex items-end gap-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon3.png" alt="App icon" width={96} height={96} />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/apple-icon.png"
-                alt="Apple touch icon"
-                width={64}
-                height={64}
-                className="rounded-xl border"
-              />
-            </div>
-            <Label>
-              icon2/icon3.png 192/512 (tile) · apple-icon.png 180 (full bleed;
-              iOS masks corners)
-            </Label>
-          </figure>
-          <figure className="rounded-lg border p-6">
-            <div className="flex items-end gap-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/brand/favicon-16.png"
-                alt="Favicon 16px"
-                width={16}
-                height={16}
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon1.png" alt="Favicon 32px" width={32} height={32} />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon2.png" alt="Icon 192px" width={48} height={48} />
-            </div>
-            <Label>
-              Actual size: 16 (hinted) · 32 · 48 · tabs use icon.svg
-              (16px-hinted master); favicon.ico holds 16/32/48
-            </Label>
-          </figure>
-          <figure className="rounded-lg border p-6">
-            <div className="flex items-center gap-1.5 font-bold">
-              <BJMark className="h-5 w-auto" />
-              <span className="text-sm">Brendan Jarvis</span>
-            </div>
-            <div className="dark bg-background text-foreground mt-4 flex items-center gap-1.5 rounded-md p-3 font-bold">
-              <BJMark className="h-5 w-auto" />
-              <span className="text-sm">Brendan Jarvis</span>
-            </div>
-            <Label>
-              Header lockup: h-5 (20px) mark, text-sm bold, gap-1.5 (light /
-              .dark tokens)
-            </Label>
-          </figure>
-        </div>
-      </Section>
-
-      <Section
-        id="colour"
-        title="Colour"
-        note="Brand accents come from @theme in globals.css and tailwind.config.ts (use as bg-*, text-*, or var(--color-*)). Theme tokens are the shadcn stone set, hsl(var(--token))."
-      >
-        <h3 className="text-lg font-semibold">Brand accents</h3>
-        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
-          {accents.map((a) => (
-            <Swatch key={a.name} hex={a.hex} name={a.name} sub={a.use} />
-          ))}
-        </div>
-        <h3 className="mt-10 text-lg font-semibold">
-          Theme tokens: light (:root) and dark (.dark)
-        </h3>
-        <div className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-          {themeTokens.map((t) => (
-            <div key={t.token} className="flex items-center gap-3">
-              <div
-                className="h-10 w-10 shrink-0 rounded-md border"
-                style={{ background: t.light }}
-              />
-              <div
-                className="h-10 w-10 shrink-0 rounded-md border border-stone-700"
-                style={{ background: t.dark }}
-              />
-              <div className="min-w-0">
-                <p className="truncate font-mono text-xs font-semibold">
-                  --{t.token}
+        <Section
+          id="principles"
+          kicker="01 — PRINCIPLES"
+          title="Five rules. The rest follows."
+        >
+          <ol className="grid gap-6 sm:grid-cols-2">
+            {[
+              ["Paper, not white.", "Ground is #F7F4EF, not #FFFFFF and not Tailwind stone."],
+              ["Citrus is the only signal.", "Links, the sweep, focus, and the primary button."],
+              ["The spectrum is a rule.", "One 4px bar. Card foot, OG image, CV header."],
+              ["Type leads. Borders leave.", "No stone border, no hover that raises it, no shadow."],
+              ["Say the specific thing.", "The hearing system, Porirua, a seasons project. The category goes small."],
+            ].map(([title, body], i) => (
+              <li key={title}>
+                <p className={cn(newsreader.className, "text-lg")}>
+                  <span className="mr-2 text-[#EA6E4B]">0{i + 1}</span>
+                  {title}
                 </p>
-                <p className="text-muted-foreground font-mono text-xs">
-                  {t.light} / {t.dark}
-                </p>
+                <p className="mt-1 text-sm leading-6 text-[#5C6578]">{body}</p>
+              </li>
+            ))}
+          </ol>
+        </Section>
+
+        <Section
+          id="colour"
+          kicker="02 — COLOUR"
+          title="Ink, paper, signal, spectrum."
+          note="Navy and paper do the work. Citrus points. The other five appear in the rule, and one of them may mark a project."
+        >
+          <div className="grid gap-4 sm:grid-cols-3">
+            {roles.map((role) => (
+              <div key={role.role} style={{ background: role.hex, color: role.fg }} className="p-4">
+                <p className={cn(plex.className, "text-[10px] tracking-wide")}>{role.role}</p>
+                <p className={cn(newsreader.className, "mt-3 text-xl")}>{role.name}</p>
+                <p className={cn(plex.className, "mt-2 text-[11px]")}>{role.hex}</p>
+                <p className="mt-2 text-sm">{role.job}</p>
               </div>
-            </div>
-          ))}
-        </div>
-        <p className="text-muted-foreground mt-4 text-xs">
-          Radius: --radius 0.5rem (rounded-lg 8px, rounded-md 6px, rounded-sm
-          4px). The dark set is defined but not switched on anywhere yet; the
-          site renders light only.
-        </p>
-      </Section>
-
-      <Section
-        id="type"
-        title="Type"
-        note="Inter (next/font/google, --font-sans) for everything. Tailwind v4 default scale; headings use tracking-tight."
-      >
-        <div className="divide-y rounded-lg border">
-          {typeScale.map((t) => (
-            <div
-              key={t.role}
-              className="grid items-baseline gap-2 p-4 sm:grid-cols-[220px_1fr]"
-            >
-              <div>
-                <p className="text-sm font-semibold">{t.role}</p>
-                <p className="text-muted-foreground font-mono text-[11px] leading-4">
-                  {t.spec}
-                </p>
-              </div>
-              <p className={cn("truncate", t.cls)}>{t.sample}</p>
-            </div>
-          ))}
-        </div>
-        <p className="text-muted-foreground mt-3 text-xs">
-          Page titles carry a font-heading class that is not defined, so they
-          render in Inter 400.
-        </p>
-      </Section>
-
-      <Section
-        id="buttons"
-        title="Buttons and links"
-        note="shadcn Button (cva) variants. Hover and focus columns apply the state classes statically so they can be seen side by side."
-      >
-        <ButtonMatrix />
-
-        <h3 className="mt-10 text-lg font-semibold">Bordered link buttons</h3>
-        <p className="text-muted-foreground mt-1 text-sm">
-          ContactLinks (home hero) and ProjectLinks (project cards):
-          border-input, rounded-md, px-3 py-1.5, text-sm medium, 16px lucide
-          icon, gap-1.5.
-        </p>
-        <div className="mt-4 space-y-4">
-          <ContactLinks className="justify-start" />
-          <div className="flex flex-wrap gap-6">
-            {oneProjectPerLinkKind(projects).map((p) => (
-              <ProjectLinks key={p._id} project={p} />
             ))}
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <span className={linkButton}>
-              <Github className="h-4 w-4" aria-hidden="true" />
-              Rest
-            </span>
-            <span
-              className={cn(linkButton, "bg-accent text-accent-foreground")}
-            >
-              <Github className="h-4 w-4" aria-hidden="true" />
-              Hover
-            </span>
-            <span
-              className={cn(
-                linkButton,
-                "outline-2 outline-offset-2 outline-[#101010]",
-              )}
-            >
-              <Github className="h-4 w-4" aria-hidden="true" />
-              Focus (browser default ring)
-            </span>
-          </div>
-        </div>
-
-        <h3 className="mt-10 text-lg font-semibold">
-          Text links and highlights
-        </h3>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border p-4">
-            <span className="text-muted-foreground text-sm font-medium">
-              All projects →
-            </span>
-            <span className="ml-4 text-sm font-medium">All projects →</span>
-            <Label>Section link: muted-foreground, hover foreground</Label>
-          </div>
-          <div className="rounded-lg border p-4">
-            <span className="decoration-soft-lilac text-lg font-semibold underline">
-              Post title
-            </span>
-            <span className="decoration-soft-lilac ml-4 text-lg font-semibold underline decoration-2">
-              Post title
-            </span>
-            <Label>Post link: soft-lilac underline, hover decoration-2</Label>
-          </div>
-          <div className="rounded-lg border p-4">
-            <span className="sweep-highlight p-1 text-xl">Kia ora</span>
-            <span className="sweep-highlight ml-4 px-1 py-0.5 text-xl font-semibold [--sweep-color:var(--color-seafoam-green)]">
-              Section
-            </span>
-            <span className="sweep-highlight ml-4 text-lg font-semibold [--sweep-color:var(--color-soft-lilac)]">
-              Project
-            </span>
-            <Label>
-              Sweep highlights: citrus-blaze (default), seafoam-green,
-              soft-lilac
-            </Label>
-          </div>
-          <div className="rounded-lg border p-4 text-xs">
-            Powered by <span className="font-bold">Next.js</span>,{" "}
-            <span className="font-bold underline">Tailwind CSS</span>
-            <Label>Footer link: text-xs bold, hover underline</Label>
-          </div>
-        </div>
-      </Section>
-
-      <Section
-        id="cards"
-        title="Cards"
-        note="Cards are bordered (rounded-lg or rounded-md), no fill beyond bg-card; hover raises the border to foreground/20."
-      >
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div>
-            <div className="bg-card rounded-lg border p-6">
-              <h3 className="font-medium">
-                <span className="hover-sweep [--sweep-color:var(--color-citrus-blaze)]">
-                  Production systems in regulated environments
-                </span>
-              </h3>
-              <p className="text-muted-foreground mt-2 text-sm">
-                Own and support the NZ Parole Board Hearing Management System
-                (PBHS) on Microsoft Dynamics 365.
-              </p>
-            </div>
-            <Label>Home, &quot;What I bring&quot; card</Label>
-          </div>
-          {featured && (
-            <div>
-              <article className="group bg-card hover:border-foreground/20 relative flex flex-col rounded-lg border p-6 transition">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  <span className="hover-sweep [--sweep-color:var(--color-soft-lilac)]">
-                    {featured.title}
-                  </span>
-                </h3>
-                <div className="pt-1 text-xs font-light text-gray-900">
-                  {format(new Date(featured.date), "MMM yyyy")}
-                </div>
-                {featured.description && (
-                  <p className="text-muted-foreground mt-2 line-clamp-3 text-sm">
-                    {featured.description}
-                  </p>
-                )}
-                <ProjectLinks
-                  project={featured}
-                  className="relative z-10 mt-auto pt-4"
-                />
-              </article>
-              <Label>Home, featured project card</Label>
-            </div>
-          )}
-          {withImage && (
-            <div>
-              <article className="group relative flex flex-col space-y-2">
-                <div className="bg-muted aspect-video overflow-hidden rounded-md border">
-                  <Image
-                    src={
-                      withImage.image ??
-                      "/images/projects/project_placeholder2.jpg"
-                    }
-                    alt={withImage.title}
-                    width={804}
-                    height={452}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-extrabold">{withImage.title}</h3>
-                {withImage.description && (
-                  <p className="text-muted-foreground">
-                    {withImage.description}
-                  </p>
-                )}
-                <ProjectLinks project={withImage} className="pt-1" />
-              </article>
-              <Label>Projects page card</Label>
-            </div>
-          )}
-          {post && (
-            <div>
-              <article className="group relative flex flex-col space-y-2">
-                {post.image && (
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    width={804}
-                    height={452}
-                    className="bg-muted aspect-video rounded-md border object-cover"
-                  />
-                )}
-                <h3 className="text-2xl font-extrabold">{post.title}</h3>
-                {post.description && (
-                  <p className="text-muted-foreground">{post.description}</p>
-                )}
-                <p className="text-muted-foreground text-sm">
-                  {format(new Date(post.date), "dd MMM yyyy")}
-                </p>
-              </article>
-              <Label>Blog list card</Label>
-            </div>
-          )}
-        </div>
-        <div className="dark bg-background text-foreground mt-8 rounded-lg p-6">
-          <p className="text-muted-foreground mb-4 text-xs font-medium">
-            Same components under the .dark tokens
+          <p className={cn(plex.className, "mt-8 text-[11px] tracking-wide text-[#5C6578]")}>
+            SPECTRUM — THE RULE, IN ORDER
           </p>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div className="bg-card rounded-lg border p-6">
-              <h3 className="font-medium">
-                End-to-end ownership &amp; integration
-              </h3>
-              <p className="text-muted-foreground mt-2 text-sm">
-                Full-stack work across C#/.NET, Azure services, Oracle PL/SQL,
-                and frontend.
-              </p>
+          <div className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-6">
+            {spectrum.map((band) => (
+              <div key={band.hex}>
+                <div className="h-16" style={{ background: band.hex }} />
+                <p className="mt-2 text-sm font-medium">{band.name}</p>
+                <p className={cn(plex.className, "text-[10px] text-[#5C6578]")}>{band.hex}</p>
+                <p className="text-xs text-[#5C6578]">{band.job}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section
+          id="type"
+          kicker="03 — TYPE"
+          title="Newsreader for the name. Outfit for the work."
+          note="A news serif, straight, with a real italic. Outfit stays geometric and plain. IBM Plex Mono for dates, hex, and labels."
+        >
+          <div className="bg-[#EFEAE3] p-6">
+            <p className={cn(newsreader.className, "text-4xl")}>Brendan Jarvis</p>
+            <p className={cn(newsreader.className, "mt-2 text-xl italic text-[#EA6E4B]")}>
+              Kia ora, I build production systems.
+            </p>
+            <p className="mt-4 text-sm text-[#5C6578]">
+              Outfit 400 — body, captions, interface.
+            </p>
+            <p className={cn(plex.className, "mt-1 text-[11px] text-[#5C6578]")}>
+              PLEX MONO — HEX, DATES, LABELS
+            </p>
+          </div>
+          <dl className="mt-6 divide-y divide-[#E4DCD2] text-sm">
+            {[
+              ["Display", "Newsreader 36–48 / 400", "Name, page title."],
+              ["Display italic", "Newsreader italic 20–28", "One phrase a page. Kia ora."],
+              ["Title", "Newsreader 22–28 / 400", "Section and card titles."],
+              ["Body", "Outfit 16–18 / 400", "Sentences. Line height 1.5."],
+              ["UI", "Outfit 14–15 / 500", "Buttons, nav, links."],
+              ["Meta", "IBM Plex Mono 11–12", "Dates, hex, labels. Uppercase."],
+            ].map(([role, face, use]) => (
+              <div key={role} className="grid gap-1 py-3 sm:grid-cols-3">
+                <dt className="font-medium">{role}</dt>
+                <dd className={cn(plex.className, "text-[11px] text-[#5C6578]")}>{face}</dd>
+                <dd className="text-[#5C6578]">{use}</dd>
+              </div>
+            ))}
+          </dl>
+        </Section>
+
+        <Section
+          id="mark"
+          kicker="04 — MARK"
+          title="Wordmark first. Monogram when it must be small."
+          note="The monogram stays single-colour: navy, paper, or white. Clear space is a quarter of the mark height. The 16px favicon uses the pixel-hinted master. It is not redrawn in Newsreader, and it is not filled with the spectrum."
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="bg-[#16223B] p-6 text-[#F7F4EF]">
+              <p className={cn(newsreader.className, "text-2xl")}>Brendan Jarvis</p>
+              <p className={cn(plex.className, "mt-4 text-[10px] text-[#9AA3B5]")}>ON NAVY</p>
             </div>
-            <div className="flex flex-wrap content-start items-start gap-2">
-              <Button>Button</Button>
-              <Button variant="outline">Outline</Button>
-              <Button variant="ghost">Ghost</Button>
-              <ContactLinks className="justify-start" />
+            <div className="border border-[#E4DCD2] p-6">
+              <p className={cn(newsreader.className, "text-2xl")}>Brendan Jarvis</p>
+              <p className={cn(plex.className, "mt-4 text-[10px] text-[#5C6578]")}>ON PAPER</p>
             </div>
           </div>
-        </div>
-      </Section>
-
-      <Section
-        id="icons"
-        title="Icons"
-        note="lucide-react, 24px grid, 2px stroke, rendered at h-4 w-4 (16px) next to text-sm labels."
-      >
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-          {icons.map(({ Icon, name, where }) => (
-            <div key={name} className="rounded-lg border p-4">
-              <div className="flex items-center gap-3">
-                <Icon className="h-4 w-4" aria-hidden="true" />
-                <Icon className="h-6 w-6" aria-hidden="true" />
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <MarkTile bg="#F7F4EF" fg="#16223B" label="Navy on paper" border />
+            <MarkTile bg="#16223B" fg="#F7F4EF" label="Paper on navy" />
+            <MarkTile bg="#3A1E66" fg="#F7F4EF" label="Paper on plum" />
+            <MarkTile bg="#FFFFFF" fg="#16223B" label="Navy on white" border />
+          </div>
+          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            <figure>
+              <div className="flex items-end gap-5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icon3.png" alt="App icon" width={96} height={96} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/apple-icon.png" alt="Apple touch icon" width={64} height={64} />
               </div>
-              <p className="mt-3 text-sm font-semibold">{name}</p>
-              <p className="text-muted-foreground text-xs">{where}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section
-        id="social"
-        title="Social images"
-        note="Example 1200×630 Open Graph images using the mark, Inter and the accent palette. Not wired into page metadata; the site still uses /images/profile.jpg."
-      >
-        <div className="grid gap-6 sm:grid-cols-2">
-          {[
-            ["og-home", "Home"],
-            ["og-blog", "Blog post"],
-            ["og-project", "Project"],
-          ].map(([file, label]) => (
-            <figure key={file}>
-              <Image
-                src={`/brand/${file}.png`}
-                alt={`${label} social image example`}
-                width={1200}
-                height={630}
-                className="rounded-md border"
-              />
-              <Label>
-                {label} · /brand/{file}.png
-              </Label>
+              <figcaption className={cn(plex.className, "mt-2 text-[10px] text-[#5C6578]")}>
+                App tile 512 · Apple 180, full bleed
+              </figcaption>
             </figure>
-          ))}
-        </div>
-      </Section>
+            <figure>
+              <div className="flex items-end gap-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/favicon-16.png" alt="Favicon 16px" width={16} height={16} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icon1.png" alt="Favicon 32px" width={32} height={32} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icon2.png" alt="Icon 192px" width={48} height={48} />
+              </div>
+              <figcaption className={cn(plex.className, "mt-2 text-[10px] text-[#5C6578]")}>
+                16 hinted · 32 · 48. Tabs use icon.svg
+              </figcaption>
+            </figure>
+            <figure className="border border-[#E4DCD2] p-4">
+              <div className="flex items-center gap-3">
+                <BJMark className="h-5 w-auto" />
+                <span className={cn(newsreader.className, "text-base")}>Brendan Jarvis</span>
+              </div>
+              <figcaption className={cn(plex.className, "mt-3 text-[10px] text-[#5C6578]")}>
+                Lockup: 20px mark, 12px gap, Newsreader 16px. No tagline.
+              </figcaption>
+            </figure>
+          </div>
+        </Section>
+
+        <Section
+          id="voice"
+          kicker="05 — VOICE"
+          title="Plain verbs. Local nouns."
+        >
+          <div className="bg-[#EFEAE3] p-6">
+            <p className={cn(plex.className, "text-[10px] text-[#5C6578]")}>RETIRED</p>
+            <p className="mt-2 text-sm text-[#5C6578]">
+              Passionate full-stack developer crafting seamless experiences.
+            </p>
+            <p className={cn(plex.className, "mt-5 text-[10px] text-[#EA6E4B]")}>IN USE</p>
+            <p className={cn(newsreader.className, "mt-2 text-xl italic")}>
+              Kia ora. I build and maintain production systems.
+            </p>
+            <p className="mt-1 text-sm">
+              Hearing management for the New Zealand Parole Board, on Dynamics 365.
+            </p>
+          </div>
+        </Section>
+
+        <Section
+          id="components"
+          kicker="06 — COMPONENTS"
+          title="Two buttons. One card. One link."
+          note="Radius is 2px. Hover darkens the fill by mixing 8% navy. Focus is a 2px citrus offset outline. No ghost, no outline-as-default."
+        >
+          <div className="flex flex-wrap gap-3">
+            <span className="rounded-sm bg-[#EA6E4B] px-4 py-2 text-sm font-medium text-[#F7F4EF]">
+              View project
+            </span>
+            <span className="rounded-sm bg-[#16223B] px-4 py-2 text-sm font-medium text-[#F7F4EF]">
+              Read the post
+            </span>
+            <span className="rounded-sm border border-[#E4DCD2] px-4 py-2 text-sm font-medium text-[#5C6578]">
+              Source
+            </span>
+          </div>
+          <p className="mt-8 text-sm font-medium">
+            <span className="underline decoration-[#EA6E4B] decoration-2 underline-offset-4">
+              All projects
+            </span>
+            <span className="ml-3 font-normal text-[#5C6578]">
+              Navy text. Citrus rule. No arrow unless it leaves the site.
+            </span>
+          </p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <article className="bg-white">
+              <div className="p-5">
+                <p className={cn(plex.className, "text-[10px] text-[#3A1E66]")}>WRITING</p>
+                <h3 className={cn(newsreader.className, "mt-2 text-2xl")}>
+                  The restricted licence test in Porirua
+                </h3>
+                <p className="mt-2 text-sm text-[#5C6578]">
+                  How to pass the motorcycle practical test.
+                </p>
+                <p className={cn(plex.className, "mt-4 text-[10px] text-[#5C6578]")}>
+                  18 JAN 2023
+                </p>
+              </div>
+              <Rule />
+            </article>
+            <article className="bg-[#16223B] text-[#F7F4EF]">
+              <div className="p-5">
+                <p className={cn(plex.className, "text-[10px] text-[#D653A9]")}>PROJECT</p>
+                <h3 className={cn(newsreader.className, "mt-2 text-2xl")}>
+                  Three.js Asteroids
+                </h3>
+                <p className="mt-2 text-sm text-[#C5CDD8]">
+                  A playable game. React Three Fiber, on this site.
+                </p>
+                <p className="mt-4 text-sm font-medium underline decoration-[#EA6E4B] decoration-2 underline-offset-4">
+                  Try it
+                </p>
+              </div>
+              <Rule />
+            </article>
+          </div>
+        </Section>
+
+        <Section
+          id="applications"
+          kicker="07 — APPLICATIONS"
+          title="The same three moves, everywhere."
+        >
+          <p className={cn(plex.className, "text-[10px] text-[#5C6578]")}>SITE HEADER</p>
+          <div className="mt-2 flex items-center justify-between border border-[#E4DCD2] px-4 py-3">
+            <span className={cn(newsreader.className, "text-lg")}>Brendan Jarvis</span>
+            <span className="flex gap-4 text-sm font-medium">
+              <span>Projects</span>
+              <span className="underline decoration-[#EA6E4B] decoration-2 underline-offset-4">
+                Writing
+              </span>
+            </span>
+          </div>
+          <p className={cn(plex.className, "mt-8 text-[10px] text-[#5C6578]")}>
+            OPEN GRAPH · TARGET
+          </p>
+          <div className="mt-2 border border-[#E4DCD2] bg-[#F7F4EF]">
+            <div className="p-6">
+              <div className="flex items-start justify-between">
+                <span className={cn(newsreader.className, "text-lg")}>Brendan Jarvis</span>
+                <span className={cn(plex.className, "text-[10px] text-[#ABE3D2]")}>PORTFOLIO</span>
+              </div>
+              <p className={cn(newsreader.className, "mt-6 max-w-md text-3xl leading-tight")}>
+                Kia ora, I am a full-stack developer.
+              </p>
+              <p className="mt-3 text-sm text-[#5C6578]">Production systems. New Zealand.</p>
+            </div>
+            <Rule />
+          </div>
+          <p className={cn(plex.className, "mt-8 text-[10px] text-[#5C6578]")}>
+            CV AND EMAIL HEADER
+          </p>
+          <div className="mt-2 bg-[#16223B] text-[#F7F4EF]">
+            <div className="flex flex-wrap items-baseline justify-between gap-2 px-4 py-3">
+              <span className={cn(newsreader.className, "text-lg")}>Brendan Jarvis</span>
+              <span className="text-sm text-[#ABE3D2]">Software engineer · Wellington</span>
+            </div>
+            <Rule />
+          </div>
+          <p className="mt-4 text-sm text-[#5C6578]">
+            Dark mode, if it ships, is plum #3A1E66 as the ground. Until then it stays off this sheet.
+          </p>
+        </Section>
+
+        <Section
+          id="captured"
+          kicker="08 — CAPTURED"
+          title="The previous social images."
+          note="These 1200×630 files still use Inter and the old sweeps. They are not wired into page metadata. The site still uses /images/profile.jpg."
+        >
+          <div className="grid gap-6 sm:grid-cols-2">
+            {[
+              ["og-home", "Home"],
+              ["og-blog", "Blog post"],
+              ["og-project", "Project"],
+            ].map(([file, label]) => (
+              <figure key={file}>
+                <Image
+                  src={`/brand/${file}.png`}
+                  alt={`${label} social image, previous system`}
+                  width={1200}
+                  height={630}
+                  className="border border-[#E4DCD2]"
+                />
+                <figcaption className={cn(plex.className, "mt-2 text-[10px] text-[#5C6578]")}>
+                  {label} · /brand/{file}.png · previous
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </Section>
+
+        <Section id="misuse" kicker="09 — MISUSE" title="Paste this. Then stop adding.">
+          <pre className={cn(plex.className, "overflow-x-auto bg-[#16223B] p-4 text-[11px] leading-5 text-[#ABE3D2]")}>{`:root {
+  --paper: #F7F4EF;
+  --ink: #16223B;
+  --signal: #EA6E4B;
+  --plum: #3A1E66;
+  --lilac: #CDA8E2;
+  --sunny: #FAF26F;
+  --seafoam: #ABE3D2;
+  --orchid: #D653A9;
+  --rule: 4px;
+  --radius: 2px;
+  --font-display: "Newsreader", serif;
+  --font-text: "Outfit", sans-serif;
+  --font-meta: "IBM Plex Mono", monospace;
+}`}</pre>
+          <ul className="mt-6 space-y-2 text-sm">
+            {misuse.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#EA6E4B]" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      </div>
     </div>
   );
 }

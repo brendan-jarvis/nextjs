@@ -2,13 +2,14 @@
 
 Reference copies. This folder is **not served**. Usable assets live in
 [`public/brand/`](../public/brand) (served at `/brand/...`), and the live
-reference page is [`/brand`](../src/app/brand/page.tsx), which is noindex and
-not linked from the nav.
+reference page is [`/brand`](../src/app/brand/page.tsx), which presents these
+guidelines. It is noindex and not linked from the nav. The site chrome around
+it still ships Inter.
 
 Two layers live here:
 
-- **Guidelines** — the system to build toward. Newsreader, warm paper, citrus as the only signal, the spectrum as a rule.
-- **Captured sheets** — what the site actually shipped on 6 Oct 2026 (Inter, shadcn stone, sweeps on several colours). `capture.py` still records that page. It has not been rebuilt.
+- **Guidelines** — Newsreader, warm paper, citrus as the only signal, the spectrum as a rule. This is what `/brand` presents.
+- **Captured sheets** — the page as it shipped on 6 Oct 2026 (Inter, shadcn stone, sweeps on several colours). `capture.py` snapshots `/brand`; rerun it to replace these sheets.
 
 ## Contents
 
