@@ -5,7 +5,7 @@ Usage (from the repo root, with the site running, e.g. `bun run build && bun run
     pip install playwright pillow && python -m playwright install chromium
     python brand/capture.py --base http://localhost:3000
 
-Writes:
+Writes (PNG assets first, since the sheets and PDF show them):
   brand/brand-sheet-1-mark-colour-type.png        /brand: header, mark, colour, type
   brand/brand-sheet-2-components-icons-social.png /brand: buttons, cards, icons, social
   brand/brand-sheets.pdf                          the same two sections as vector pages
@@ -65,6 +65,26 @@ def main():
     with sync_playwright() as p:
         b = p.chromium.launch(executable_path=a.chrome) if a.chrome else p.chromium.launch()
 
+        # PNG assets first: the sheets and PDF show the OG images
+        print("og images")
+        pg = b.new_page(viewport={"width": 1200, "height": 630})
+        for f in sorted((BRAND / "og").glob("*.html")):
+            pg.goto(f.as_uri(), wait_until="networkidle"); pg.evaluate("document.fonts.ready")
+            save_png(png(pg), PUBLIC / "brand" / f"{f.stem}.png")
+        pg.close()
+
+        print("mark pngs")
+        pg = b.new_page(device_scale_factor=1)
+        for c in ("navy", "black", "white"):
+            svg = (PUBLIC / "brand" / f"mark-{c}.svg").read_text()
+            vb = [float(v) for v in svg.split('viewBox="')[1].split('"')[0].split()]
+            h = 512; w = round(h * vb[2] / vb[3])
+            pg.set_viewport_size({"width": w, "height": h})
+            pg.set_content(f'<body style="margin:0;background:transparent"><img width="{w}" height="{h}" style="display:block" '
+                           f'src="data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()}"></body>')
+            save_png(png(pg, omit_background=True), PUBLIC / "brand" / f"mark-{c}-512.png")
+        pg.close()
+
         print("sheets")
         pg = b.new_page(viewport={"width": 1280, "height": 900}, device_scale_factor=2)
         pg.goto(a.base + "/brand", wait_until="networkidle")
@@ -93,23 +113,6 @@ def main():
         print(f"  brand/brand-sheets.pdf  {(BRAND / 'brand-sheets.pdf').stat().st_size // 1024} KB")
         pg.close()
 
-        print("og images")
-        pg = b.new_page(viewport={"width": 1200, "height": 630})
-        for f in sorted((BRAND / "og").glob("*.html")):
-            pg.goto(f.as_uri(), wait_until="networkidle"); pg.evaluate("document.fonts.ready")
-            save_png(png(pg), PUBLIC / "brand" / f"{f.stem}.png")
-        pg.close()
-
-        print("mark pngs")
-        pg = b.new_page(device_scale_factor=1)
-        for c in ("navy", "black", "white"):
-            svg = (PUBLIC / "brand" / f"mark-{c}.svg").read_text()
-            vb = [float(v) for v in svg.split('viewBox="')[1].split('"')[0].split()]
-            h = 512; w = round(h * vb[2] / vb[3])
-            pg.set_viewport_size({"width": w, "height": h})
-            pg.set_content(f'<body style="margin:0;background:transparent"><img width="{w}" height="{h}" style="display:block" '
-                           f'src="data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()}"></body>')
-            save_png(png(pg, omit_background=True), PUBLIC / "brand" / f"mark-{c}-512.png")
         b.close()
 
 

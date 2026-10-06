@@ -7,20 +7,25 @@ noindex and not linked from the nav.
 
 ## Contents
 
-| File                                        | What                                                |
-| ------------------------------------------- | --------------------------------------------------- |
-| `brand-sheet-1-mark-colour-type.png`        | Mark, colour and type (captured from `/brand`)      |
-| `brand-sheet-2-components-icons-social.png` | Buttons/links, cards, icons, social images          |
-| `brand-sheets.pdf`                          | The same two sections as vector pages               |
-| `og/*.html`                                 | Sources for the example 1200×630 OG images          |
-| `capture.py`                                | Regenerates the sheets, PDF, OG PNGs and mark PNGs  |
-| `source-2026-10-06.png`                     | The original ~91px mark the vector was redrawn from |
+| File                                        | What                                                                                       |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `brand-sheet-1-mark-colour-type.png`        | Mark, colour and type (captured from `/brand`)                                             |
+| `brand-sheet-2-components-icons-social.png` | Buttons/links, cards, icons, social images                                                 |
+| `brand-sheets.pdf`                          | The same two sections as vector pages                                                      |
+| `og/*.html`                                 | Sources for the example 1200×630 OG images                                                 |
+| `capture.py`                                | Regenerates the sheets, PDF, OG PNGs and mark PNGs                                         |
+| `source-2026-10-06.png`                     | The original ~91px mark the vector was redrawn from (it still has the diagonal tail notch) |
 
 ## The mark
 
 A B/J monogram. It's single-colour and never recoloured beyond navy, black or
 white. Keep clear space of at least a quarter of the mark height around it.
 The aspect ratio is 450:535.
+
+The bottom is closed: the B's lower bowl runs into the J's baseline as one
+solid curve, so there is no diagonal notch where the J tail meets the bowl.
+Both lower counters sit on the same floor, so the bottom stroke is one
+weight across the full width.
 
 | Asset                                                      | Use                                                                         |
 | ---------------------------------------------------------- | --------------------------------------------------------------------------- |
