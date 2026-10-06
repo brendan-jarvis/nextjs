@@ -28,23 +28,35 @@ export const metadata: Metadata = {
 
 const bring = [
   {
-    title: "Production systems",
-    body: "Own and support the NZ Parole Board Hearing Management System (PBHS) on Microsoft Dynamics 365. C# plugins, Azure Logic Apps, Cloud Flows, and L2/L3 response.",
+    title: "Production systems in regulated environments",
+    paragraphs: [
+      "Own and support the NZ Parole Board Hearing Management System (PBHS) on Microsoft Dynamics 365.",
+      "C# plugins, Azure Logic Apps integration to legacy systems, Cloud Flows, and incident response under real compliance obligations.",
+    ],
     color: "#16223B",
   },
   {
-    title: "Reviewed AI output",
-    body: "Claude Code for navigation, defect investigation, and remediation. Every generated output is reviewed before it ships.",
+    title: "Responsible AI-augmented development",
+    paragraphs: [
+      "Use Claude Code daily for code navigation, defect investigation, and rapid remediation.",
+      "Every AI-generated output is reviewed and validated before it ships to production.",
+    ],
     color: "#EA6E4B",
   },
   {
-    title: "End-to-end ownership",
-    body: "C#/.NET, Dataverse plugins, Azure, Oracle PL/SQL, and React. Fixes and features through go-live and support.",
+    title: "End-to-end ownership & integration",
+    paragraphs: [
+      "Full-stack work across C#/.NET (MVC, WCF, Dataverse plugins), Azure services, Oracle PL/SQL, and frontend (Kendo UI, React).",
+      "Delivered fixes and features through go-live and ongoing support with tight release cadences.",
+    ],
     color: "#3A1E66",
   },
   {
-    title: "Law and science, then engineering",
-    body: "Active work in TypeScript, React/Next.js, and Python tooling. Structured thinking carried across from law and chemistry.",
+    title: "Self-directed modern portfolio",
+    paragraphs: [
+      "Active work in TypeScript, React/Next.js, and Python tooling.",
+      "Career-changer who brings structured thinking from law and science into engineering.",
+    ],
     color: "#ABE3D2",
   },
 ];
@@ -88,7 +100,11 @@ export default async function Home() {
             <article key={item.title} className="flex h-full flex-col bg-card">
               <div className="flex-1 p-6">
                 <h3 className="text-lg">{item.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
+                {item.paragraphs.map((paragraph) => (
+                  <p key={paragraph} className="mt-2 text-sm text-muted-foreground">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
               <SpectrumRule color={item.color} />
             </article>
