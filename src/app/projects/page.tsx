@@ -7,6 +7,8 @@ import type { Metadata } from "next";
 import { ProjectLinks } from "@/app/_components/ProjectLinks";
 import { SpectrumRule } from "@/app/_components/SpectrumRule";
 
+const projectColors = ["#D653A9", "#EA6E4B", "#3A1E66", "#CDA8E2", "#ABE3D2"];
+
 export const metadata: Metadata = {
   title: "Projects",
 };
@@ -34,7 +36,7 @@ export default async function ProjectsPage() {
           {projects.map((project, index) => (
             <article
               key={project._id}
-              className="relative flex flex-col bg-card"
+              className="relative flex h-full flex-col bg-card"
             >
               <div className="aspect-video overflow-hidden bg-muted">
                 <Image
@@ -49,7 +51,10 @@ export default async function ProjectsPage() {
                 />
               </div>
               <div className="flex flex-1 flex-col p-5">
-                <p className="font-mono text-[10px] tracking-wide text-orchid-pink">
+                <p
+                  className="font-mono text-[10px] tracking-wide"
+                  style={{ color: projectColors[index % projectColors.length] }}
+                >
                   PROJECT
                 </p>
                 <h2 className="mt-2 text-2xl">{project.title}</h2>
@@ -66,9 +71,9 @@ export default async function ProjectsPage() {
                 <Link href={project.slug} className="absolute inset-0">
                   <span className="sr-only">View {project.title}</span>
                 </Link>
-                <ProjectLinks project={project} className="relative z-10 mt-4" />
+                <ProjectLinks project={project} className="relative z-10 mt-auto pt-4" />
               </div>
-              <SpectrumRule />
+              <SpectrumRule color={projectColors[index % projectColors.length]!} />
             </article>
           ))}
         </div>

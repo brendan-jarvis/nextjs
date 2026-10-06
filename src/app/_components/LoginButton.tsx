@@ -15,7 +15,7 @@ export function LoginButton() {
     return (
       <Button
         variant="ghost"
-        className="rounded-md px-3 py-2 font-semibold"
+        className="cursor-pointer rounded-md px-3 py-2 font-semibold"
         onClick={() => void signOut()}
       >
         Sign out
@@ -26,7 +26,7 @@ export function LoginButton() {
   return (
     <Button
       variant="ghost"
-      className="rounded-md px-3 py-2 font-semibold"
+      className="cursor-pointer rounded-md px-3 py-2 font-semibold"
       onClick={() => void signIn()}
     >
       Sign in

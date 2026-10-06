@@ -27,23 +27,29 @@ export const metadata: Metadata = {
 };
 
 const bring = [
-  [
-    "Production systems",
-    "Own and support the NZ Parole Board Hearing Management System (PBHS) on Microsoft Dynamics 365. C# plugins, Azure Logic Apps, Cloud Flows, and L2/L3 response.",
-  ],
-  [
-    "Reviewed AI output",
-    "Claude Code for navigation, defect investigation, and remediation. Every generated output is reviewed before it ships.",
-  ],
-  [
-    "End-to-end ownership",
-    "C#/.NET, Dataverse plugins, Azure, Oracle PL/SQL, and React. Fixes and features through go-live and support.",
-  ],
-  [
-    "Law and science, then engineering",
-    "Active work in TypeScript, React/Next.js, and Python tooling. Structured thinking carried across from law and chemistry.",
-  ],
+  {
+    title: "Production systems",
+    body: "Own and support the NZ Parole Board Hearing Management System (PBHS) on Microsoft Dynamics 365. C# plugins, Azure Logic Apps, Cloud Flows, and L2/L3 response.",
+    color: "#16223B",
+  },
+  {
+    title: "Reviewed AI output",
+    body: "Claude Code for navigation, defect investigation, and remediation. Every generated output is reviewed before it ships.",
+    color: "#EA6E4B",
+  },
+  {
+    title: "End-to-end ownership",
+    body: "C#/.NET, Dataverse plugins, Azure, Oracle PL/SQL, and React. Fixes and features through go-live and support.",
+    color: "#3A1E66",
+  },
+  {
+    title: "Law and science, then engineering",
+    body: "Active work in TypeScript, React/Next.js, and Python tooling. Structured thinking carried across from law and chemistry.",
+    color: "#ABE3D2",
+  },
 ];
+
+const projectColors = ["#D653A9", "#EA6E4B", "#3A1E66", "#CDA8E2"];
 
 export default async function Home() {
   const posts = allPosts
@@ -58,30 +64,32 @@ export default async function Home() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:py-16">
-      <section className="mb-16">
+      <section className="mb-16 text-center">
         <h1 className="text-5xl sm:text-6xl">Brendan Jarvis</h1>
         <p className="mt-4 font-mono text-[11px] tracking-wide text-muted-foreground">
           NEW ZEALAND · ELIGIBLE TO WORK IN AUSTRALIA
         </p>
         <p className="mt-6 font-display text-2xl italic text-citrus-blaze">Kia ora.</p>
-        <p className="mt-2 max-w-2xl text-lg">I build and maintain production systems.</p>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-2xl text-lg">
+          I build and maintain production systems.
+        </p>
+        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
           Hearing management for the New Zealand Parole Board, on Dynamics 365.
           Commercial C#/.NET and React.
         </p>
-        <ContactLinks className="mt-6" />
+        <ContactLinks className="mt-6 justify-center" />
       </section>
 
       <section className="mb-16">
         <h2 className="mb-6 text-2xl">What I bring</h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          {bring.map(([title, body]) => (
-            <article key={title} className="flex flex-col bg-card">
-              <div className="p-6">
-                <h3 className="text-lg">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+          {bring.map((item) => (
+            <article key={item.title} className="flex h-full flex-col bg-card">
+              <div className="flex-1 p-6">
+                <h3 className="text-lg">{item.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{item.body}</p>
               </div>
-              <SpectrumRule />
+              <SpectrumRule color={item.color} />
             </article>
           ))}
         </div>
@@ -99,10 +107,13 @@ export default async function Home() {
         </div>
         {projects.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2">
-            {projects.map((project) => (
-              <article key={project._id} className="flex flex-col bg-card">
-                <div className="p-6">
-                  <p className="font-mono text-[10px] tracking-wide text-orchid-pink">
+            {projects.map((project, index) => (
+              <article key={project._id} className="flex h-full flex-col bg-card">
+                <div className="flex flex-1 flex-col p-6">
+                  <p
+                    className="font-mono text-[10px] tracking-wide"
+                    style={{ color: projectColors[index % projectColors.length] }}
+                  >
                     PROJECT
                   </p>
                   <h3 className="mt-2 text-xl">
@@ -116,9 +127,9 @@ export default async function Home() {
                       {project.description}
                     </p>
                   )}
-                  <ProjectLinks project={project} className="mt-4" />
+                  <ProjectLinks project={project} className="mt-auto pt-4" />
                 </div>
-                <SpectrumRule />
+                <SpectrumRule color={projectColors[index % projectColors.length]!} />
               </article>
             ))}
           </div>

@@ -31,7 +31,7 @@ export default async function BlogPage() {
       {posts?.length ? (
         <div className="grid gap-10 sm:grid-cols-2">
           {posts.map((post, index) => (
-            <article key={post._id} className="relative flex flex-col bg-card">
+            <article key={post._id} className="relative flex h-full flex-col bg-card">
               {post.image && (
                 <Image
                   src={post.image}
@@ -42,14 +42,14 @@ export default async function BlogPage() {
                   priority={index <= 1}
                 />
               )}
-              <div className="p-5">
+              <div className="flex flex-1 flex-col p-5">
                 <p className="font-mono text-[10px] tracking-wide text-seafoam-green">
                   WRITING
                 </p>
                 <h2 className="mt-2 text-2xl">
                   <Link
                     href={post.slug}
-                    className="underline decoration-citrus-blaze decoration-2 underline-offset-4"
+                    className="underline decoration-seafoam-green decoration-2 underline-offset-4"
                   >
                     {post.title}
                   </Link>
@@ -65,7 +65,7 @@ export default async function BlogPage() {
                   </p>
                 )}
               </div>
-              <SpectrumRule />
+              <SpectrumRule color="#ABE3D2" />
             </article>
           ))}
         </div>
