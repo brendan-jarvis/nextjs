@@ -71,11 +71,12 @@ export default async function Home() {
         </p>
         <p className="mt-6 font-display text-2xl italic text-citrus-blaze">Kia ora.</p>
         <p className="mx-auto mt-2 max-w-2xl text-lg">
-          I build and maintain production systems.
+          I am a full-stack web developer with commercial C#/.NET, Dynamics 365,
+          and React experience.
         </p>
         <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-          Hearing management for the New Zealand Parole Board, on Dynamics 365.
-          Commercial C#/.NET and React.
+          I build and maintain production systems for the New Zealand Department
+          of Corrections and New Zealand Parole Board.
         </p>
         <ContactLinks className="mt-6 justify-center" />
       </section>
