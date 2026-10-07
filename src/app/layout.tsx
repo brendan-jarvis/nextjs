@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { IBM_Plex_Mono, Newsreader, Outfit } from "next/font/google";
 import type { Metadata } from "next";
 import Nav from "@/app/_components/Nav";
@@ -67,6 +68,7 @@ export default function RootLayout({
             <Footer />
           </main>
           <Toaster />
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
