@@ -89,6 +89,13 @@
     font-family: var(--font-display), serif;
     font-weight: 400;
   }
+  :focus {
+    outline: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-citrus-blaze);
+    outline-offset: 3px;
+  }
 }
 
 .spectrum-rule {
