@@ -3,13 +3,6 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="flex flex-col items-start py-16">
-      <img
-        src="/brand/mark-navy.svg"
-        alt=""
-        width={72}
-        height={86}
-        className="mb-8"
-      />
       <p className="font-mono text-[10px] tracking-wide text-citrus-blaze">
         404
       </p>
