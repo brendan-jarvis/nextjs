@@ -4,7 +4,7 @@ import { allPosts, allProjects } from "contentlayer/generated";
 import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/blog", "/projects", "/asteroids", "/privacy"].map(
+  const staticRoutes = ["", "/blog", "/projects", "/privacy"].map((path) => ({
     (path) => ({
       url: `${siteUrl}${path}`,
     }),
