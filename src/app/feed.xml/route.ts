@@ -5,10 +5,10 @@ import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
 function escapeXml(value: string) {
   return value
-    .replaceAll("&", "&")
-    .replaceAll("<", "<")
-    .replaceAll(">", ">")
-    .replaceAll('"', """);
+    .replaceAll("&", "\u0026amp;")
+    .replaceAll("<", "\u0026lt;")
+    .replaceAll(">", "\u0026gt;")
+    .replaceAll('"', "\u0026quot;");
 }
 
 export function GET() {
