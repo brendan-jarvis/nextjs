@@ -1,25 +1,22 @@
 import Link from "next/link";
-import { Button } from "@/app/_components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex min-h-screen flex-col items-center">
-      <h1 className="bg-citrus-blaze my-2 py-2 text-center text-3xl font-bold uppercase">
-        Not found
-      </h1>
-      <div className="py-4">
-        <p>Could not find the requested resource.</p>
-      </div>
-      <div className="flex flex-row gap-2">
-        <Button asChild>
-          <Link
-            href="/"
-            className="bg-seafoam-green hover:text-seafoam-green text-gray-900 underline hover:bg-gray-700"
-          >
-            Back to home
-          </Link>
-        </Button>
-      </div>
+    <div className="flex flex-col items-start py-16">
+      <p className="font-mono text-[10px] tracking-wide text-citrus-blaze">
+        404
+      </p>
+      <h1 className="mt-2 text-4xl">Page not found</h1>
+      <p className="mt-3 max-w-md text-muted-foreground">
+        That link does not go anywhere. The page may have moved, or the
+        address is wrong.
+      </p>
+      <Link
+        href="/"
+        className="mt-6 text-sm font-medium underline decoration-citrus-blaze decoration-2 underline-offset-4"
+      >
+        Back to home
+      </Link>
     </div>
   );
 }

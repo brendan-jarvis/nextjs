@@ -23,7 +23,13 @@ export default async function BlogPage() {
         <div className="flex-1 space-y-4">
           <h1 className="text-4xl lg:text-5xl">Writing</h1>
           <p className="text-muted-foreground">
-            Notes on the work, and the occasional practical post.
+            Notes on the work, and the occasional practical post.{" "}
+            <a
+              href="/feed.xml"
+              className="underline decoration-citrus-blaze decoration-2 underline-offset-4"
+            >
+              RSS
+            </a>
           </p>
         </div>
       </div>

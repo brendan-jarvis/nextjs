@@ -89,6 +89,13 @@
     font-family: var(--font-display), serif;
     font-weight: 400;
   }
+  :focus {
+    outline: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-citrus-blaze);
+    outline-offset: 3px;
+  }
 }
 
 .spectrum-rule {
@@ -227,4 +234,24 @@
   transform: scaleX(0);
   transition: none;
   animation: sweep-highlight 700ms ease-out forwards;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #16223b;
+  }
+  nav,
+  footer,
+  .print-hide {
+    display: none !important;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  article {
+    max-width: none;
+  }
 }

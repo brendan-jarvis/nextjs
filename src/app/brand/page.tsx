@@ -462,7 +462,7 @@ export default function BrandPage() {
           id="captured"
           kicker="08 — CAPTURED"
           title="The previous social images."
-          note="These 1200×630 files still use Inter and the old sweeps. They are not wired into page metadata. The site still uses /images/profile.jpg."
+          note="These 1200×630 files still use Inter and the old sweeps. The site uses /brand/og.png, the mark on navy."
         >
           <div className="grid gap-6 sm:grid-cols-2">
             {[
