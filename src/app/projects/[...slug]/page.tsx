@@ -94,6 +94,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <h1 className="font-heading mt-2 inline-block text-4xl leading-tight lg:text-5xl">
           {project.title}
         </h1>
+        {project.technologies && project.technologies.length > 0 && (
+          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+            {project.technologies.map((technology) => (
+              <li
+                key={technology}
+                className="font-mono text-[11px] text-muted-foreground"
+              >
+                {technology}
+              </li>
+            ))}
+          </ul>
+        )}
         <ProjectLinks project={project} className="mt-6" />
       </div>
       {project.image && (

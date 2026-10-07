@@ -95,6 +95,11 @@ export const Project = defineDocumentType(() => ({
       of: { type: "string" },
       required: true,
     },
+    technologies: {
+      type: "list",
+      of: { type: "string" },
+      required: false,
+    },
   },
   computedFields,
 }));
