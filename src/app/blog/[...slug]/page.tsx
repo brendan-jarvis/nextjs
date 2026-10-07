@@ -51,7 +51,9 @@ export async function generateMetadata({
       description: post.description,
       type: "article",
       publishedTime: post.date,
-      images: post.image ? [{ url: post.image }] : [],
+      images: post.image
+        ? [{ url: post.image }]
+        : [{ url: "/brand/og.png", width: 1200, height: 630, alt: post.title }],
     },
   };
 }
