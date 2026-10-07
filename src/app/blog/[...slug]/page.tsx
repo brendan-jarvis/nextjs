@@ -75,7 +75,7 @@ export default async function PostPage({ params }: PostPageProps) {
     <article className="container max-w-3xl py-6 lg:py-10">
       <Link
         href="/blog"
-        className={cn(buttonVariants({ variant: "ghost" }), "mb-4 flex w-fit")}
+        className={cn(buttonVariants({ variant: "ghost" }), "print-hide mb-4 flex w-fit")}
       >
         <ChevronLeft className="mr-2 h-4 w-4" />
         See all posts
@@ -104,9 +104,11 @@ export default async function PostPage({ params }: PostPageProps) {
         />
       )}
       <Mdx code={post.body.code} />
-      <Comments postTitle={post.title} />
-      <hr className="mt-12" />
-      <div className="flex justify-center py-6 lg:py-10">
+      <div className="print-hide">
+        <Comments postTitle={post.title} />
+      </div>
+      <hr className="print-hide mt-12" />
+      <div className="print-hide flex justify-center py-6 lg:py-10">
         <Link href="/blog" className={cn(buttonVariants({ variant: "ghost" }))}>
           <ChevronLeft className="mr-2 h-4 w-4" />
           See all posts

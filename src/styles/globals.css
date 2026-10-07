@@ -228,3 +228,23 @@
   transition: none;
   animation: sweep-highlight 700ms ease-out forwards;
 }
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #16223b;
+  }
+  nav,
+  footer,
+  .print-hide {
+    display: none !important;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  article {
+    max-width: none;
+  }
+}
