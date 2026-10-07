@@ -3,6 +3,8 @@ import { compareDesc } from "date-fns";
 
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
+export const dynamic = "force-static";
+
 function escapeXml(value: string) {
   return value
     .replaceAll("&", "\u0026amp;")
