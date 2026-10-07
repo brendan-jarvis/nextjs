@@ -5,12 +5,14 @@ import { LoginButton } from "./LoginButton";
 
 export default function Nav() {
   return (
-    <nav className="border-b-foreground/10 flex h-16 w-full justify-center border-b">
-      <div className="flex w-full max-w-4xl items-center justify-between p-3 text-sm">
+    <nav className="flex w-full justify-center">
+      <div className="flex w-full max-w-4xl items-center justify-between px-4 py-4 text-sm">
         <HomeButton />
-        <BlogButton />
-        <ProjectsButton />
-        <LoginButton />
+        <div className="flex items-center gap-5">
+          <ProjectsButton />
+          <BlogButton />
+          <LoginButton />
+        </div>
       </div>
     </nav>
   );

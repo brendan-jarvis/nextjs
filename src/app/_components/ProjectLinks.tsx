@@ -18,7 +18,7 @@ export function ProjectLinks({
       {getProjectLinks(project).map((link) => {
         const Icon = icons[link.kind];
         const classes =
-          "border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition";
+          "inline-flex items-center gap-1.5 border border-[#E4DCD2] px-3 py-1.5 text-sm font-medium transition hover:border-foreground";
         const content = (
           <>
             <Icon className="h-4 w-4" aria-hidden="true" />

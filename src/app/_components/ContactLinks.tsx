@@ -33,7 +33,7 @@ export function ContactLinks({ className }: { className?: string }) {
     <nav
       aria-label="Contact"
       className={cn(
-        "flex flex-wrap justify-center gap-1.5 sm:gap-2",
+        "flex flex-wrap justify-start gap-1.5 sm:gap-2",
         className,
       )}
     >
@@ -45,7 +45,7 @@ export function ContactLinks({ className }: { className?: string }) {
           {...(newTab
             ? { target: "_blank", rel: "noopener noreferrer" }
             : undefined)}
-          className="border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-sm font-medium transition sm:px-3"
+          className="inline-flex items-center gap-1.5 border border-[#E4DCD2] px-2.5 py-1.5 text-sm font-medium text-foreground transition hover:border-foreground sm:px-3"
         >
           <Icon className="h-4 w-4" aria-hidden="true" />
           {label}
