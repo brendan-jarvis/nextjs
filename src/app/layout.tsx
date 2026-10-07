@@ -37,6 +37,11 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   authors: [{ name: "Brendan Jarvis", url: "https://x.com/brendanjjarvis" }],
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
   openGraph: {
     title: siteName,
     description: siteDescription,
