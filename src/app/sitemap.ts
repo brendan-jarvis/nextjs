@@ -5,10 +5,8 @@ import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = ["", "/blog", "/projects", "/privacy"].map((path) => ({
-    (path) => ({
-      url: `${siteUrl}${path}`,
-    }),
-  );
+    url: `${siteUrl}${path}`,
+  }));
 
   const posts = allPosts
     .filter((post) => post.published)
