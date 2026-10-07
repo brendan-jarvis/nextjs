@@ -46,14 +46,7 @@ export default async function BlogPage() {
                 <p className="font-mono text-[10px] tracking-wide text-seafoam-green">
                   WRITING
                 </p>
-                <h2 className="mt-2 text-2xl">
-                  <Link
-                    href={post.slug}
-                    className="underline decoration-seafoam-green decoration-2 underline-offset-4"
-                  >
-                    {post.title}
-                  </Link>
-                </h2>
+                <h2 className="mt-2 text-2xl">{post.title}</h2>
                 {post.description && (
                   <p className="mt-2 text-sm text-muted-foreground">
                     {post.description}
@@ -64,6 +57,9 @@ export default async function BlogPage() {
                     {format(new Date(post.date), "dd MMM yyyy").toUpperCase()}
                   </p>
                 )}
+                <Link href={post.slug} className="absolute inset-0">
+                  <span className="sr-only">View {post.title}</span>
+                </Link>
               </div>
               <SpectrumRule color="#ABE3D2" />
             </article>

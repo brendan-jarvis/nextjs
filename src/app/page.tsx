@@ -125,7 +125,7 @@ export default async function Home() {
         {projects.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2">
             {projects.map((project, index) => (
-              <article key={project._id} className="flex h-full flex-col bg-card">
+              <article key={project._id} className="relative flex h-full flex-col bg-card">
                 <div className="flex flex-1 flex-col p-6">
                   <p
                     className="font-mono text-[10px] tracking-wide"
@@ -133,9 +133,7 @@ export default async function Home() {
                   >
                     PROJECT
                   </p>
-                  <h3 className="mt-2 text-xl">
-                    <Link href={project.slug}>{project.title}</Link>
-                  </h3>
+                  <h3 className="mt-2 text-xl">{project.title}</h3>
                   <p className="mt-1 font-mono text-[11px] text-muted-foreground">
                     {format(new Date(project.date), "MMM yyyy").toUpperCase()}
                   </p>
@@ -144,7 +142,10 @@ export default async function Home() {
                       {project.description}
                     </p>
                   )}
-                  <ProjectLinks project={project} className="mt-auto pt-4" />
+                  <Link href={project.slug} className="absolute inset-0">
+                    <span className="sr-only">View {project.title}</span>
+                  </Link>
+                  <ProjectLinks project={project} className="relative z-10 mt-auto pt-4" />
                 </div>
                 <SpectrumRule color={projectColors[index % projectColors.length]!} />
               </article>
@@ -168,23 +169,19 @@ export default async function Home() {
         <div className="space-y-4">
           {posts.length > 0 ? (
             posts.map((post) => (
-              <article key={post._id} className="bg-card">
+              <article key={post._id} className="relative bg-card">
                 <div className="p-6">
                   <p className="font-mono text-[10px] tracking-wide text-seafoam-green">
                     WRITING
                   </p>
-                  <h3 className="mt-1 text-xl">
-                    <Link
-                      href={post.slug}
-                      className="underline decoration-citrus-blaze decoration-2 underline-offset-4"
-                    >
-                      {post.title}
-                    </Link>
-                  </h3>
+                  <h3 className="mt-1 text-xl">{post.title}</h3>
                   <p className="mt-1 font-mono text-[11px] text-muted-foreground">
                     {format(new Date(post.date), "dd MMM yyyy").toUpperCase()}
                     {post.description ? ` · ${post.description}` : ""}
                   </p>
+                  <Link href={post.slug} className="absolute inset-0">
+                    <span className="sr-only">View {post.title}</span>
+                  </Link>
                 </div>
                 <SpectrumRule color="#ABE3D2" />
               </article>
