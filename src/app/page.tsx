@@ -165,25 +165,28 @@ export default async function Home() {
             All posts
           </Link>
         </div>
-        <div className="space-y-6">
+        <div className="space-y-4">
           {posts.length > 0 ? (
             posts.map((post) => (
-              <article key={post._id}>
-                <p className="font-mono text-[10px] tracking-wide text-seafoam-green">
-                  WRITING
-                </p>
-                <h3 className="mt-1 text-xl">
-                  <Link
-                    href={post.slug}
-                    className="underline decoration-citrus-blaze decoration-2 underline-offset-4"
-                  >
-                    {post.title}
-                  </Link>
-                </h3>
-                <p className="mt-1 font-mono text-[11px] text-muted-foreground">
-                  {format(new Date(post.date), "dd MMM yyyy").toUpperCase()}
-                  {post.description ? ` · ${post.description}` : ""}
-                </p>
+              <article key={post._id} className="bg-card">
+                <div className="p-6">
+                  <p className="font-mono text-[10px] tracking-wide text-seafoam-green">
+                    WRITING
+                  </p>
+                  <h3 className="mt-1 text-xl">
+                    <Link
+                      href={post.slug}
+                      className="underline decoration-citrus-blaze decoration-2 underline-offset-4"
+                    >
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                    {format(new Date(post.date), "dd MMM yyyy").toUpperCase()}
+                    {post.description ? ` · ${post.description}` : ""}
+                  </p>
+                </div>
+                <SpectrumRule color="#ABE3D2" />
               </article>
             ))
           ) : (
