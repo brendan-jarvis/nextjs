@@ -283,12 +283,12 @@ const rockLineMat = new LineBasicMaterial({
 });
 rockLineMat.userData.persist = true;
 
-const rockLineDim = new LineBasicMaterial({
-  color: 0x7d8792,
+const rockLineSmall = new LineBasicMaterial({
+  color: 0xe4ebf2,
   transparent: true,
-  opacity: 0.4,
+  opacity: 0.95,
 });
-rockLineDim.userData.persist = true;
+rockLineSmall.userData.persist = true;
 
 let chipGeo: BufferGeometry | null = null;
 
@@ -437,8 +437,8 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
   const tier = radius > 3.5 ? "big" : radius > 2 ? "mid" : "small";
   const contour = points.map(([x, z]) => new Vector2(x, z));
   const faces = ShapeUtils.triangulateShape(contour, []);
-  const stone = tier === "big" ? [0.26, 0.27, 0.29] : tier === "mid" ? [0.16, 0.165, 0.175] : [0.035, 0.036, 0.038];
-  const crest = tier === "big" ? [0.38, 0.39, 0.41] : tier === "mid" ? [0.22, 0.225, 0.23] : [0.05, 0.051, 0.053];
+  const stone = tier === "big" ? [0.26, 0.27, 0.29] : tier === "mid" ? [0.24, 0.25, 0.27] : [0.34, 0.35, 0.37];
+  const crest = tier === "big" ? [0.38, 0.39, 0.41] : tier === "mid" ? [0.34, 0.35, 0.37] : [0.5, 0.51, 0.53];
   const valley = stone.map((channel) => channel * 0.55);
   const rimY = points.map(() => radius * (0.14 + rnd() * 0.1));
   const pos: number[] = [];
@@ -503,12 +503,10 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
   body.add(mesh);
   const geos: BufferGeometry[] = [geo];
 
-  const lineMat = tier === "big" ? rockLineMat : rockLineDim;
-  if (tier !== "small") {
-    const line = new LineLoop(loopGeometry(points, radius * 0.5), lineMat);
-    body.add(line);
-    geos.push(line.geometry);
-  }
+  const lineMat = tier === "small" ? rockLineSmall : rockLineMat;
+  const line = new LineLoop(loopGeometry(points, radius * 0.46), lineMat);
+  body.add(line);
+  geos.push(line.geometry);
 
   const chipCount = radius > 3.4 ? 2 : 0;
   for (let i = 0; i < chipCount; i++) {
