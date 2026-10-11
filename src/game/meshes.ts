@@ -30,7 +30,7 @@ import {
 
 const ICE = 0x6ae4ff;
 const EMBER = 0xff9a3c;
-const HULL = 0xd5dee8;
+const HULL = 0x323a42;
 const VOID = 0x10151c;
 
 export type ShipView = {
@@ -87,14 +87,14 @@ function sharedGlow() {
 }
 
 export function makeStars() {
-  const count = 640;
+  const count = 320;
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
     positions[i * 3] = (Math.random() - 0.5) * 420;
     positions[i * 3 + 1] = 4 + Math.random() * 36;
     positions[i * 3 + 2] = (Math.random() - 0.5) * 420;
-    const t = 0.55 + Math.random() * 0.45;
+    const t = 0.22 + Math.random() * 0.28;
     colors[i * 3] = t;
     colors[i * 3 + 1] = t;
     colors[i * 3 + 2] = Math.min(1, t + 0.08);
@@ -103,11 +103,11 @@ export function makeStars() {
   geo.setAttribute("position", new Float32BufferAttribute(positions, 3));
   geo.setAttribute("color", new Float32BufferAttribute(colors, 3));
   const mat = new PointsMaterial({
-    size: 2.2,
+    size: 1.35,
     sizeAttenuation: false,
     vertexColors: true,
     transparent: true,
-    opacity: 0.9,
+    opacity: 0.55,
     depthWrite: false,
   });
   return new Points(geo, mat);
@@ -116,11 +116,11 @@ export function makeStars() {
 function hullMaterial() {
   return new MeshStandardMaterial({
     color: HULL,
-    metalness: 0.82,
-    roughness: 0.28,
+    metalness: 0.45,
+    roughness: 0.55,
     flatShading: true,
-    emissive: new Color(0x0c2833),
-    emissiveIntensity: 0.45,
+    emissive: new Color(0x070c10),
+    emissiveIntensity: 0.2,
     side: DoubleSide,
   });
 }
@@ -257,19 +257,19 @@ function dartGeometry() {
 const rockMat = new MeshStandardMaterial({
   color: 0xffffff,
   vertexColors: true,
-  roughness: 0.62,
-  metalness: 0.22,
+  roughness: 0.84,
+  metalness: 0.06,
   flatShading: true,
-  emissive: new Color(0x0c1014),
-  emissiveIntensity: 0.7,
+  emissive: new Color(0x050608),
+  emissiveIntensity: 0.25,
   side: DoubleSide,
 });
 rockMat.userData.persist = true;
 
 const chipMat = new MeshStandardMaterial({
-  color: 0x2a3036,
-  roughness: 0.38,
-  metalness: 0.42,
+  color: 0x161a1f,
+  roughness: 0.8,
+  metalness: 0.12,
   flatShading: true,
   emissive: new Color(0x10141a),
   emissiveIntensity: 0.35,
@@ -277,9 +277,9 @@ const chipMat = new MeshStandardMaterial({
 chipMat.userData.persist = true;
 
 const rockLineMat = new LineBasicMaterial({
-  color: 0xaeb8c2,
+  color: 0x5c6772,
   transparent: true,
-  opacity: 0.5,
+  opacity: 0.42,
 });
 rockLineMat.userData.persist = true;
 
@@ -287,7 +287,7 @@ const fissureAmber = new MeshBasicMaterial({
   color: 0xff9a3c,
   toneMapped: false,
   transparent: true,
-  opacity: 0.92,
+  opacity: 0.85,
   blending: AdditiveBlending,
   depthWrite: false,
   side: DoubleSide,
@@ -466,9 +466,9 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
   const rnd = mulberry32(seed);
   const contour = points.map(([x, z]) => new Vector2(x, z));
   const faces = ShapeUtils.triangulateShape(contour, []);
-  const stone = [0.1, 0.098, 0.09];
-  const crest = [0.2, 0.19, 0.17];
-  const valley = [0.045, 0.044, 0.04];
+  const stone = [0.11, 0.115, 0.12];
+  const crest = [0.16, 0.165, 0.17];
+  const valley = [0.055, 0.058, 0.06];
   const rimY = points.map(() => radius * (0.14 + rnd() * 0.1));
   const pos: number[] = [];
   const col: number[] = [];
@@ -511,7 +511,7 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
     const b = points[j] ?? [0, 0];
     const inset = 0.74;
     const y0 = radius * 0.03;
-    const shade = [0.07, 0.08, 0.09];
+    const shade = [0.035, 0.037, 0.04];
     emit(a[0], rimY[i] ?? 0, a[1], stone);
     emit(b[0], rimY[j] ?? 0, b[1], stone);
     emit(b[0] * inset, y0, b[1] * inset, shade);
@@ -535,8 +535,8 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
   body.add(line);
 
   const geos: BufferGeometry[] = [geo, line.geometry];
-  const crackMat = seed % 4 === 0 ? fissureCyan : fissureAmber;
-  const cracks = radius > 2.2 ? 2 : 1;
+  const crackMat = seed % 6 === 0 ? fissureCyan : fissureAmber;
+  const cracks = radius > 1.6 ? 1 : 0;
   for (let k = 0; k < cracks; k++) {
     const edge = points[Math.floor(rnd() * points.length)] ?? [radius, 0];
     const ox = (rnd() - 0.5) * radius * 0.35;
@@ -548,7 +548,7 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
       ox + (edge[0] - ox) * reach,
       oz + (edge[1] - oz) * reach,
       radius * 0.52,
-      Math.max(radius * 0.11, 0.22),
+      Math.max(radius * 0.065, 0.14),
     );
     geos.push(fissure);
     const glow = new Mesh(fissure, crackMat);
@@ -556,7 +556,7 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
     body.add(glow);
   }
 
-  const chipCount = radius > 3.2 ? 4 : radius > 2 ? 3 : 0;
+  const chipCount = radius > 3.4 ? 2 : 0;
   for (let i = 0; i < chipCount; i++) {
     const chip = new Mesh(sharedChipGeo(), chipMat);
     chip.name = "chip";
@@ -630,14 +630,14 @@ export function makeUfo(kind: "large" | "small"): UfoView {
   lathe.computeVertexNormals();
   const shell = new Mesh(
     lathe,
-    saucerMetal(hunter ? 0x2c261f : 0x2b333c, hunter ? 0x1c120c : 0x101820, 0.58, 0.32),
+    saucerMetal(hunter ? 0x3a342e : 0x46505a, hunter ? 0x140e0c : 0x101418, 0.42, 0.5),
   );
   shell.name = "shell";
   hull.add(shell);
 
   const dome = new Mesh(
     new SphereGeometry(radius * 0.3, 7, 5),
-    saucerMetal(hunter ? 0xc4beb4 : 0xd5dee8, hunter ? 0x3a2818 : 0x1c4a58, 0.12, 0.22),
+    saucerMetal(hunter ? 0x4a453e : 0x5c6772, hunter ? 0x1a120e : 0x121c22, 0.28, 0.42),
   );
   dome.scale.y = 0.52;
   dome.position.y = radius * 0.16;
@@ -653,7 +653,7 @@ export function makeUfo(kind: "large" | "small"): UfoView {
 
   const rim = new Mesh(
     new TorusGeometry(radius * 0.98, Math.max(0.055, radius * 0.028), 5, 28),
-    new MeshBasicMaterial({ color: 0xe7eef6, transparent: true, opacity: 0.88, toneMapped: false }),
+    new MeshBasicMaterial({ color: 0x6a737c, transparent: true, opacity: 0.32, toneMapped: false }),
   );
   rim.rotation.x = Math.PI / 2;
   rim.position.y = radius * 0.012;
@@ -673,7 +673,7 @@ export function makeUfo(kind: "large" | "small"): UfoView {
   for (let i = 0; i < lamps; i++) {
     const lamp = new Mesh(
       new BoxGeometry(lampSize, Math.max(0.06, radius * 0.035), lampSize * 0.72),
-      new MeshBasicMaterial({ color: i % 2 === 0 ? accent : 0xf7fbff, toneMapped: false }),
+      new MeshBasicMaterial({ color: accent, toneMapped: false }),
     );
     const a = (i / lamps) * Math.PI * 2;
     lamp.position.set(Math.cos(a) * lampReach, radius * 0.1, Math.sin(a) * lampReach);
@@ -704,7 +704,7 @@ export function makeUfo(kind: "large" | "small"): UfoView {
       map: sharedGlow(),
       color: hunter ? EMBER : 0xffc27a,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.18,
       blending: AdditiveBlending,
       depthWrite: false,
       toneMapped: false,
@@ -712,19 +712,19 @@ export function makeUfo(kind: "large" | "small"): UfoView {
   );
   underglow.name = "underglow";
   underglow.position.y = -radius * 0.22;
-  underglow.scale.setScalar(radius * 2.35);
+  underglow.scale.setScalar(radius * 1.45);
   hull.add(underglow);
 
   const trail = new Group();
   trail.name = "trail";
   root.add(trail);
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 3; i++) {
     const mote = new Sprite(
       new SpriteMaterial({
         map: sharedGlow(),
         color: hunter ? EMBER : ICE,
         transparent: true,
-        opacity: 0.42 - i * 0.08,
+        opacity: 0.22 - i * 0.06,
         blending: AdditiveBlending,
         depthWrite: false,
         toneMapped: false,

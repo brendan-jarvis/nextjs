@@ -132,7 +132,7 @@ export function createGame(opts: {
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const scene = new Scene();
-  scene.background = new Color(0x04060a);
+  scene.background = new Color(0x010204);
 
   const camera = new OrthographicCamera(-40, 40, 40, -40, 0.1, 220);
   camera.up.set(0, 0, -1);
@@ -146,21 +146,19 @@ export function createGame(opts: {
     powerPreference: "high-performance",
     stencil: false,
   });
-  renderer.setClearColor(0x04060a, 1);
+  renderer.setClearColor(0x010204, 1);
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.12;
+  renderer.toneMappingExposure = 0.92;
 
-  const hemi = new HemisphereLight(0xc5d6e6, 0x05070c, 0.55);
-  const key = new DirectionalLight(0xfff4ea, 1.7);
+  const hemi = new HemisphereLight(0x8a94a0, 0x010204, 0.26);
+  const key = new DirectionalLight(0xd8d4cc, 0.95);
   key.position.set(22, 54, 16);
-  const rim = new DirectionalLight(0x8fdfff, 1.15);
+  const rim = new DirectionalLight(0x12343c, 0.22);
   rim.position.set(-34, 26, -28);
-  const kick = new DirectionalLight(0xffb15a, 0.42);
-  kick.position.set(16, 18, 36);
-  const fill = new AmbientLight(0x8ea0b8, 0.14);
-  const engineLight = new PointLight(EMBER, 0, 18, 2);
-  scene.add(hemi, key, rim, kick, fill, engineLight);
+  const fill = new AmbientLight(0x1a222c, 0.08);
+  const engineLight = new PointLight(EMBER, 0, 12, 2);
+  scene.add(hemi, key, rim, fill, engineLight);
 
   const glow = makeGlowTexture();
   scene.add(makeStars());
@@ -764,16 +762,6 @@ export function createGame(opts: {
       rock.x = wrapX(rock.x + rock.vx * dt);
       rock.z = wrapZ(rock.z + rock.vz * dt);
       rock.view.body.rotation.y += dt * (0.22 + (rock.gen + 1) * 0.12);
-      if (!reduceMotion && rock.gen === 0 && Math.random() < dt * 0.1) {
-        burst(
-          rock.x + (Math.random() - 0.5) * rock.radius,
-          rock.z + (Math.random() - 0.5) * rock.radius,
-          Math.random() > 0.65,
-          1,
-          2.4,
-          0.45,
-        );
-      }
     }
   }
 
@@ -1061,7 +1049,7 @@ export function createGame(opts: {
           }
           if (child.name === "underglow") {
             const mat = (child as Sprite).material as SpriteMaterial;
-            mat.opacity = 0.32 + (reduceMotion ? 0 : Math.sin(simTime * (fast ? 10 : 5)) * 0.08) + (charging ? 0.28 : 0);
+            mat.opacity = 0.16 + (reduceMotion ? 0 : Math.sin(simTime * (fast ? 10 : 5)) * 0.04) + (charging ? 0.22 : 0);
           }
           if (child.name === "trail") child.visible = withTrail;
         });
@@ -1140,7 +1128,7 @@ export function createGame(opts: {
     rootEl.style.setProperty("--hurt", hurt.toFixed(3));
     thrustVis = MathUtils.damp(thrustVis, thrusting ? 1 : 0, 10, delta);
     engineLight.position.set(ship.x, 1.6, ship.z);
-    engineLight.intensity = thrustVis * 14;
+    engineLight.intensity = thrustVis * 6;
     if (!reduceMotion) stars.rotation.y += delta * 0.01;
     syncMeshes();
     renderer.render(scene, camera);
