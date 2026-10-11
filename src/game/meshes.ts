@@ -30,7 +30,7 @@ import {
 
 const ICE = 0x6ae4ff;
 const EMBER = 0xff9a3c;
-const HULL = 0x323a42;
+const HULL = 0xc5ced6;
 const VOID = 0x10151c;
 
 export type ShipView = {
@@ -116,11 +116,11 @@ export function makeStars() {
 function hullMaterial() {
   return new MeshStandardMaterial({
     color: HULL,
-    metalness: 0.45,
-    roughness: 0.55,
+    metalness: 0.62,
+    roughness: 0.34,
     flatShading: true,
-    emissive: new Color(0x070c10),
-    emissiveIntensity: 0.2,
+    emissive: new Color(0x24303a),
+    emissiveIntensity: 0.85,
     side: DoubleSide,
   });
 }
@@ -152,7 +152,7 @@ export function makeShip(): ShipView {
   bank.add(canopy);
 
   const nose = new Mesh(
-    new SphereGeometry(0.12, 8, 8),
+    new SphereGeometry(0.18, 8, 8),
     new MeshBasicMaterial({ color: ICE, toneMapped: false }),
   );
   nose.position.set(0, 0.06, -2.55);
