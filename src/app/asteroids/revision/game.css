@@ -14,7 +14,18 @@
   inset: 0;
   background: var(--color-void);
   touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   --hurt: 0;
+}
+.game-root,
+.game-root * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .game-root canvas {
   position: absolute;

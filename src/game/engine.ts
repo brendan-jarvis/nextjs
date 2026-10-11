@@ -1263,6 +1263,10 @@ export function createGame(opts: {
     event.preventDefault();
   }
 
+  function blockCallout(event: Event) {
+    event.preventDefault();
+  }
+
   const ro = new ResizeObserver(() => resize());
   ro.observe(canvas);
   window.addEventListener("keydown", onKeyDown);
@@ -1270,6 +1274,9 @@ export function createGame(opts: {
   window.addEventListener("blur", onBlur);
   document.addEventListener("visibilitychange", onVis);
   rootEl.addEventListener("touchmove", onTouchMove, { passive: false });
+  window.addEventListener("contextmenu", blockCallout, { capture: true });
+  rootEl.addEventListener("selectstart", blockCallout);
+  rootEl.addEventListener("dragstart", blockCallout);
   window.visualViewport?.addEventListener("resize", resize);
 
   for (let i = 0; i < 6; i++) {
@@ -1331,6 +1338,9 @@ export function createGame(opts: {
       window.removeEventListener("blur", onBlur);
       document.removeEventListener("visibilitychange", onVis);
       rootEl.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("contextmenu", blockCallout, { capture: true });
+      rootEl.removeEventListener("selectstart", blockCallout);
+      rootEl.removeEventListener("dragstart", blockCallout);
       window.visualViewport?.removeEventListener("resize", resize);
       audio.dispose();
       clearRocks();
