@@ -486,6 +486,11 @@ export function createGame(opts: {
     }
   }
 
+  function armUfo() {
+    const base = Math.max(8, 14 - wave * 0.4);
+    ufoTimer = base + Math.random() * 5;
+  }
+
   function removeUfo() {
     if (!ufo) return;
     ufo.view.root.removeFromParent();
@@ -493,6 +498,7 @@ export function createGame(opts: {
     releaseUfo(ufo.view);
     ufo = null;
     audio.ufo(false);
+    armUfo();
   }
 
   function spawnUfo() {
