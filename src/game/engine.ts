@@ -132,7 +132,7 @@ export function createGame(opts: {
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const scene = new Scene();
-  scene.background = new Color(0x07090e);
+  scene.background = new Color(0x04060a);
 
   const camera = new OrthographicCamera(-40, 40, 40, -40, 0.1, 220);
   camera.up.set(0, 0, -1);
@@ -146,19 +146,21 @@ export function createGame(opts: {
     powerPreference: "high-performance",
     stencil: false,
   });
-  renderer.setClearColor(0x07090e, 1);
+  renderer.setClearColor(0x04060a, 1);
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.12;
 
-  const hemi = new HemisphereLight(0xc5d4e4, 0x07090e, 0.72);
-  const key = new DirectionalLight(0xfff4ea, 1.45);
-  key.position.set(28, 70, 18);
-  const rim = new DirectionalLight(0x6ae4ff, 0.65);
-  rim.position.set(-36, 28, -40);
-  const fill = new AmbientLight(0x8ea0b8, 0.28);
+  const hemi = new HemisphereLight(0xc5d6e6, 0x05070c, 0.55);
+  const key = new DirectionalLight(0xfff4ea, 1.7);
+  key.position.set(22, 54, 16);
+  const rim = new DirectionalLight(0x8fdfff, 1.15);
+  rim.position.set(-34, 26, -28);
+  const kick = new DirectionalLight(0xffb15a, 0.42);
+  kick.position.set(16, 18, 36);
+  const fill = new AmbientLight(0x8ea0b8, 0.14);
   const engineLight = new PointLight(EMBER, 0, 18, 2);
-  scene.add(hemi, key, rim, fill, engineLight);
+  scene.add(hemi, key, rim, kick, fill, engineLight);
 
   const glow = makeGlowTexture();
   scene.add(makeStars());
@@ -394,8 +396,7 @@ export function createGame(opts: {
   function dropRock(rock: Rock) {
     rock.view.root.removeFromParent();
     for (const ghost of rock.view.ghosts) ghost.removeFromParent();
-    rock.view.geo.dispose();
-    rock.view.lineGeo.dispose();
+    rock.view.geos.forEach((geo) => geo.dispose());
   }
 
   function spawnRock(gen: 0 | 1 | 2, x: number, z: number, vx: number, vz: number) {
@@ -762,7 +763,17 @@ export function createGame(opts: {
       if (!rock.alive) continue;
       rock.x = wrapX(rock.x + rock.vx * dt);
       rock.z = wrapZ(rock.z + rock.vz * dt);
-      rock.view.body.rotation.y += dt * (0.35 + (rock.gen + 1) * 0.16);
+      rock.view.body.rotation.y += dt * (0.22 + (rock.gen + 1) * 0.12);
+      if (!reduceMotion && rock.gen === 0 && Math.random() < dt * 0.1) {
+        burst(
+          rock.x + (Math.random() - 0.5) * rock.radius,
+          rock.z + (Math.random() - 0.5) * rock.radius,
+          Math.random() > 0.65,
+          1,
+          2.4,
+          0.45,
+        );
+      }
     }
   }
 
@@ -974,9 +985,23 @@ export function createGame(opts: {
   function syncMeshes() {
     for (const rock of rocks) {
       layout(rock.view.root, rock.view.ghosts, rock.x, rock.z, rock.radius + 0.8, rock.alive);
+      const spinChips = (root: Object3D) => {
+        root.traverse((child) => {
+          if (child.name !== "chip") return;
+          const base = child.userData.baseY as number;
+          const phase = child.userData.phase as number;
+          if (typeof base !== "number" || typeof phase !== "number") return;
+          if (!reduceMotion) {
+            child.position.y = base + Math.sin(simTime * 1.5 + phase) * rock.radius * 0.045;
+            child.rotation.y = simTime * 0.7 + phase;
+          }
+        });
+      };
+      spinChips(rock.view.root);
       for (const ghost of rock.view.ghosts) {
         const body = ghost.getObjectByName("body");
         if (body) body.quaternion.copy(rock.view.body.quaternion);
+        spinChips(ghost);
       }
     }
 
@@ -1010,14 +1035,39 @@ export function createGame(opts: {
     if (ufo) {
       const fast = ufo.kind === "small";
       const high = reduceMotion || Math.floor(simTime * (fast ? 9 : 5.5)) % 2 === 0;
-      const paint = (obj: Object3D) => {
+      const charging = ufo.fireT < 0.26;
+      const chargeK = charging ? 1 - ufo.fireT / 0.26 : 0;
+      const bob = reduceMotion ? 0 : Math.sin(simTime * (fast ? 3.4 : 2.15)) * 0.07;
+      const bank = reduceMotion ? 0 : MathUtils.clamp(ufo.vz * 0.016, -0.2, 0.2);
+      const yaw = Math.atan2(ufo.vx, ufo.vz);
+      const paint = (obj: Object3D, withTrail: boolean) => {
+        if (withTrail) obj.rotation.y = yaw;
         obj.traverse((child) => {
           if (child.name === "lamp-a") child.visible = reduceMotion || high;
           if (child.name === "lamp-b") child.visible = reduceMotion || !high;
+          if (child.name === "hull") {
+            const base = child.userData.baseY as number;
+            child.position.y = (typeof base === "number" ? base : 0.48) + bob;
+            child.rotation.z = bank;
+            child.rotation.x = bank * 0.35;
+          }
+          if (child.name === "sensor") {
+            const pulse = reduceMotion ? 0 : Math.sin(simTime * (fast ? 8 : 4.2)) * 0.1;
+            child.scale.setScalar(1 + pulse + (charging ? 0.55 : 0));
+          }
+          if (child.name === "charge") {
+            child.visible = charging;
+            child.scale.setScalar(0.72 + chargeK * 0.5);
+          }
+          if (child.name === "underglow") {
+            const mat = (child as Sprite).material as SpriteMaterial;
+            mat.opacity = 0.32 + (reduceMotion ? 0 : Math.sin(simTime * (fast ? 10 : 5)) * 0.08) + (charging ? 0.28 : 0);
+          }
+          if (child.name === "trail") child.visible = withTrail;
         });
       };
-      paint(ufo.view.root);
-      for (const ghost of ufo.view.ghosts) paint(ghost);
+      paint(ufo.view.root, true);
+      for (const ghost of ufo.view.ghosts) paint(ghost, false);
       layout(ufo.view.root, ufo.view.ghosts, ufo.x, ufo.z, ufo.radius + 1.2, true);
     }
 

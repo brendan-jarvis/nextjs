@@ -7,9 +7,9 @@ import {
   ConeGeometry,
   CylinderGeometry,
   DoubleSide,
-  ExtrudeGeometry,
   Float32BufferAttribute,
   Group,
+  LatheGeometry,
   LineBasicMaterial,
   LineLoop,
   Mesh,
@@ -18,12 +18,13 @@ import {
   Object3D,
   Points,
   PointsMaterial,
-  Shape,
+  ShapeUtils,
   SphereGeometry,
   Sprite,
   SpriteMaterial,
   SRGBColorSpace,
   TorusGeometry,
+  Vector2,
   type Material,
 } from "three";
 
@@ -45,14 +46,13 @@ export type RockView = {
   root: Group;
   ghosts: Group[];
   body: Object3D;
-  geo: BufferGeometry;
-  lineGeo: BufferGeometry;
+  geos: BufferGeometry[];
 };
 
 export type UfoView = {
   root: Group;
   ghosts: Group[];
-  ring: Object3D;
+  hull: Group;
 };
 
 export type BulletView = {
@@ -79,21 +79,11 @@ export function makeGlowTexture() {
   return tex;
 }
 
-export function makeShadowTexture() {
-  const size = 128;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const g = canvas.getContext("2d");
-  if (!g) throw new Error("Canvas unavailable");
-  const grad = g.createRadialGradient(64, 64, 8, 64, 64, 64);
-  grad.addColorStop(0, "rgba(0,0,0,0.45)");
-  grad.addColorStop(1, "rgba(0,0,0,0)");
-  g.fillStyle = grad;
-  g.fillRect(0, 0, size, size);
-  const tex = new CanvasTexture(canvas);
-  tex.colorSpace = SRGBColorSpace;
-  return tex;
+let glowTex: CanvasTexture | null = null;
+
+function sharedGlow() {
+  glowTex ??= makeGlowTexture();
+  return glowTex;
 }
 
 export function makeStars() {
@@ -265,19 +255,82 @@ function dartGeometry() {
 }
 
 const rockMat = new MeshStandardMaterial({
-  color: 0x8d8680,
-  roughness: 0.94,
-  metalness: 0.02,
+  color: 0xffffff,
+  vertexColors: true,
+  roughness: 0.62,
+  metalness: 0.22,
   flatShading: true,
+  emissive: new Color(0x0c1014),
+  emissiveIntensity: 0.7,
+  side: DoubleSide,
 });
 rockMat.userData.persist = true;
 
+const chipMat = new MeshStandardMaterial({
+  color: 0x2a3036,
+  roughness: 0.38,
+  metalness: 0.42,
+  flatShading: true,
+  emissive: new Color(0x10141a),
+  emissiveIntensity: 0.35,
+});
+chipMat.userData.persist = true;
+
 const rockLineMat = new LineBasicMaterial({
-  color: 0xe4ddd4,
+  color: 0xaeb8c2,
   transparent: true,
-  opacity: 0.92,
+  opacity: 0.5,
 });
 rockLineMat.userData.persist = true;
+
+const fissureAmber = new MeshBasicMaterial({
+  color: 0xff9a3c,
+  toneMapped: false,
+  transparent: true,
+  opacity: 0.92,
+  blending: AdditiveBlending,
+  depthWrite: false,
+  side: DoubleSide,
+  polygonOffset: true,
+  polygonOffsetFactor: -2,
+  polygonOffsetUnits: -2,
+});
+fissureAmber.userData.persist = true;
+
+const fissureCyan = fissureAmber.clone();
+fissureCyan.color.setHex(0x6ae4ff);
+fissureCyan.userData.persist = true;
+
+let chipGeo: BufferGeometry | null = null;
+
+function sharedChipGeo() {
+  if (chipGeo) return chipGeo;
+  const s = 1;
+  const v = [
+    [0, 0.72 * s, 0.04 * s],
+    [-0.62 * s, -0.28 * s, -0.22 * s],
+    [0.58 * s, -0.18 * s, -0.34 * s],
+    [0.08 * s, -0.34 * s, 0.66 * s],
+    [-0.16 * s, 0.22 * s, 0.18 * s],
+  ];
+  const faces = [
+    [0, 1, 2],
+    [0, 2, 3],
+    [0, 3, 1],
+    [1, 3, 2],
+    [4, 2, 1],
+    [4, 3, 2],
+  ];
+  const positions: number[] = [];
+  for (const f of faces) {
+    for (const i of f) positions.push(...(v[i] ?? [0, 0, 0]));
+  }
+  chipGeo = new BufferGeometry();
+  chipGeo.setAttribute("position", new Float32BufferAttribute(positions, 3));
+  chipGeo.computeVertexNormals();
+  chipGeo.userData.persist = true;
+  return chipGeo;
+}
 
 /** Jagged arcade silhouettes. Unit-ish, normalized to the collision radius. */
 const ROCK_OUTLINES: Array<Array<[number, number]>> = [
@@ -367,28 +420,14 @@ function rockOutline(seed: number, radius: number) {
   return raw.map(([x, z]) => [(flip * x * radius) / max, (z * radius) / max] as [number, number]);
 }
 
-function slabGeometry(points: Array<[number, number]>, depth: number, lift: number, sharp = false) {
-  const shape = new Shape();
-  const first = points[0] ?? [0, 0];
-  shape.moveTo(first[0], -first[1]);
-  for (let i = 1; i < points.length; i++) {
-    const p = points[i];
-    if (!p) continue;
-    shape.lineTo(p[0], -p[1]);
-  }
-  shape.closePath();
-  const geo = new ExtrudeGeometry(shape, {
-    depth,
-    bevelEnabled: !sharp,
-    bevelThickness: depth * 0.22,
-    bevelSize: depth * 0.16,
-    bevelSegments: 1,
-    curveSegments: 1,
-  });
-  geo.rotateX(-Math.PI / 2);
-  geo.translate(0, lift, 0);
-  geo.computeVertexNormals();
-  return geo;
+function mulberry32(seed: number) {
+  let a = seed >>> 0 || 1;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 function loopGeometry(points: Array<[number, number]>, y: number) {
@@ -399,119 +438,311 @@ function loopGeometry(points: Array<[number, number]>, y: number) {
   return geo;
 }
 
-function dressRock(geo: BufferGeometry, lineGeo: BufferGeometry) {
-  const body = new Mesh(geo, rockMat);
+function pushVert(pos: number[], col: number[], x: number, y: number, z: number, tint: number[]) {
+  pos.push(x, y, z);
+  col.push(tint[0] ?? 0.2, tint[1] ?? 0.2, tint[2] ?? 0.22);
+}
+
+function fissureGeometry(ax: number, az: number, bx: number, bz: number, y: number, width: number) {
+  const dx = bx - ax;
+  const dz = bz - az;
+  const len = Math.hypot(dx, dz) || 1;
+  const nx = (-dz / len) * width * 0.5;
+  const nz = (dx / len) * width * 0.5;
+  const data = [
+    ax + nx, y, az + nz,
+    bx + nx, y, bz + nz,
+    bx - nx, y, bz - nz,
+    ax + nx, y, az + nz,
+    bx - nx, y, bz - nz,
+    ax - nx, y, az - nz,
+  ];
+  const geo = new BufferGeometry();
+  geo.setAttribute("position", new Float32BufferAttribute(data, 3));
+  return geo;
+}
+
+function buildRock(points: Array<[number, number]>, radius: number, seed: number) {
+  const rnd = mulberry32(seed);
+  const contour = points.map(([x, z]) => new Vector2(x, z));
+  const faces = ShapeUtils.triangulateShape(contour, []);
+  const stone = [0.1, 0.098, 0.09];
+  const crest = [0.2, 0.19, 0.17];
+  const valley = [0.045, 0.044, 0.04];
+  const rimY = points.map(() => radius * (0.14 + rnd() * 0.1));
+  const pos: number[] = [];
+  const col: number[] = [];
+
+  const emit = (x: number, y: number, z: number, tint: number[]) => pushVert(pos, col, x, y, z, tint);
+
+  if (faces.length === 0) {
+    for (let i = 1; i < points.length - 1; i++) faces.push([0, i, i + 1]);
+  }
+
+  for (const face of faces) {
+    const ia = face[0] ?? 0;
+    const ib = face[1] ?? 0;
+    const ic = face[2] ?? 0;
+    const pa = points[ia] ?? [0, 0];
+    const pb = points[ib] ?? [0, 0];
+    const pc = points[ic] ?? [0, 0];
+    const mx = (pa[0] + pb[0] + pc[0]) / 3;
+    const mz = (pa[1] + pb[1] + pc[1]) / 3;
+    const raised = rnd() > 0.28;
+    const peak = radius * (raised ? 0.26 + rnd() * 0.28 : 0.08 + rnd() * 0.08);
+    const tint = raised ? (rnd() > 0.55 ? crest : stone) : valley;
+    const tri = [
+      [pa[0], rimY[ia] ?? 0, pa[1], stone],
+      [pb[0], rimY[ib] ?? 0, pb[1], stone],
+      [mx, peak, mz, tint],
+      [pb[0], rimY[ib] ?? 0, pb[1], stone],
+      [pc[0], rimY[ic] ?? 0, pc[1], stone],
+      [mx, peak, mz, tint],
+      [pc[0], rimY[ic] ?? 0, pc[1], stone],
+      [pa[0], rimY[ia] ?? 0, pa[1], stone],
+      [mx, peak, mz, tint],
+    ] as const;
+    for (const [x, y, z, c] of tri) emit(x, y, z, [...c]);
+  }
+
+  for (let i = 0; i < points.length; i++) {
+    const j = (i + 1) % points.length;
+    const a = points[i] ?? [0, 0];
+    const b = points[j] ?? [0, 0];
+    const inset = 0.74;
+    const y0 = radius * 0.03;
+    const shade = [0.07, 0.08, 0.09];
+    emit(a[0], rimY[i] ?? 0, a[1], stone);
+    emit(b[0], rimY[j] ?? 0, b[1], stone);
+    emit(b[0] * inset, y0, b[1] * inset, shade);
+    emit(a[0], rimY[i] ?? 0, a[1], stone);
+    emit(b[0] * inset, y0, b[1] * inset, shade);
+    emit(a[0] * inset, y0, a[1] * inset, shade);
+  }
+
+  const geo = new BufferGeometry();
+  geo.setAttribute("position", new Float32BufferAttribute(pos, 3));
+  geo.setAttribute("color", new Float32BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+
+  const body = new Group();
   body.name = "body";
-  body.add(new LineLoop(lineGeo, rockLineMat));
-  return body;
+  const mesh = new Mesh(geo, rockMat);
+  mesh.name = "shell";
+  body.add(mesh);
+
+  const line = new LineLoop(loopGeometry(points, radius * 0.5), rockLineMat);
+  body.add(line);
+
+  const geos: BufferGeometry[] = [geo, line.geometry];
+  const crackMat = seed % 4 === 0 ? fissureCyan : fissureAmber;
+  const cracks = radius > 2.2 ? 2 : 1;
+  for (let k = 0; k < cracks; k++) {
+    const edge = points[Math.floor(rnd() * points.length)] ?? [radius, 0];
+    const ox = (rnd() - 0.5) * radius * 0.35;
+    const oz = (rnd() - 0.5) * radius * 0.35;
+    const reach = 0.42 + rnd() * 0.28;
+    const fissure = fissureGeometry(
+      ox,
+      oz,
+      ox + (edge[0] - ox) * reach,
+      oz + (edge[1] - oz) * reach,
+      radius * 0.52,
+      Math.max(radius * 0.11, 0.22),
+    );
+    geos.push(fissure);
+    const glow = new Mesh(fissure, crackMat);
+    glow.name = "fissure";
+    body.add(glow);
+  }
+
+  const chipCount = radius > 3.2 ? 4 : radius > 2 ? 3 : 0;
+  for (let i = 0; i < chipCount; i++) {
+    const chip = new Mesh(sharedChipGeo(), chipMat);
+    chip.name = "chip";
+    const ang = rnd() * Math.PI * 2;
+    const dist = radius * (1.02 + rnd() * 0.22);
+    const y = radius * (0.18 + rnd() * 0.42);
+    chip.position.set(Math.cos(ang) * dist, y, Math.sin(ang) * dist);
+    chip.scale.setScalar(radius * (0.13 + rnd() * 0.07));
+    chip.rotation.set(rnd() * 2, rnd() * 4, rnd() * 2);
+    chip.userData.baseY = y;
+    chip.userData.phase = rnd() * Math.PI * 2;
+    body.add(chip);
+  }
+
+  return { body, geos };
 }
 
 export function makeRock(seed: number, radius: number): RockView {
   const pts = rockOutline(seed, radius);
-  const depth = radius * 0.26;
-  const lift = radius * 0.08;
-  const geo = slabGeometry(pts, depth, lift);
-  const lineGeo = loopGeometry(pts, lift + depth + radius * 0.06);
-  const body = dressRock(geo, lineGeo);
+  const { body, geos } = buildRock(pts, radius, seed);
   const root = new Group();
   root.add(body);
   const ghosts = [0, 1, 2].map(() => {
     const g = new Group();
-    g.add(dressRock(geo, lineGeo));
+    g.add(body.clone());
     g.visible = false;
     return g;
   });
-  return { root, ghosts, body, geo, lineGeo };
+  return { root, ghosts, body, geos };
 }
 
-/** Arcade saucer, side-on: dome, shoulder, pointed rim, flat belly. */
-const SAUCER_RAW: Array<[number, number]> = [
-  [0, 8],
-  [4, 4],
-  [8, 4],
-  [12, 0],
-  [8, -4],
-  [-8, -4],
-  [-12, 0],
-  [-8, 4],
-  [-4, 4],
-];
+function saucerMetal(color: number, emissive: number, metalness: number, roughness: number) {
+  return new MeshStandardMaterial({
+    color,
+    metalness,
+    roughness,
+    flatShading: true,
+    emissive: new Color(emissive),
+    emissiveIntensity: 0.42,
+  });
+}
 
-function saucerPoints(radius: number) {
-  let sx = 0;
-  let sz = 0;
-  for (const [x, z] of SAUCER_RAW) {
-    sx += x;
-    sz += z;
-  }
-  sx /= SAUCER_RAW.length;
-  sz /= SAUCER_RAW.length;
-  const shifted = SAUCER_RAW.map(([x, z]) => [x - sx, z - sz] as [number, number]);
-  let max = 1;
-  for (const [x, z] of shifted) max = Math.max(max, Math.hypot(x, z));
-  const scale = radius / max;
-  return {
-    pts: shifted.map(([x, z]) => [x * scale, z * scale] as [number, number]),
-    windowZ: (0 - sz) * scale,
-  };
+function saucerProfile(radius: number) {
+  const h = radius * 0.42;
+  const r = radius;
+  return [
+    new Vector2(0.02 * r, 0.9 * h),
+    new Vector2(0.2 * r, 0.74 * h),
+    new Vector2(0.38 * r, 0.46 * h),
+    new Vector2(0.56 * r, 0.28 * h),
+    new Vector2(0.78 * r, 0.14 * h),
+    new Vector2(1 * r, 0.02 * h),
+    new Vector2(0.8 * r, -0.2 * h),
+    new Vector2(0.46 * r, -0.34 * h),
+    new Vector2(0.06 * r, -0.14 * h),
+  ];
 }
 
 export function makeUfo(kind: "large" | "small"): UfoView {
   const radius = kind === "large" ? 2.7 : 1.55;
   const hunter = kind === "small";
-  const { pts, windowZ } = saucerPoints(radius);
-  const stroke = pts.map(([x, z]) => [x * 1.14, z * 1.14] as [number, number]);
-  const depth = Math.max(0.22, radius * 0.14);
-  const lift = 0.35;
-  const ink = new MeshBasicMaterial({
-    color: hunter ? 0xffb15a : 0xf4fbff,
-    toneMapped: false,
-  });
-  const fill = new MeshStandardMaterial({
-    color: hunter ? 0x3a2418 : 0x1a242e,
-    metalness: 0.4,
-    roughness: 0.55,
-    flatShading: true,
-    emissive: new Color(hunter ? 0x4a220c : 0x123040),
-    emissiveIntensity: 0.45,
-  });
-  const edge = new LineBasicMaterial({ color: hunter ? 0xffd7a8 : 0xffffff });
+  const accent = hunter ? EMBER : ICE;
   const root = new Group();
-  root.add(new Mesh(slabGeometry(stroke, depth * 0.55, lift, true), ink));
-  const body = new Mesh(slabGeometry(pts, depth, lift + 0.04, true), fill);
-  body.name = "body";
-  body.add(new LineLoop(loopGeometry(pts, lift + depth + 0.08), edge));
-  root.add(body);
+  const hull = new Group();
+  hull.name = "hull";
+  hull.userData.baseY = 0.48;
+  hull.position.y = 0.48;
+  root.add(hull);
 
-  const bar = new Mesh(new BoxGeometry(radius * 1.35, 0.08, Math.max(0.08, radius * 0.045)), ink);
-  bar.position.set(0, lift + depth + 0.1, windowZ);
-  root.add(bar);
+  const lathe = new LatheGeometry(saucerProfile(radius), hunter ? 10 : 12);
+  lathe.computeVertexNormals();
+  const shell = new Mesh(
+    lathe,
+    saucerMetal(hunter ? 0x2c261f : 0x2b333c, hunter ? 0x1c120c : 0x101820, 0.58, 0.32),
+  );
+  shell.name = "shell";
+  hull.add(shell);
 
-  const lamps = hunter ? 3 : 4;
+  const dome = new Mesh(
+    new SphereGeometry(radius * 0.3, 7, 5),
+    saucerMetal(hunter ? 0xc4beb4 : 0xd5dee8, hunter ? 0x3a2818 : 0x1c4a58, 0.12, 0.22),
+  );
+  dome.scale.y = 0.52;
+  dome.position.y = radius * 0.16;
+  hull.add(dome);
+
+  const seam = new Mesh(
+    new TorusGeometry(radius * 0.72, Math.max(0.035, radius * 0.018), 4, 20),
+    saucerMetal(0x14181e, 0x0a0e12, 0.4, 0.55),
+  );
+  seam.rotation.x = Math.PI / 2;
+  seam.position.y = radius * 0.05;
+  hull.add(seam);
+
+  const rim = new Mesh(
+    new TorusGeometry(radius * 0.98, Math.max(0.055, radius * 0.028), 5, 28),
+    new MeshBasicMaterial({ color: 0xe7eef6, transparent: true, opacity: 0.88, toneMapped: false }),
+  );
+  rim.rotation.x = Math.PI / 2;
+  rim.position.y = radius * 0.012;
+  hull.add(rim);
+
+  const sensor = new Mesh(
+    new SphereGeometry(Math.max(0.16, radius * 0.1), 8, 6),
+    new MeshBasicMaterial({ color: accent, toneMapped: false }),
+  );
+  sensor.name = "sensor";
+  sensor.position.y = radius * 0.3;
+  hull.add(sensor);
+
+  const lamps = hunter ? 6 : 8;
+  const lampReach = radius * 0.5;
+  const lampSize = Math.max(0.36, radius * 0.28);
   for (let i = 0; i < lamps; i++) {
     const lamp = new Mesh(
-      new SphereGeometry(hunter ? 0.16 : 0.2, 10, 8),
-      new MeshBasicMaterial({
-        color: i % 2 === 0 ? (hunter ? EMBER : ICE) : 0xfff6e8,
+      new BoxGeometry(lampSize, Math.max(0.06, radius * 0.035), lampSize * 0.72),
+      new MeshBasicMaterial({ color: i % 2 === 0 ? accent : 0xf7fbff, toneMapped: false }),
+    );
+    const a = (i / lamps) * Math.PI * 2;
+    lamp.position.set(Math.cos(a) * lampReach, radius * 0.1, Math.sin(a) * lampReach);
+    lamp.rotation.y = -a;
+    lamp.name = i % 2 === 0 ? "lamp-a" : "lamp-b";
+    hull.add(lamp);
+  }
+
+  const charge = new Mesh(
+    new TorusGeometry(radius * 0.5, Math.max(0.04, radius * 0.02), 6, 24),
+    new MeshBasicMaterial({
+      color: accent,
+      transparent: true,
+      opacity: 0.95,
+      blending: AdditiveBlending,
+      depthWrite: false,
+      toneMapped: false,
+    }),
+  );
+  charge.name = "charge";
+  charge.visible = false;
+  charge.rotation.x = Math.PI / 2;
+  charge.position.y = radius * 0.12;
+  hull.add(charge);
+
+  const underglow = new Sprite(
+    new SpriteMaterial({
+      map: sharedGlow(),
+      color: hunter ? EMBER : 0xffc27a,
+      transparent: true,
+      opacity: 0.4,
+      blending: AdditiveBlending,
+      depthWrite: false,
+      toneMapped: false,
+    }),
+  );
+  underglow.name = "underglow";
+  underglow.position.y = -radius * 0.22;
+  underglow.scale.setScalar(radius * 2.35);
+  hull.add(underglow);
+
+  const trail = new Group();
+  trail.name = "trail";
+  root.add(trail);
+  for (let i = 0; i < 4; i++) {
+    const mote = new Sprite(
+      new SpriteMaterial({
+        map: sharedGlow(),
+        color: hunter ? EMBER : ICE,
+        transparent: true,
+        opacity: 0.42 - i * 0.08,
+        blending: AdditiveBlending,
+        depthWrite: false,
         toneMapped: false,
       }),
     );
-    lamp.name = i % 2 === 0 ? "lamp-a" : "lamp-b";
-    const t = i / (lamps - 1);
-    lamp.position.set((t - 0.5) * radius * 1.15, lift + depth + 0.22, windowZ);
-    root.add(lamp);
+    mote.position.set(0, 0.35, -(radius * 0.42) * (i + 1.2));
+    mote.scale.setScalar(radius * (0.42 - i * 0.06));
+    mote.name = "trail";
+    trail.add(mote);
   }
 
-  const ring = new Group();
-  ring.name = "ring";
-  root.add(ring);
-
   const ghosts = [0, 1, 2].map(() => {
-    const g = root.clone();
+    const g = new Group();
+    g.add(hull.clone());
     g.visible = false;
     return g;
   });
-  return { root, ghosts, ring };
+  return { root, ghosts, hull };
 }
 
 export function releaseUfo(view: UfoView) {
