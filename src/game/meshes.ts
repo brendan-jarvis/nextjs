@@ -277,29 +277,18 @@ const chipMat = new MeshStandardMaterial({
 chipMat.userData.persist = true;
 
 const rockLineMat = new LineBasicMaterial({
-  color: 0x5c6772,
+  color: 0xb7c0ca,
   transparent: true,
-  opacity: 0.42,
+  opacity: 0.72,
 });
 rockLineMat.userData.persist = true;
 
-const fissureAmber = new MeshBasicMaterial({
-  color: 0xff9a3c,
-  toneMapped: false,
+const rockLineDim = new LineBasicMaterial({
+  color: 0x7d8792,
   transparent: true,
-  opacity: 0.85,
-  blending: AdditiveBlending,
-  depthWrite: false,
-  side: DoubleSide,
-  polygonOffset: true,
-  polygonOffsetFactor: -2,
-  polygonOffsetUnits: -2,
+  opacity: 0.4,
 });
-fissureAmber.userData.persist = true;
-
-const fissureCyan = fissureAmber.clone();
-fissureCyan.color.setHex(0x6ae4ff);
-fissureCyan.userData.persist = true;
+rockLineDim.userData.persist = true;
 
 let chipGeo: BufferGeometry | null = null;
 
@@ -443,32 +432,14 @@ function pushVert(pos: number[], col: number[], x: number, y: number, z: number,
   col.push(tint[0] ?? 0.2, tint[1] ?? 0.2, tint[2] ?? 0.22);
 }
 
-function fissureGeometry(ax: number, az: number, bx: number, bz: number, y: number, width: number) {
-  const dx = bx - ax;
-  const dz = bz - az;
-  const len = Math.hypot(dx, dz) || 1;
-  const nx = (-dz / len) * width * 0.5;
-  const nz = (dx / len) * width * 0.5;
-  const data = [
-    ax + nx, y, az + nz,
-    bx + nx, y, bz + nz,
-    bx - nx, y, bz - nz,
-    ax + nx, y, az + nz,
-    bx - nx, y, bz - nz,
-    ax - nx, y, az - nz,
-  ];
-  const geo = new BufferGeometry();
-  geo.setAttribute("position", new Float32BufferAttribute(data, 3));
-  return geo;
-}
-
 function buildRock(points: Array<[number, number]>, radius: number, seed: number) {
   const rnd = mulberry32(seed);
+  const tier = radius > 3.5 ? "big" : radius > 2 ? "mid" : "small";
   const contour = points.map(([x, z]) => new Vector2(x, z));
   const faces = ShapeUtils.triangulateShape(contour, []);
-  const stone = [0.11, 0.115, 0.12];
-  const crest = [0.16, 0.165, 0.17];
-  const valley = [0.055, 0.058, 0.06];
+  const stone = tier === "big" ? [0.26, 0.27, 0.29] : tier === "mid" ? [0.16, 0.165, 0.175] : [0.035, 0.036, 0.038];
+  const crest = tier === "big" ? [0.38, 0.39, 0.41] : tier === "mid" ? [0.22, 0.225, 0.23] : [0.05, 0.051, 0.053];
+  const valley = stone.map((channel) => channel * 0.55);
   const rimY = points.map(() => radius * (0.14 + rnd() * 0.1));
   const pos: number[] = [];
   const col: number[] = [];
@@ -530,30 +501,13 @@ function buildRock(points: Array<[number, number]>, radius: number, seed: number
   const mesh = new Mesh(geo, rockMat);
   mesh.name = "shell";
   body.add(mesh);
+  const geos: BufferGeometry[] = [geo];
 
-  const line = new LineLoop(loopGeometry(points, radius * 0.5), rockLineMat);
-  body.add(line);
-
-  const geos: BufferGeometry[] = [geo, line.geometry];
-  const crackMat = seed % 6 === 0 ? fissureCyan : fissureAmber;
-  const cracks = radius > 1.6 ? 1 : 0;
-  for (let k = 0; k < cracks; k++) {
-    const edge = points[Math.floor(rnd() * points.length)] ?? [radius, 0];
-    const ox = (rnd() - 0.5) * radius * 0.35;
-    const oz = (rnd() - 0.5) * radius * 0.35;
-    const reach = 0.42 + rnd() * 0.28;
-    const fissure = fissureGeometry(
-      ox,
-      oz,
-      ox + (edge[0] - ox) * reach,
-      oz + (edge[1] - oz) * reach,
-      radius * 0.52,
-      Math.max(radius * 0.065, 0.14),
-    );
-    geos.push(fissure);
-    const glow = new Mesh(fissure, crackMat);
-    glow.name = "fissure";
-    body.add(glow);
+  const lineMat = tier === "big" ? rockLineMat : rockLineDim;
+  if (tier !== "small") {
+    const line = new LineLoop(loopGeometry(points, radius * 0.5), lineMat);
+    body.add(line);
+    geos.push(line.geometry);
   }
 
   const chipCount = radius > 3.4 ? 2 : 0;
