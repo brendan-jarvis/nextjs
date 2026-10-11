@@ -60,6 +60,7 @@ type Rock = {
   gen: 0 | 1 | 2;
   radius: number;
   alive: boolean;
+  cool: number;
   view: RockView;
 };
 
@@ -397,7 +398,7 @@ export function createGame(opts: {
     rock.view.geos.forEach((geo) => geo.dispose());
   }
 
-  function spawnRock(gen: 0 | 1 | 2, x: number, z: number, vx: number, vz: number) {
+  function spawnRock(gen: 0 | 1 | 2, x: number, z: number, vx: number, vz: number, cool = 0) {
     const radius = RADII[gen];
     const view = makeRock((Math.random() * 1e9) | 0, radius);
     view.body.rotation.y = Math.random() * Math.PI * 2;
@@ -411,6 +412,7 @@ export function createGame(opts: {
       gen,
       radius,
       alive: true,
+      cool,
       view,
     });
   }
@@ -554,7 +556,7 @@ export function createGame(opts: {
     }
   }
 
-  function destroyRock(rock: Rock, by: "player" | "ufo") {
+  function destroyRock(rock: Rock, by: "player" | "ufo" | "impact") {
     if (!rock.alive) return;
     rock.alive = false;
     if (by === "player") {
@@ -564,8 +566,11 @@ export function createGame(opts: {
       grantLife();
     }
     burst(rock.x, rock.z, false, rock.gen === 0 ? 16 : 10, 8 + rock.gen * 2, 0.4);
-    audio.explode(rock.gen === 0);
-    if (rock.gen === 0) {
+    if (by === "impact") audio.explode(false);
+    else audio.explode(rock.gen === 0);
+    if (by === "impact") {
+      addShake(0.18);
+    } else if (rock.gen === 0) {
       addShake(0.7);
       hitStop = Math.max(hitStop, 0.045);
       hurt = Math.min(1, hurt + 0.28);
@@ -586,10 +591,75 @@ export function createGame(opts: {
           rock.z + Math.cos(angle) * 1.6,
           Math.sin(angle) * speed,
           Math.cos(angle) * speed,
+          0.65,
         );
       }
     }
     emit();
+  }
+
+  function rockMass(rock: Rock) {
+    return rock.gen === 0 ? 4 : rock.gen === 1 ? 2 : 1;
+  }
+
+  function clampRockSpeed(rock: Rock) {
+    const speed = Math.hypot(rock.vx, rock.vz);
+    if (speed <= 30) return;
+    rock.vx = (rock.vx / speed) * 30;
+    rock.vz = (rock.vz / speed) * 30;
+  }
+
+  function resolveRockHits() {
+    for (let i = 0; i < rocks.length; i++) {
+      const a = rocks[i];
+      if (!a?.alive) continue;
+      for (let j = i + 1; j < rocks.length; j++) {
+        const b = rocks[j];
+        if (!b?.alive) continue;
+        let dx = wrapDeltaX(b.x, a.x);
+        let dz = wrapDeltaZ(b.z, a.z);
+        const reach = a.radius + b.radius;
+        const d2 = dx * dx + dz * dz;
+        if (d2 >= reach * reach) continue;
+        let dist = Math.sqrt(d2);
+        if (dist < 1e-4) {
+          dx = 1;
+          dz = 0;
+          dist = 1;
+        }
+        const nx = dx / dist;
+        const nz = dz / dist;
+        const overlap = reach - dist;
+        a.x = wrapX(a.x - nx * overlap * 0.5);
+        a.z = wrapZ(a.z - nz * overlap * 0.5);
+        b.x = wrapX(b.x + nx * overlap * 0.5);
+        b.z = wrapZ(b.z + nz * overlap * 0.5);
+        const velN = (b.vx - a.vx) * nx + (b.vz - a.vz) * nz;
+        if (velN < 0) {
+          const ma = rockMass(a);
+          const mb = rockMass(b);
+          const impulse = (-1.86 * velN) / (1 / ma + 1 / mb);
+          a.vx -= (impulse * nx) / ma;
+          a.vz -= (impulse * nz) / ma;
+          b.vx += (impulse * nx) / mb;
+          b.vz += (impulse * nz) / mb;
+          clampRockSpeed(a);
+          clampRockSpeed(b);
+        }
+        const closing = Math.max(0, -velN);
+        const larger = a.gen <= b.gen ? a : b;
+        if (larger.gen < 2 && larger.cool <= 0 && closing > 8 && Math.random() < 0.42) {
+          a.cool = Math.max(a.cool, 0.45);
+          b.cool = Math.max(b.cool, 0.45);
+          burst(a.x + nx * a.radius, a.z + nz * a.radius, true, 8, 7, 0.28);
+          destroyRock(larger, "impact");
+        } else {
+          a.cool = Math.max(a.cool, 0.16);
+          b.cool = Math.max(b.cool, 0.16);
+          if (closing > 4) burst(a.x + nx * a.radius, a.z + nz * a.radius, false, 3, 4, 0.18);
+        }
+      }
+    }
   }
 
   function killShip() {
@@ -761,6 +831,7 @@ export function createGame(opts: {
       if (!rock.alive) continue;
       rock.x = wrapX(rock.x + rock.vx * dt);
       rock.z = wrapZ(rock.z + rock.vz * dt);
+      if (rock.cool > 0) rock.cool -= dt;
       rock.view.body.rotation.y += dt * (0.22 + (rock.gen + 1) * 0.12);
     }
   }
@@ -902,6 +973,8 @@ export function createGame(opts: {
       if (bullet.age > BULLET_LIFE) bullet.alive = false;
     }
 
+    resolveRockHits();
+
     for (const bullet of bullets) {
       if (!bullet.alive) continue;
       if (ufo && bullet.owner === "player") {
@@ -944,8 +1017,16 @@ export function createGame(opts: {
       for (const rock of rocks) {
         if (!rock.alive) continue;
         if (dist2(ufo.x, ufo.z, rock.x, rock.z) < (rock.radius + ufo.radius) ** 2) {
+          const dx = wrapDeltaX(rock.x, ufo.x);
+          const dz = wrapDeltaZ(rock.z, ufo.z);
+          const dist = Math.hypot(dx, dz) || 1;
+          rock.vx += (dx / dist) * 7;
+          rock.vz += (dz / dist) * 7;
+          clampRockSpeed(rock);
           burst(ufo.x, ufo.z, true, 14, 9, 0.35);
           audio.explode(false);
+          if (rock.gen < 2 && rock.cool <= 0 && Math.random() < 0.5) destroyRock(rock, "impact");
+          else rock.cool = Math.max(rock.cool, 0.4);
           removeUfo();
           break;
         }
