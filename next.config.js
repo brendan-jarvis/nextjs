@@ -9,6 +9,10 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: false,
+  // The dev server listens on 0.0.0.0. Browsers that open 127.0.0.1 are
+  // treated as a different dev origin, and Next.js 16 then blocks the
+  // client chunks (the asteroids page stays on "Loading...").
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   async headers() {
     return [
       {

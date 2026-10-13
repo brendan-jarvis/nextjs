@@ -82,6 +82,7 @@ bun run start
 - Sign-in needs `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`. Auth.js reads the provider pairs by convention.
 - CSP is customized in `next.config.js`. Development allows `'unsafe-eval'` so webpack's dev runtime can run; production does not.
 - Next.js 16 turns Turbopack on by default, and Contentlayer's webpack config makes `next dev` exit. The `dev` and `build` scripts pass `--webpack`. Do not drop that flag.
+- `next.config.js` sets `allowedDevOrigins` for `127.0.0.1` and `localhost`. The dev server binds `0.0.0.0`, and without that allowlist Next.js 16 blocks client chunks when the browser host is `127.0.0.1`.
 - `metadataBase` is `https://brendan-jarvis.vercel.app`. There is no custom domain.
 - Worktrees have caused confusion historically — stick to `main` branch + git.
 - No tests; rely on lint + build + manual dev verification.
