@@ -33,14 +33,17 @@ const config = {
           },
           // 'unsafe-inline' stays in script-src because Next.js inlines its
           // bootstrap and RSC payload scripts; nonces would make every page
-          // dynamic. MDX renders on the server, so 'unsafe-eval' is not needed.
-          // form-action allows the OAuth redirects that follow the Auth.js
-          // sign-in form.
+          // dynamic. Webpack's dev runtime evaluates scripts, so 'unsafe-eval'
+          // is added only while NODE_ENV is development. Production CSP does
+          // not allow it. form-action allows the OAuth redirects that follow
+          // the Auth.js sign-in form.
           {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
+              process.env.NODE_ENV === "development"
+                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+                : "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",

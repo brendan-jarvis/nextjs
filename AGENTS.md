@@ -8,8 +8,8 @@ Personal blog + portfolio site. Static MDX content (blog posts, projects) via Co
 
 ## Tech Stack
 
-- **Next.js 15** (App Router, React 19)
-- **Bun 1.3.14** (package manager + runtime)
+- **Next.js 16** (App Router, React 19)
+- **Bun 1.4.2** (package manager + runtime; `packageManager` in package.json)
 - **Contentlayer2** + MDX for content
 - **tRPC** (type-safe API) + **Drizzle ORM** + **postgres.js**
 - **Auth.js** (next-auth v5, GitHub + Google providers, Drizzle adapter, database sessions)
@@ -80,7 +80,8 @@ bun run start
 - Env validation is strict and runs early (in next.config.js). Use `SKIP_ENV_VALIDATION=1` frequently.
 - Comments are loaded in the browser by post title. `auth()` runs on the tRPC route, not in the root layout, so pages stay static.
 - Sign-in needs `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`. Auth.js reads the provider pairs by convention.
-- CSP is customized in `next.config.js`.
+- CSP is customized in `next.config.js`. Development allows `'unsafe-eval'` so webpack's dev runtime can run; production does not.
+- Next.js 16 turns Turbopack on by default, and Contentlayer's webpack config makes `next dev` exit. The `dev` and `build` scripts pass `--webpack`. Do not drop that flag.
 - `metadataBase` is `https://brendan-jarvis.vercel.app`. There is no custom domain.
 - Worktrees have caused confusion historically — stick to `main` branch + git.
 - No tests; rely on lint + build + manual dev verification.
