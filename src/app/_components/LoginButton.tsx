@@ -8,7 +8,7 @@ export function LoginButton() {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return <span className="text-muted-foreground px-3 py-2 text-sm">…</span>;
+    return <span className="px-3 py-2 text-sm text-muted-foreground">…</span>;
   }
 
   if (session?.user) {

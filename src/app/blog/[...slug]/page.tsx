@@ -75,7 +75,10 @@ export default async function PostPage({ params }: PostPageProps) {
     <article className="container max-w-3xl py-6 lg:py-10">
       <Link
         href="/blog"
-        className={cn(buttonVariants({ variant: "ghost" }), "print-hide mb-4 flex w-fit")}
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "print-hide mb-4 flex w-fit",
+        )}
       >
         <ChevronLeft className="mr-2 h-4 w-4" />
         See all posts
@@ -84,7 +87,7 @@ export default async function PostPage({ params }: PostPageProps) {
         {post.date && (
           <time
             dateTime={new Date(post.date).toISOString()}
-            className="text-muted-foreground block text-sm"
+            className="block text-sm text-muted-foreground"
           >
             Published on {format(new Date(post.date), "dd MMM yyyy")}
           </time>
@@ -99,7 +102,7 @@ export default async function PostPage({ params }: PostPageProps) {
           alt={post.title}
           width={720}
           height={405}
-          className="bg-muted my-8 rounded-md border transition-colors"
+          className="my-8 rounded-md border bg-muted transition-colors"
           priority
         />
       )}
