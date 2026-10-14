@@ -18,16 +18,16 @@ Borrowed from three public systems, then applied here:
 
 ## Colour
 
-| Role | Name | Hex | Use |
-| --- | --- | --- | --- |
-| Ink | bj-navy | `#16223B` | Text, mark, primary surface |
-| Paper | warm paper | `#F7F4EF` | Page ground |
-| Signal | citrus-blaze | `#EA6E4B` | Button, link, focus, sweep |
-| Spectrum | sunny-yellow | `#FAF26F` | Rule only. Never type |
-| Spectrum | seafoam-green | `#ABE3D2` | Rule, and the writing label |
-| Spectrum | orchid-pink | `#D653A9` | Rule, and one project label |
-| Spectrum | soft-lilac | `#CDA8E2` | Rule, and large display only |
-| Inverse | night-plum | `#3A1E66` | Dark ground, if it ships |
+| Role     | Name          | Hex       | Use                          |
+| -------- | ------------- | --------- | ---------------------------- |
+| Ink      | bj-navy       | `#16223B` | Text, mark, primary surface  |
+| Paper    | warm paper    | `#F7F4EF` | Page ground                  |
+| Signal   | citrus-blaze  | `#EA6E4B` | Button, link, focus, sweep   |
+| Spectrum | sunny-yellow  | `#FAF26F` | Rule only. Never type        |
+| Spectrum | seafoam-green | `#ABE3D2` | Rule, and the writing label  |
+| Spectrum | orchid-pink   | `#D653A9` | Rule, and one project label  |
+| Spectrum | soft-lilac    | `#CDA8E2` | Rule, and large display only |
+| Inverse  | night-plum    | `#3A1E66` | Dark ground, if it ships     |
 
 Body text is navy on paper. Citrus type is allowed at 16px and above, on paper only. Buttons use paper text on a citrus fill. A project may take one spectrum colour as its label. Seasoned takes seafoam. It does not recolour the page. Flat bands only — do not blend the bar.
 
@@ -37,14 +37,14 @@ Dark mode, if it ships, is plum as the ground and paper as the text. Until it sh
 
 Newsreader for the name and titles. Newsreader italic for one phrase a page (“Kia ora”). Outfit for body, nav, and buttons. IBM Plex Mono for dates, hex, and labels.
 
-| Role | Face | Size | Weight |
-| --- | --- | --- | --- |
-| Display | Newsreader | 36–48 | 400 |
-| Display italic | Newsreader italic | 20–28 | 400 |
-| Title | Newsreader | 22–28 | 400 |
-| Body | Outfit | 16–18 web | 400 |
-| UI | Outfit | 14–15 | 500 |
-| Meta | IBM Plex Mono | 11–12 | 400 |
+| Role           | Face              | Size      | Weight |
+| -------------- | ----------------- | --------- | ------ |
+| Display        | Newsreader        | 36–48     | 400    |
+| Display italic | Newsreader italic | 20–28     | 400    |
+| Title          | Newsreader        | 22–28     | 400    |
+| Body           | Outfit            | 16–18 web | 400    |
+| UI             | Outfit            | 14–15     | 500    |
+| Meta           | IBM Plex Mono     | 11–12     | 400    |
 
 No black weights. No Inter on a rebuilt page. Do not fall back to Fraunces.
 

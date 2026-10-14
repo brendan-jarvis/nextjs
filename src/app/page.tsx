@@ -81,7 +81,9 @@ export default async function Home() {
         <p className="mt-4 font-mono text-[11px] tracking-wide text-muted-foreground">
           NEW ZEALAND · ELIGIBLE TO WORK IN AUSTRALIA
         </p>
-        <p className="mt-6 font-display text-2xl italic text-citrus-blaze">Kia ora.</p>
+        <p className="mt-6 font-display text-2xl text-citrus-blaze italic">
+          Kia ora.
+        </p>
         <p className="mx-auto mt-2 max-w-2xl text-lg">
           I am a full-stack web developer with commercial C#/.NET, Dynamics 365,
           and React experience.
@@ -101,7 +103,10 @@ export default async function Home() {
               <div className="flex-1 p-6">
                 <h3 className="text-lg">{item.title}</h3>
                 {item.paragraphs.map((paragraph) => (
-                  <p key={paragraph} className="mt-2 text-sm text-muted-foreground">
+                  <p
+                    key={paragraph}
+                    className="mt-2 text-sm text-muted-foreground"
+                  >
                     {paragraph}
                   </p>
                 ))}
@@ -125,11 +130,16 @@ export default async function Home() {
         {projects.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2">
             {projects.map((project, index) => (
-              <article key={project._id} className="relative flex h-full flex-col bg-card">
+              <article
+                key={project._id}
+                className="relative flex h-full flex-col bg-card"
+              >
                 <div className="flex flex-1 flex-col p-6">
                   <p
                     className="font-mono text-[10px] tracking-wide"
-                    style={{ color: projectColors[index % projectColors.length] }}
+                    style={{
+                      color: projectColors[index % projectColors.length],
+                    }}
                   >
                     PROJECT
                   </p>
@@ -145,9 +155,14 @@ export default async function Home() {
                   <Link href={project.slug} className="absolute inset-0">
                     <span className="sr-only">View {project.title}</span>
                   </Link>
-                  <ProjectLinks project={project} className="relative z-10 mt-auto pt-4" />
+                  <ProjectLinks
+                    project={project}
+                    className="relative z-10 mt-auto pt-4"
+                  />
                 </div>
-                <SpectrumRule color={projectColors[index % projectColors.length]!} />
+                <SpectrumRule
+                  color={projectColors[index % projectColors.length]!}
+                />
               </article>
             ))}
           </div>
