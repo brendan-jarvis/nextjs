@@ -22,7 +22,9 @@ export const env = createEnv({
     AUTH_GOOGLE_ID: z.string().min(1).optional(),
     AUTH_GOOGLE_SECRET: z.string().min(1).optional(),
     // Vercel sends `Authorization: Bearer $CRON_SECRET` to cron routes
-    // when this is set. Optional: /api/keep-alive works without it.
+    // when this is set. /api/keep-alive returns 401 without it, so the
+    // route is never public. Optional at build time so preview deploys
+    // without the secret still build.
     CRON_SECRET: z.string().min(16).optional(),
   },
   client: {},

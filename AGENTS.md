@@ -84,6 +84,6 @@ bun run start
 - `metadataBase` is `https://brendan-jarvis.vercel.app`. There is no custom domain.
 - Worktrees have caused confusion historically — stick to `main` branch + git.
 - No tests; rely on lint + build + manual dev verification.
-- `drizzle/0000_nextjs_baseline.sql` describes tables that already exist in Supabase. Do not run `drizzle-kit migrate` or `push` against production without review.
+- `drizzle/0000_nextjs_baseline.sql` describes tables that already exist in Supabase. Do not run `drizzle-kit migrate` or `push` against production without review. `drizzle/0001_heartbeat.sql` is the keep-alive table; nothing applies it on deploy, so it has to be run by hand in the Supabase SQL editor.
 
 Update this file when major stack/architecture changes occur.

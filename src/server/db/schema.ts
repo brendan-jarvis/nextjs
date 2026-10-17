@@ -14,10 +14,14 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
- * Every table lives in the Supabase `nextjs` schema. The tables already
- * exist there with row level security enabled and no policies, and the
- * schema is not exposed to the Data API. The definitions below match
- * the live tables exactly, so no migration is needed.
+ * Every table lives in the Supabase `nextjs` schema. The schema is not
+ * exposed to the Data API. Row level security is enabled with no policies,
+ * and the app role (`nextjs_app`) has BYPASSRLS.
+ *
+ * Posts, comments, projects, and the Auth.js tables already exist in
+ * Supabase. `drizzle/0000_nextjs_baseline.sql` describes them; do not
+ * re-apply it. `heartbeat` is created by `drizzle/0001_heartbeat.sql` and
+ * is written only by `/api/keep-alive`.
  *
  * Every table calls .enableRLS(). Without it, `drizzle-kit push` would
  * emit `ALTER TABLE ... DISABLE ROW LEVEL SECURITY` for each table.
@@ -181,3 +185,14 @@ users.enableRLS();
 accounts.enableRLS();
 sessions.enableRLS();
 verificationTokens.enableRLS();
+
+/**
+ * Supabase free-tier keep-alive. `/api/keep-alive` inserts, updates, and
+ * deletes rows here and nowhere else. No page or tRPC procedure reads it.
+ */
+export const heartbeat = nextjs
+  .table("heartbeat", {
+    id: serial("id").primaryKey(),
+    touchedAt: timestamp("touched_at").defaultNow().notNull(),
+  })
+  .enableRLS();
