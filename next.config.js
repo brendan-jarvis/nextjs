@@ -9,6 +9,10 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: false,
+  // The dev server listens on 0.0.0.0. Browsers that open 127.0.0.1 are
+  // treated as a different dev origin, and Next.js 16 then blocks the
+  // client chunks (the asteroids page stays on "Loading...").
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   async headers() {
     return [
       {
@@ -33,14 +37,17 @@ const config = {
           },
           // 'unsafe-inline' stays in script-src because Next.js inlines its
           // bootstrap and RSC payload scripts; nonces would make every page
-          // dynamic. MDX renders on the server, so 'unsafe-eval' is not needed.
-          // form-action allows the OAuth redirects that follow the Auth.js
-          // sign-in form.
+          // dynamic. Webpack's dev runtime evaluates scripts, so 'unsafe-eval'
+          // is added only while NODE_ENV is development. Production CSP does
+          // not allow it. form-action allows the OAuth redirects that follow
+          // the Auth.js sign-in form.
           {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
+              process.env.NODE_ENV === "development"
+                ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+                : "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "contentlayer2 build && next build --webpack",
-    "dev": "concurrently \"contentlayer2 dev\" \"next dev\"",
+    "dev": "concurrently \"contentlayer2 dev\" \"next dev --webpack\"",
     "lint": "eslint src",
     "start": "next start",
     "seed": "bun run src/server/db/seed.ts"
