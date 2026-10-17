@@ -83,6 +83,7 @@ Dynamic data (blog comments, projects metadata) is stored in Supabase Postgres a
 - Run `bun run seed` to populate tables from the MDX files in `content/`. Comments attach to a `posts` row found by title, so posting a comment fails until posts are seeded. The seed script deletes all comments, posts, and projects first.
 - Comments support create / edit / delete for the signed-in author. Sign-in is GitHub or Google via Auth.js. Sessions are stored in Supabase Postgres.
 - See `src/server/db/schema.ts` and `src/server/api/routers/content.ts`.
+- Supabase Free pauses projects that go quiet. `vercel.json` calls `/api/keep-alive` four times a day. Each call writes one row in `nextjs.heartbeat` (insert, update, delete) and leaves that table with a single row. Nothing on the site reads it. The route requires `CRON_SECRET` (`Authorization: Bearer`). Deploy does not apply SQL: run `drizzle/0001_heartbeat.sql` once in the Supabase SQL editor. Do not run `drizzle-kit migrate`; `0000_nextjs_baseline.sql` recreates tables that already exist.
 
 ## Security Notes
 
