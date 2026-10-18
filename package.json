@@ -8,7 +8,11 @@
     "dev": "concurrently \"contentlayer2 dev\" \"next dev\"",
     "lint": "eslint src",
     "start": "next start",
-    "seed": "bun run src/server/db/seed.ts"
+    "seed": "bun run src/server/db/seed.ts",
+    "format": "bun fmt",
+    "format:check": "bun fmt --check",
+    "format:prettier": "prettier --write .",
+    "format:prettier:check": "prettier --check ."
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",

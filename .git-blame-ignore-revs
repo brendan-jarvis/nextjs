@@ -1,0 +1,5 @@
+# Formatting-only commits. GitHub blame skips these automatically; locally:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Format the repo with bun fmt
+75dc45baaf5dad1894dd2038cdb3ee69a4afd503
