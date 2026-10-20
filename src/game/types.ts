@@ -20,6 +20,7 @@ export type GameApi = {
   togglePause: () => void;
   unlockAudio: () => void;
   setAction: (name: ActionName, down: boolean) => void;
+  setStick: (x: number, y: number, held: boolean) => void;
   tapHyper: () => void;
   setSound: (on: boolean) => void;
   setHaptics: (on: boolean) => void;

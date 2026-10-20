@@ -1,16 +1,13 @@
 "use client";
 
 import "./game.css";
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode, type RefObject } from "react";
 import {
   Crosshair,
-  Flame,
   Navigation,
   Orbit,
   Pause,
   Play,
-  RotateCcw,
-  RotateCw,
   Smartphone,
   Volume2,
   VolumeX,
@@ -212,7 +209,7 @@ export default function Home() {
               </button>
             </div>
             <p className="hint hint-keys">A D turn · W thrust · Space fire · H jump · P pause</p>
-            <p className="hint hint-touch">Turn with the left keys. Thrust, fire, and jump live on the right.</p>
+            <p className="hint hint-touch">Left stick aims and thrusts. Fire and jump sit on the right.</p>
             <p className="fine">Four shots at a time. Saucers keep score. Hyperspace is a gamble.</p>
           </section>
         </div>
@@ -231,14 +228,7 @@ export default function Home() {
       ) : null}
 
       <div className="deck">
-        <div className="cluster">
-          <Hold name="left" label="Rotate left" gameRef={gameRef}>
-            <RotateCcw size={22} />
-          </Hold>
-          <Hold name="right" label="Rotate right" gameRef={gameRef}>
-            <RotateCw size={22} />
-          </Hold>
-        </div>
+        <Stick gameRef={gameRef} />
         <div className="cluster">
           <div className="stack">
             <button
@@ -252,13 +242,10 @@ export default function Home() {
             >
               <Orbit size={18} />
             </button>
-            <Hold name="thrust" label="Thrust" className="thrust" gameRef={gameRef}>
-              <Flame size={22} />
+            <Hold name="fire" label="Fire" className="fire" gameRef={gameRef}>
+              <Crosshair size={26} />
             </Hold>
           </div>
-          <Hold name="fire" label="Fire" className="fire" gameRef={gameRef}>
-            <Crosshair size={26} />
-          </Hold>
         </div>
       </div>
 
@@ -267,6 +254,61 @@ export default function Home() {
         {hud.phase === "over" ? `Game over. Score ${hud.score}.` : ""}
       </p>
     </main>
+  );
+}
+
+function Stick({ gameRef }: { gameRef: RefObject<GameApi | null> }) {
+  const baseRef = useRef<HTMLDivElement>(null);
+  const [knob, setKnob] = useState({ x: 0, y: 0, hot: false });
+
+  function aim(event: PointerEvent<HTMLDivElement>) {
+    const el = baseRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const radius = rect.width * 0.32;
+    let dx = event.clientX - (rect.left + rect.width / 2);
+    let dy = event.clientY - (rect.top + rect.height / 2);
+    const mag = Math.hypot(dx, dy);
+    const clamped = Math.min(mag, radius);
+    if (mag > 0) {
+      dx = (dx / mag) * clamped;
+      dy = (dy / mag) * clamped;
+    }
+    const nx = radius > 0 ? dx / radius : 0;
+    const ny = radius > 0 ? -dy / radius : 0;
+    setKnob({ x: dx, y: dy, hot: Math.hypot(nx, ny) > 0.18 });
+    gameRef.current?.setStick(nx, ny, true);
+  }
+
+  function release() {
+    setKnob({ x: 0, y: 0, hot: false });
+    gameRef.current?.setStick(0, 0, false);
+  }
+
+  return (
+    <div
+      ref={baseRef}
+      className="stick"
+      data-hot={knob.hot ? "1" : "0"}
+      role="slider"
+      aria-label="Move"
+      aria-valuemin={-1}
+      aria-valuemax={1}
+      aria-valuetext={knob.hot ? "Thrusting" : "Centered"}
+      onPointerDown={(event) => {
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        aim(event);
+      }}
+      onPointerMove={(event) => {
+        if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+        aim(event);
+      }}
+      onPointerUp={release}
+      onPointerCancel={release}
+    >
+      <span className="stick-knob" style={{ transform: `translate(${knob.x}px, ${knob.y}px)` }} />
+    </div>
   );
 }
 

@@ -196,6 +196,10 @@ export function createGame(opts: {
 
   const keys = new Set<string>();
   const actions = { left: false, right: false, thrust: false, fire: false };
+  let stickX = 0;
+  let stickY = 0;
+  let stickOn = false;
+  let thrustPower = 0;
   let steerOverride: number | null = null;
   let gamepadArmed = false;
 
@@ -781,12 +785,30 @@ export function createGame(opts: {
     if (keys.has("KeyA") || keys.has("ArrowLeft") || actions.left) turn += 1;
     if (keys.has("KeyD") || keys.has("ArrowRight") || actions.right) turn -= 1;
     if (steerOverride !== null) turn = steerOverride;
-    else if (tiltOn) turn += tiltSteer;
+    else if (tiltOn && !stickOn) turn += tiltSteer;
     turn = MathUtils.clamp(turn, -1, 1);
     readGamepad(turn);
+
+    let aim: number | null = null;
+    let thrustScale = 1;
+    if (stickOn) {
+      const mag = Math.hypot(stickX, stickY);
+      if (mag > 0.18) {
+        const sx = stickX / mag;
+        const sz = -stickY / mag;
+        aim = Math.atan2(-sx, -sz);
+        thrustScale = Math.min(1, (mag - 0.18) / 0.82);
+      } else {
+        thrustScale = 0;
+      }
+    }
+
+    const keyThrust = keys.has("KeyW") || keys.has("ArrowUp") || actions.thrust || gamepadTurn.thrust;
     return {
-      turn: gamepadTurn.used ? MathUtils.clamp(turn + gamepadTurn.turn, -1, 1) : turn,
-      thrust: keys.has("KeyW") || keys.has("ArrowUp") || actions.thrust || gamepadTurn.thrust,
+      turn: stickOn ? 0 : gamepadTurn.used ? MathUtils.clamp(turn + gamepadTurn.turn, -1, 1) : turn,
+      thrust: stickOn ? thrustScale > 0.02 : keyThrust,
+      thrustScale: stickOn ? thrustScale : 1,
+      aim,
       fire: keys.has("Space") || actions.fire || gamepadTurn.fire,
     };
   }
@@ -919,14 +941,23 @@ export function createGame(opts: {
       audio.ufo(false);
     }
 
-    const input = ship.dead ? { turn: 0, thrust: false, fire: false } : readInput();
+    const input = ship.dead
+      ? { turn: 0, thrust: false, fire: false, thrustScale: 0, aim: null as number | null }
+      : readInput();
     if (!ship.dead) {
-      ship.yaw += input.turn * TURN * dt;
+      if (input.aim !== null) {
+        const delta = Math.atan2(Math.sin(input.aim - ship.yaw), Math.cos(input.aim - ship.yaw));
+        const maxStep = 16 * dt;
+        ship.yaw += Math.abs(delta) <= maxStep ? delta : Math.sign(delta) * maxStep;
+      } else {
+        ship.yaw += input.turn * TURN * dt;
+      }
       const fx = -Math.sin(ship.yaw);
       const fz = -Math.cos(ship.yaw);
       if (input.thrust) {
-        ship.vx += fx * ACCEL * dt;
-        ship.vz += fz * ACCEL * dt;
+        const power = input.thrustScale;
+        ship.vx += fx * ACCEL * power * dt;
+        ship.vz += fz * ACCEL * power * dt;
         const speed = Math.hypot(ship.vx, ship.vz);
         if (speed > MAX_SPEED) {
           ship.vx = (ship.vx / speed) * MAX_SPEED;
@@ -940,6 +971,7 @@ export function createGame(opts: {
       if (ship.invuln > 0) ship.invuln -= dt;
       if (input.fire) tryFire();
       thrusting = input.thrust;
+      thrustPower = input.thrust ? input.thrustScale : 0;
       if (input.thrust) {
         sparkT -= dt;
         if (sparkT <= 0) {
@@ -949,6 +981,7 @@ export function createGame(opts: {
       }
     } else {
       thrusting = false;
+      thrustPower = 0;
       if (respawnT > 0) respawnT -= dt;
       else if (ending || lives <= 0) {
         phase = "over";
@@ -1190,7 +1223,7 @@ export function createGame(opts: {
     camera.left = -halfX;
     camera.right = halfX;
     camera.updateProjectionMatrix();
-    const deck = narrow ? 150 : 0;
+    const deck = narrow ? 176 : 0;
     const hud = 92;
     const biasPx = (deck - hud) / 2;
     viewShiftZ = (biasPx / h) * (camera.top - camera.bottom);
@@ -1207,7 +1240,7 @@ export function createGame(opts: {
     camera.lookAt(sx, 0, z);
     hurt *= Math.exp(-5.5 * delta);
     rootEl.style.setProperty("--hurt", hurt.toFixed(3));
-    thrustVis = MathUtils.damp(thrustVis, thrusting ? 1 : 0, 10, delta);
+    thrustVis = MathUtils.damp(thrustVis, ship.dead ? 0 : thrustPower, 10, delta);
     engineLight.position.set(ship.x, 1.6, ship.z);
     engineLight.intensity = thrustVis * 6;
     if (!reduceMotion) stars.rotation.y += delta * 0.01;
@@ -1326,6 +1359,10 @@ export function createGame(opts: {
     actions.right = false;
     actions.thrust = false;
     actions.fire = false;
+    stickOn = false;
+    stickX = 0;
+    stickY = 0;
+    thrustPower = 0;
     audio.thrust(false);
     thrusting = false;
   }
@@ -1387,6 +1424,12 @@ export function createGame(opts: {
       if (!down) return;
       if (name === "fire") tryFire();
       else haptic("tick");
+    },
+    setStick: (x: number, y: number, held: boolean) => {
+      stickX = MathUtils.clamp(x, -1, 1);
+      stickY = MathUtils.clamp(y, -1, 1);
+      stickOn = held;
+      if (!held) thrustPower = 0;
     },
     tapHyper: () => tryHyper(),
     setSound: (on: boolean) => {

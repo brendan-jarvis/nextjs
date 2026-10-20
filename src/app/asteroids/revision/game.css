@@ -356,6 +356,35 @@
   opacity: 0;
   pointer-events: none;
 }
+.game-root .stick {
+  width: 8.75rem;
+  height: 8.75rem;
+  position: relative;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-ice) 35%, var(--color-line));
+  background:
+    radial-gradient(circle at center, transparent 0 34%, color-mix(in srgb, var(--color-line) 70%, transparent) 35% 36%, transparent 37%),
+    color-mix(in srgb, var(--color-glass) 62%, transparent);
+  backdrop-filter: blur(14px);
+  touch-action: none;
+  pointer-events: none;
+}
+.game-root .stick-knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3rem;
+  height: 3rem;
+  margin: -1.5rem 0 0 -1.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-ice) 45%, var(--color-line));
+  background: color-mix(in srgb, var(--color-glass) 88%, var(--color-ice));
+  box-shadow: 0 8px 18px rgb(0 0 0 / 0.35);
+}
+.game-root .stick[data-hot="1"] .stick-knob {
+  background: color-mix(in srgb, var(--color-ice) 62%, var(--color-glass));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--color-ice) 45%, transparent);
+}
 .game-root .cluster {
   display: flex;
   align-items: flex-end;
@@ -414,7 +443,8 @@
 .game-root[data-phase="play"] .deck {
   opacity: 1;
 }
-.game-root[data-phase="play"] .pad {
+.game-root[data-phase="play"] .pad,
+.game-root[data-phase="play"] .stick {
   pointer-events: auto;
 }
 .game-root[data-phase="play"] .legend {
