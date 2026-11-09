@@ -152,13 +152,29 @@ interface MdxProps {
   code: string;
 }
 
+type MdxComponent = ReturnType<typeof getMDXComponent>;
+
+// Stable component identity for a compiled source string. Creating it inside
+// Mdx would remount the article on every render.
+const mdxComponentCache = new Map<string, MdxComponent>();
+
+function componentForCode(code: string): MdxComponent {
+  const cached = mdxComponentCache.get(code);
+  if (cached) return cached;
+  const created = getMDXComponent(code);
+  mdxComponentCache.set(code, created);
+  return created;
+}
+
 // A server component: the compiled MDX is evaluated (with new Function) on
 // the server only, so the browser CSP does not need 'unsafe-eval'.
 export function Mdx({ code }: MdxProps) {
-  const Component = getMDXComponent(code);
+  const Component = componentForCode(code);
 
   return (
     <div className="mdx">
+      {/* Cached by source above. The rule still treats this as a new component. */}
+      {/* eslint-disable-next-line react-hooks/static-components -- cached by source */}
       <Component components={components} />
     </div>
   );

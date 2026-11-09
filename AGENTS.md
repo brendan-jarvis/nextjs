@@ -81,6 +81,7 @@ bun run start
 ## Key Gotchas & Architecture
 
 - Env validation is strict and runs early (in next.config.js). Use `SKIP_ENV_VALIDATION=1` frequently.
+- `typescript` is `@typescript/typescript6` (6.0.2) so typescript-eslint can import the compiler API. TypeScript 7.0 has no compiler API, and typescript-eslint does not support it. TypeScript 7 is installed as `@typescript/native` (`npm:typescript@7.0.2`); `tsc` is that compiler. Do not put TypeScript 7 back on the `typescript` name until typescript-eslint supports its API.
 - Comments are loaded in the browser by post title. `auth()` runs on the tRPC route, not in the root layout, so pages stay static.
 - Sign-in needs `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`. Auth.js reads the provider pairs by convention.
 - CSP is customized in `next.config.js`.

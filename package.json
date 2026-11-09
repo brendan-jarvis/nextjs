@@ -56,7 +56,6 @@
     "zod": "4.6.6"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.7",
     "@next/eslint-plugin-next": "16.4.1",
     "@tailwindcss/typography": "^0.5.20",
     "@types/eslint": "^9.6.1",
@@ -78,7 +77,8 @@
     "rehype-slug": "^6.0.0",
     "remark": "^15.0.1",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
+    "@typescript/native": "npm:typescript@7.0.2",
+    "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-eslint": "^8.71.1"
   },
   "ct3aMetadata": {
