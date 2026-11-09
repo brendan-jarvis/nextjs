@@ -3,13 +3,7 @@ import { FileText, Mail, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { contact } from "@/lib/site";
 
-function BrandIcon({
-  path,
-  className,
-}: {
-  path: string;
-  className?: string;
-}) {
+function BrandIcon({ path, className }: { path: string; className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -76,10 +70,7 @@ export function ContactLinks({ className }: { className?: string }) {
   return (
     <nav
       aria-label="Contact"
-      className={cn(
-        "flex flex-wrap justify-start gap-1.5 sm:gap-2",
-        className,
-      )}
+      className={cn("flex flex-wrap justify-start gap-1.5 sm:gap-2", className)}
     >
       {links.map(({ href, label, icon: Icon, newTab, title, srHint }) => (
         <a

@@ -55,7 +55,14 @@ export async function generateMetadata({
       publishedTime: project.date,
       images: project.image
         ? [{ url: project.image }]
-        : [{ url: "/brand/og.png", width: 1200, height: 630, alt: project.title }],
+        : [
+            {
+              url: "/brand/og.png",
+              width: 1200,
+              height: 630,
+              alt: project.title,
+            },
+          ],
     },
   };
 }
@@ -86,7 +93,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {project.date && (
           <time
             dateTime={new Date(project.date).toISOString()}
-            className="text-muted-foreground block text-sm"
+            className="block text-sm text-muted-foreground"
           >
             Published on {format(new Date(project.date), "dd MMM yyyy")}
           </time>
@@ -114,7 +121,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           alt={project.title}
           height={500}
           width={500}
-          className="bg-muted my-8 aspect-square rounded-md border object-cover transition-transform hover:scale-105"
+          className="my-8 aspect-square rounded-md border bg-muted object-cover transition-transform hover:scale-105"
           priority
         />
       )}

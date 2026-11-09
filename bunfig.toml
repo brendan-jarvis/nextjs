@@ -1,0 +1,4 @@
+# Tailwind v4 theme lives in this stylesheet. Without it, custom utilities
+# (text-muted-foreground, bg-card, font-display, …) sort as unknown classes.
+[fmt.sortTailwindcss]
+stylesheet = "./src/styles/globals.css"

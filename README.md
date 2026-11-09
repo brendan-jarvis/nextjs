@@ -16,7 +16,7 @@ A personal blog and portfolio built with Next.js 15, featuring static MDX conten
 ## Getting Started
 
 ```bash
-# Install dependencies (uses Bun)
+# Install dependencies (Bun 1.4.4; see package.json and .bun-version)
 bun install
 
 # Set up environment variables
@@ -92,6 +92,17 @@ Dynamic data (blog comments, projects metadata) is stored in Supabase Postgres a
 - Sign-in is Auth.js with the GitHub and Google providers. Comment writes use a protected tRPC procedure and `session.user.id`. There is no auth middleware, so pages stay static.
 - Run `bun audit` / `bun update` regularly. Some moderate vulns are in transitive deps of the build-time `contentlayer2` tool.
 - Keep secrets out of git (`.env` and `.env*.local` are ignored; only `.env.example` is committed).
+
+## Formatting
+
+Code is formatted with Bun's built-in formatter (`bun fmt`), not Prettier. Bun is pinned to 1.4.4 in `package.json` (`packageManager` and `engines`), `.bun-version`, and CI.
+
+```bash
+bun run format        # rewrite files
+bun run format:check  # bun fmt --check
+```
+
+CI (`.github/workflows/format.yml`) runs `bun fmt --check` on every pull request and on pushes to `main`. The job fails when a file is unformatted. Tailwind class sorting is on, and it reads the theme from `src/styles/globals.css` (`bunfig.toml`) so custom utilities sort with the rest of the classes.
 
 ## License
 
