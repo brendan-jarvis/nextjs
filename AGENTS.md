@@ -9,7 +9,7 @@ Personal blog + portfolio site. Static MDX content (blog posts, projects) via Co
 ## Tech Stack
 
 - **Next.js 15** (App Router, React 19)
-- **Bun 1.3.14** (package manager + runtime)
+- **Bun 1.4.4** (package manager + runtime; pinned in `packageManager`, `engines`, and `.bun-version`)
 - **Contentlayer2** + MDX for content
 - **tRPC** (type-safe API) + **Drizzle ORM** + **postgres.js**
 - **Auth.js** (next-auth v5, GitHub + Google providers, Drizzle adapter, database sessions)
@@ -17,7 +17,7 @@ Personal blog + portfolio site. Static MDX content (blog posts, projects) via Co
 - **Tailwind v4** + shadcn/ui
 - **TypeScript** (strict)
 
-Key files: `src/env.js` (strict env validation, supports SKIP_ENV_VALIDATION=1), `src/lib/site.ts` (canonical URL and default metadata), `next.config.js` (CSP), `contentlayer.config.js`.
+Key files: `src/env.js` (strict env validation, supports SKIP_ENV_VALIDATION=1), `src/lib/site.ts` (canonical URL and default metadata), `next.config.js` (CSP), `contentlayer.config.js`, `bunfig.toml` (formatter; Tailwind class sorting uses `src/styles/globals.css`).
 
 ## High-Level Structure
 
@@ -48,6 +48,8 @@ cp .env.example .env            # Fill real keys
 SKIP_ENV_VALIDATION=1 bun run dev     # Dev (contentlayer + next)
 bun run build                         # contentlayer2 build && next build
 bun run lint                          # eslint src
+bun run format                        # bun fmt
+bun run format:check                  # bun fmt --check (blocking in CI)
 bun run seed                          # Seed DB from MDX + test data
 bun run start
 ```
@@ -70,7 +72,8 @@ bun run start
 - Use branches for features (`git checkout -b ...`), not worktrees.
 - Never hardcode secrets. Use `env.*` or `process.env` with SKIP for builds.
 - For DB/auth changes: respect the server-only model. Session tokens stay in Postgres. Do not add client-side writes.
-- Prefer Bun commands. Update package.json with `"packageManager": "bun@..."` if changing.
+- Prefer Bun commands. Bun is pinned to 1.4.4 (`packageManager`, `engines`, `.bun-version`, and `.github/workflows/format.yml`). Update every pin together.
+- Format with `bun fmt` (`bun run format`). Do not add Prettier. CI fails on `bun fmt --check`.
 - Keep changes minimal and focused. Update relevant docs (README) when adding features.
 - Test manually via `bun run dev` (no automated test suite exists).
 - When editing UI (e.g. highlights): maintain support for CSS color vars (`--sweep-color`) and hover replay patterns.
