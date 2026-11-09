@@ -61,12 +61,12 @@ export function Comments({ postTitle }: CommentsProps) {
 
   return (
     <div className="mt-12 w-full">
-      <h2 className="bg-seafoam-green mb-6 text-2xl font-semibold tracking-tight">
+      <h2 className="mb-6 bg-seafoam-green text-2xl font-semibold tracking-tight">
         Comments
       </h2>
 
       {isLoading ? (
-        <p className="text-muted-foreground text-sm">Loading comments...</p>
+        <p className="text-sm text-muted-foreground">Loading comments...</p>
       ) : comments && comments.length > 0 ? (
         <div className="space-y-4">
           {comments.map((comment) => {
@@ -79,7 +79,7 @@ export function Comments({ postTitle }: CommentsProps) {
             const isEditing = editingId === comment.id;
 
             return (
-              <div key={comment.id} className="bg-card rounded-lg border p-4">
+              <div key={comment.id} className="rounded-lg border bg-card p-4">
                 {isEditing ? (
                   <form
                     onSubmit={(event) => {
@@ -91,9 +91,11 @@ export function Comments({ postTitle }: CommentsProps) {
                     }}
                   >
                     <textarea
-                      className="bg-background w-full resize-none rounded-md border p-3 text-sm focus:ring-2 focus:outline-none"
+                      className="w-full resize-none rounded-md border bg-background p-3 text-sm focus:ring-2 focus:outline-none"
                       value={editingContent}
-                      onChange={(event) => setEditingContent(event.target.value)}
+                      onChange={(event) =>
+                        setEditingContent(event.target.value)
+                      }
                       rows={3}
                       maxLength={2000}
                     />
@@ -122,7 +124,7 @@ export function Comments({ postTitle }: CommentsProps) {
                     {comment.content}
                   </div>
                 )}
-                <div className="text-muted-foreground mt-2 flex items-center gap-2 text-xs">
+                <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
                   <span>by {comment.authorName ?? comment.authorId}</span>
                   <span>•</span>
                   <time dateTime={created.toISOString()}>
@@ -133,7 +135,7 @@ export function Comments({ postTitle }: CommentsProps) {
                     <>
                       <button
                         type="button"
-                        className="hover:text-foreground underline"
+                        className="underline hover:text-foreground"
                         onClick={() => {
                           setEditingId(comment.id);
                           setEditingContent(comment.content);
@@ -146,7 +148,7 @@ export function Comments({ postTitle }: CommentsProps) {
                         <>
                           <button
                             type="button"
-                            className="hover:text-foreground underline"
+                            className="underline hover:text-foreground"
                             disabled={deleteComment.isPending}
                             onClick={() =>
                               deleteComment.mutate({ id: comment.id })
@@ -156,7 +158,7 @@ export function Comments({ postTitle }: CommentsProps) {
                           </button>
                           <button
                             type="button"
-                            className="hover:text-foreground underline"
+                            className="underline hover:text-foreground"
                             onClick={() => setPendingDeleteId(null)}
                           >
                             Cancel
@@ -165,7 +167,7 @@ export function Comments({ postTitle }: CommentsProps) {
                       ) : (
                         <button
                           type="button"
-                          className="hover:text-foreground underline"
+                          className="underline hover:text-foreground"
                           onClick={() => setPendingDeleteId(comment.id)}
                         >
                           Delete
@@ -179,7 +181,7 @@ export function Comments({ postTitle }: CommentsProps) {
           })}
         </div>
       ) : (
-        <p className="text-muted-foreground text-sm">No comments yet.</p>
+        <p className="text-sm text-muted-foreground">No comments yet.</p>
       )}
 
       {session?.user ? (
@@ -191,7 +193,7 @@ export function Comments({ postTitle }: CommentsProps) {
           }}
         >
           <textarea
-            className="bg-background w-full resize-none rounded-md border p-3 text-sm focus:ring-2 focus:outline-none"
+            className="w-full resize-none rounded-md border bg-background p-3 text-sm focus:ring-2 focus:outline-none"
             placeholder="Write a comment..."
             value={newComment}
             onChange={(event) => setNewComment(event.target.value)}
@@ -200,9 +202,9 @@ export function Comments({ postTitle }: CommentsProps) {
             disabled={createComment.isPending}
           />
           <div className="flex items-center justify-between gap-3">
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-muted-foreground">
               Commenting as{" "}
-              <span className="text-foreground font-medium">
+              <span className="font-medium text-foreground">
                 {session.user.name ?? session.user.email ?? "you"}
               </span>
             </p>
@@ -221,7 +223,7 @@ export function Comments({ postTitle }: CommentsProps) {
           </div>
         </form>
       ) : (
-        <p className="text-muted-foreground mt-4 text-sm">
+        <p className="mt-4 text-sm text-muted-foreground">
           <button
             type="button"
             className="underline"

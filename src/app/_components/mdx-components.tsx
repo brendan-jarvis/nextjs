@@ -85,7 +85,7 @@ const components = {
   blockquote: ({ className, ...props }: { className?: string }) => (
     <blockquote
       className={cn(
-        "[&>*]:text-muted-foreground mt-6 border-l-2 pl-6 italic",
+        "mt-6 border-l-2 pl-6 italic [&>*]:text-muted-foreground",
         className,
       )}
       {...props}
@@ -106,7 +106,7 @@ const components = {
   ),
   tr: ({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
     <tr
-      className={cn("even:bg-muted m-0 border-t p-0", className)}
+      className={cn("m-0 border-t p-0 even:bg-muted", className)}
       {...props}
     />
   ),

@@ -66,7 +66,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${newsreader.variable} ${plex.variable} font-sans`}>
+      <body
+        className={`${outfit.variable} ${newsreader.variable} ${plex.variable} font-sans`}
+      >
         <Providers>
           <main className="flex min-h-screen flex-col items-center">
             <Nav />

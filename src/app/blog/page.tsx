@@ -37,7 +37,10 @@ export default async function BlogPage() {
       {posts?.length ? (
         <div className="grid gap-10 sm:grid-cols-2">
           {posts.map((post, index) => (
-            <article key={post._id} className="relative flex h-full flex-col bg-card">
+            <article
+              key={post._id}
+              className="relative flex h-full flex-col bg-card"
+            >
               {post.image && (
                 <Image
                   src={post.image}

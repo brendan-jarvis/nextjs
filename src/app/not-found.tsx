@@ -8,8 +8,8 @@ export default function NotFound() {
       </p>
       <h1 className="mt-2 text-4xl">Page not found</h1>
       <p className="mt-3 max-w-md text-muted-foreground">
-        That link does not go anywhere. The page may have moved, or the
-        address is wrong.
+        That link does not go anywhere. The page may have moved, or the address
+        is wrong.
       </p>
       <Link
         href="/"

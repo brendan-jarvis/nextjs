@@ -65,15 +65,23 @@ export default async function ProjectsPage() {
                 )}
                 {project.date && (
                   <p className="mt-2 font-mono text-[11px] text-muted-foreground">
-                    {format(new Date(project.date), "dd MMM yyyy").toUpperCase()}
+                    {format(
+                      new Date(project.date),
+                      "dd MMM yyyy",
+                    ).toUpperCase()}
                   </p>
                 )}
                 <Link href={project.slug} className="absolute inset-0">
                   <span className="sr-only">View {project.title}</span>
                 </Link>
-                <ProjectLinks project={project} className="relative z-10 mt-auto pt-4" />
+                <ProjectLinks
+                  project={project}
+                  className="relative z-10 mt-auto pt-4"
+                />
               </div>
-              <SpectrumRule color={projectColors[index % projectColors.length]!} />
+              <SpectrumRule
+                color={projectColors[index % projectColors.length]!}
+              />
             </article>
           ))}
         </div>

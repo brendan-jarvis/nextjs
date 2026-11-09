@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t-foreground/10 mt-8 flex w-full flex-col justify-center border-t p-8 text-center text-xs">
+    <footer className="mt-8 flex w-full flex-col justify-center border-t border-t-foreground/10 p-8 text-center text-xs">
       <p>
         Powered by{" "}
         <Link
